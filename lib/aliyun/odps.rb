@@ -1,4 +1,4 @@
-require "aliyun/odps/version"
+require 'aliyun/odps/version'
 
 module Aliyun
   module Odps
