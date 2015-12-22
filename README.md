@@ -2,7 +2,6 @@
 
 -----
 
-
 It is a full-featured Ruby Library for Aliyun ODPS API. Enjoy it!
 
 
