@@ -1,7 +1,8 @@
 module Aliyun
   module Odps
     class Client
-      module Tunnels
+      # Methods for Tables
+      module Tables
       end
     end
   end

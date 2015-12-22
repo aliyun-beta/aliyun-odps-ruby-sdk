@@ -6,10 +6,10 @@ module Aliyun
     class Http # nodoc
       attr_reader :access_key, :secret_key
 
-      def initialize(access_key, secret_key, host)
+      def initialize(access_key, secret_key, endpoint)
         @access_key = access_key
         @secret_key = secret_key
-        @host = host
+        @endpoint = endpoint
       end
 
       def get(uri, options = {})
@@ -46,9 +46,9 @@ module Aliyun
         headers = options.fetch(:headers, {})
         body = options.delete(:body)
 
-        append_headers!(headers, verb, body, options)
+        append_headers!(headers, verb, body, options.merge(path: resource))
 
-        path = api_endpoint(headers['Host']) + resource
+        path = @endpoint + resource
         options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI }
 
         wrap(HTTParty.__send__(verb.downcase, path, options))
@@ -66,7 +66,6 @@ module Aliyun
       def append_headers!(headers, verb, body, options)
         append_default_headers!(headers)
         append_body_headers!(headers, body)
-        append_host_headers!(headers, options[:bucket], options[:location])
         append_authorization_headers!(headers, verb, options)
       end
 
@@ -108,13 +107,7 @@ module Aliyun
       end
 
       def get_host(_bucket, _location)
-        # if location && bucket
-        # "#{bucket}.#{location}.aliyuncs.com"
-        # elsif bucket
-        # "#{bucket}.#{@host}"
-        # else
-        # @host
-        # end
+        @host
       end
 
       def default_content_type

@@ -7,6 +7,12 @@ module Aliyun
   module Odps
     class Authorization
       PROVIDER = 'ODPS'
+      OVERRIDE_RESPONSE_LIST = %w(
+        response-content-type response-content-language response-cache-control
+        logging response-content-encoding acl uploadId uploads partNumber group
+        link delete website location objectInfo response-expires
+        response-content-disposition cors lifecycle restore qos referer append
+        position)
 
       # @private
       #
@@ -32,9 +38,9 @@ module Aliyun
       def self.concat_content_string(verb, time, options = {})
         headers = options.fetch(:headers, {})
 
-        conon_headers = get_cononicalized_oss_headers(headers)
+        conon_headers = get_cononicalized_odps_headers(headers)
         conon_resource = get_cononicalized_resource(
-          *options.values_at(:bucket, :key, :query)
+          *options.values_at(:path, :query)
         )
 
         join_values(verb, time, headers, conon_headers, conon_resource)
@@ -61,21 +67,19 @@ module Aliyun
         )
       end
 
-      def self.get_cononicalized_oss_headers(headers)
-        oss_headers = (headers || {}).select do |key, _|
-          key.to_s.downcase.start_with?('x-oss-')
+      def self.get_cononicalized_odps_headers(headers)
+        odps_headers = (headers || {}).select do |key, _|
+          key.to_s.downcase.start_with?('x-odps-')
         end
-        return if oss_headers.empty?
+        return if odps_headers.empty?
 
-        oss_headers.keys.sort.map do |key|
-          "#{key.downcase}:#{oss_headers[key]}"
+        odps_headers.keys.sort.map do |key|
+          "#{key.downcase}:#{odps_headers[key]}"
         end.join("\n") + "\n"
       end
 
-      def self.get_cononicalized_resource(bucket, key, query)
-        conon_resource = '/'
-        conon_resource += "#{bucket}/" if bucket
-        conon_resource += key if key
+      def self.get_cononicalized_resource(path, query)
+        conon_resource = path
         return conon_resource if query.nil? || query.empty?
 
         query_str = query.keys.select { |k| OVERRIDE_RESPONSE_LIST.include?(k) }

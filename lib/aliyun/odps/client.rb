@@ -1,5 +1,5 @@
-require 'aliyun/oss/client/clients'
-require 'aliyun/oss/http'
+require 'aliyun/odps/client/clients'
+require 'aliyun/odps/http'
 
 module Aliyun
   module Odps
@@ -14,19 +14,27 @@ module Aliyun
       # @option options [String] :bucket Bucket name
       #
       # @return [Response]
+      #
+      # ilowzBTRmVJb5CUr
+      # IlWd7Jcsls43DQjX5OXyemmRf1HyPN
       def initialize(access_key, secret_key, options = {})
         @access_key = access_key
         @secret_key = secret_key
         @options = options
-        @bucket = options[:bucket]
 
         @services = {}
+      end
+
+      %w(get put post delete options head).each do |method|
+        define_method(method) do |*args|
+          http.send(method, *args)
+        end
       end
 
       private
 
       def http
-        @http ||= Http.new(access_key, secret_key, @options[:host])
+        @http ||= Http.new(access_key, secret_key, @options[:endpoint])
       end
     end
   end

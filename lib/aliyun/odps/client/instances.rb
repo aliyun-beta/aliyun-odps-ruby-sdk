@@ -1,7 +1,8 @@
 module Aliyun
   module Odps
     class Client
-      module Resources
+      # Methods for Instances
+      module Instances
       end
     end
   end
