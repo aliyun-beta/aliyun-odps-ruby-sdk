@@ -25,7 +25,7 @@ module Aliyun
           @code = error_values['Code']
           @message = error_values['Message']
         end
-        @request_id = response.headers['x-oss-request-id']
+        @request_id = response.headers['x-odps-request-id']
         @origin_response = response
         super("#{@request_id} - #{@code}: #{@message}")
       end

@@ -32,11 +32,11 @@ module Aliyun
         end
       end
 
-      # Digest body with MD5 and then encoding with Base64
+      # HexDigest body with MD5
       #
       # @return [String]
-      def self.md5_digest(body)
-        Base64.encode64(Digest::MD5.digest(body)).strip
+      def self.md5_hexdigest(body)
+        Digest::MD5.hexdigest(body).strip
       end
 
       # @example

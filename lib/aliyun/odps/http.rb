@@ -1,5 +1,6 @@
 require 'httparty'
 require 'addressable/uri'
+require 'aliyun/odps/error'
 
 module Aliyun
   module Odps
@@ -49,7 +50,9 @@ module Aliyun
         append_headers!(headers, verb, body, options.merge(path: resource))
 
         path = @endpoint + resource
+        #options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI, http_proxyaddr: "127.0.0.1", http_proxyport: "8888" }
         options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI }
+        p options
 
         wrap(HTTParty.__send__(verb.downcase, path, options))
       end
@@ -77,15 +80,11 @@ module Aliyun
         return headers unless body
 
         unless headers.key?('Content-MD5')
-          headers.merge!('Content-MD5' => Utils.md5_digest(body))
+          headers.merge!('Content-MD5' => Utils.md5_hexdigest(body))
         end
 
         return if headers.key?('Content-Length')
         headers.merge!('Content-Length' => Utils.content_size(body).to_s)
-      end
-
-      def append_host_headers!(headers, bucket, location)
-        headers.merge!('Host' => get_host(bucket, location))
       end
 
       def append_authorization_headers!(headers, verb, options)
@@ -106,18 +105,10 @@ module Aliyun
         }
       end
 
-      def get_host(_bucket, _location)
-        @host
-      end
-
       def default_content_type
         {
           'Content-Type' => 'application/xml'
         }
-      end
-
-      def api_endpoint(host)
-        "http://#{host}"
       end
 
       def user_agent
