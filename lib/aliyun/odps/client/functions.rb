@@ -21,7 +21,7 @@ module Aliyun
 
           keys = %w(Functions Function)
           Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            Struct::Instance.new(_hash.merge(client: client.soft_clone))
+            Struct::Function.new(_hash.merge(client: client.soft_clone))
           end
         end
 
