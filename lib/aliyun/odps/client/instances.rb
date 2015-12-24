@@ -37,7 +37,8 @@ module Aliyun
         # @params priority [Integer] Specify priority of the instance
         # @params tasks [Array<Struct::InstanceTask]> a list for instance_task
         #
-        # TODO: Aliyun::Odps::RequestError: 567AC4821570937335716D4C - MethodNotAllowed: ODPS-0420081: Method not allowed -
+        # TODO: http://git.oschina.net/newell_zlx/aliyun-odps-ruby-sdk/issues/1
+        # Aliyun::Odps::RequestError: 567AC4821570937335716D4C - MethodNotAllowed: ODPS-0420081: Method not allowed -
         def create(name, comment, priority, tasks = [])
           path = "/projects/#{client.current_project}/Instances"
           body = XmlGenerator.generate_create_instance_xml(name, comment, priority, tasks)

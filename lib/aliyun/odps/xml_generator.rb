@@ -30,6 +30,16 @@ module Aliyun
         )
       end
 
+      def self.generate_create_function_xml(name, class_type, resources)
+        Utils.to_xml(
+          'Function' => {
+            'Alias' => name,
+            'ClassType' => class_type,
+            'Resources' => resources.map(&:to_hash)
+          }
+        )
+      end
+
     end
   end
 end

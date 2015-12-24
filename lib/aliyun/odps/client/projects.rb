@@ -11,10 +11,14 @@ module Aliyun
         # @option options [String] :owner specify the project owner
         # @option options [String] :marker
         # @option options [String] :maxitems (1000)
+        #
+        # TODO: http://git.oschina.net/newell_zlx/aliyun-odps-ruby-sdk/issues/2
         def list(options = {})
           Utils.stringify_keys!(options)
           query = Utils.hash_slice(options, 'owner', 'marker', 'maxitems')
-          result = client.get('/projects', query: query).parsed_response
+          resp = client.get('/projects', query: query)
+          p 888, resp.headers
+          result = resp.parsed_response
 
           keys = %w(Projects Project)
           Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
