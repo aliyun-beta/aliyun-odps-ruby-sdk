@@ -22,6 +22,14 @@ module Aliyun
         )
       end
 
+      def self.generate_put_instance_xml
+        Utils.to_xml(
+          'Instance' => {
+            'Status' => 'Terminated'
+          }
+        )
+      end
+
     end
   end
 end

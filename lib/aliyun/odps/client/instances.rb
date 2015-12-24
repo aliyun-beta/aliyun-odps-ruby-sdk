@@ -43,6 +43,19 @@ module Aliyun
           body = XmlGenerator.generate_create_instance_xml(name, comment, priority, tasks)
           client.post(path, body: body).headers['Location']
         end
+
+        # Get status of instance
+        #
+        # @see http://repo.aliyun.com/api-doc/Instance/get_instance/index.html Get instance
+        #
+        # @params name [String] specify the instance name
+        #
+        # @return Instance status: Suspended, Running, Terminated
+        def status(name)
+          path = "/projects/#{client.current_project}/instances/#{name}"
+          result = client.get(path).parsed_response
+          Utils.dig_value(result, 'Instance', 'Status')
+        end
       end
     end
   end

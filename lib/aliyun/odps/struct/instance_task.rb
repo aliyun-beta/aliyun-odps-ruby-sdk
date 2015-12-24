@@ -17,6 +17,16 @@ module Aliyun
 
         attr_accessor :query
 
+        attr_accessor :start_time
+
+        attr_accessor :end_time
+
+        attr_accessor :status
+
+        attr_accessor :histories
+
+        attr_accessor :client
+
         def to_hash
           {
             'SQL' => {
