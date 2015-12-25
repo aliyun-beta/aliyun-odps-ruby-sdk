@@ -29,9 +29,7 @@ module Aliyun
 
           keys = %w(Projects Project)
           Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            dup_client = client.soft_clone
-            dup_client.current_project = _hash['Name']
-            Struct::Project.new(_hash.merge(client: dup_client))
+            Struct::Project.new(hash)
           end
         end
 
@@ -42,10 +40,8 @@ module Aliyun
         # @params name specify the project name
         def get(name)
           result = client.get("/projects/#{name}").parsed_response
-          _hash = Utils.dig_value(result, 'Project')
-          dup_client = client.soft_clone
-          dup_client.current_project = name
-          Struct::Project.new(_hash.merge(client: dup_client))
+          hash = Utils.dig_value(result, 'Project')
+          Struct::Project.new(hash)
         end
 
         # Update Project Information

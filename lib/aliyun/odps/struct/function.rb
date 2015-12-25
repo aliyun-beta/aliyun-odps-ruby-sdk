@@ -11,8 +11,6 @@ module Aliyun
         attr_accessor :creation_time
 
         attr_accessor :resources
-
-        attr_accessor :client
       end
     end
   end

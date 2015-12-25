@@ -14,8 +14,6 @@ module Aliyun
 
         attr_accessor :properties
 
-        attr_accessor :client
-
         attr_reader :services
 
         def tables

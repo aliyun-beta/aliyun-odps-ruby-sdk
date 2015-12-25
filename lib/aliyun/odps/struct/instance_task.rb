@@ -24,8 +24,6 @@ module Aliyun
 
         attr_accessor :histories
 
-        attr_accessor :client
-
         def to_hash
           {
             'SQL' => {

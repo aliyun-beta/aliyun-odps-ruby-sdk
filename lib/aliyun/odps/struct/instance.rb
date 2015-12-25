@@ -12,8 +12,6 @@ module Aliyun
 
         attr_accessor :end_time
 
-        attr_accessor :client
-
         # Get task detail of instance
         #
         # @see http://repo.aliyun.com/api-doc/Instance/get_instance_detail/index.html Get instance detail
@@ -56,8 +54,8 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           keys = %w(Instance Tasks Task)
-          Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            Struct::InstanceTask.new(_hash.merge(client: client.soft_clone))
+          Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+            Struct::InstanceTask.new(hash)
           end
         end
 

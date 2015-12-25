@@ -7,5 +7,5 @@ require 'minitest/autorun'
 Aliyun::Odps.configure do |config|
   config.access_key = 'ilowzBTRmVJb5CUr'
   config.secret_key = 'IlWd7Jcsls43DQjX5OXyemmRf1HyPN'
-  config.end_point = 'http://service.odps.aliyun.com/api'
+  config.endpoint = 'http://service.odps.aliyun.com/api'
 end

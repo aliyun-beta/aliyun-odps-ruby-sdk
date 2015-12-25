@@ -22,8 +22,8 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           keys = %w(Instances Instance)
-          Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            Struct::Instance.new(_hash.merge(client: client.soft_clone))
+          Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+            Struct::Instance.new(hash)
           end
         end
 

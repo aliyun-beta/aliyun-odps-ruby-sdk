@@ -19,8 +19,8 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           keys = %w(Resources Resource)
-          Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            Struct::Resource.new(_hash.merge(client: client.soft_clone))
+          Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+            Struct::Resource.new(hash)
           end
         end
 
@@ -33,7 +33,7 @@ module Aliyun
           path = "/projects/#{client.current_project}/resources/#{name}"
           resp = client.get(path)
 
-          _hash = {
+          hash = {
             name: resp.headers['x-odps-resource-name'],
             last_updator: resp.headers['x-odps-updator'],
             owner: resp.headers['x-odps-owner'],
@@ -45,9 +45,9 @@ module Aliyun
             content: resp.parsed_response
           }
 
-          p _hash
+          p hash
 
-          Struct::Resource.new(_hash.merge(client: client.soft_clone))
+          Struct::Resource.new(hash)
         end
 
         # Get resource information in project
@@ -59,7 +59,7 @@ module Aliyun
           path = "/projects/#{client.current_project}/resources/#{name}"
           resp = client.head(path)
 
-          _hash = {
+          hash = {
             name: resp.headers['x-odps-resource-name'],
             last_updator: resp.headers['x-odps-updator'],
             owner: resp.headers['x-odps-owner'],
@@ -70,9 +70,9 @@ module Aliyun
             resource_type: resp.headers['x-odps-resource-type']
           }
 
-          p _hash
+          p hash
 
-          Struct::Resource.new(_hash.merge(client: client.soft_clone))
+          Struct::Resource.new(hash)
         end
 
         # Create resource in project

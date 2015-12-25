@@ -23,8 +23,7 @@ module Aliyun
 
           Struct::DownloadSession.new(result.merge(
             table_name: table_name,
-            partition_spec: partition_spec,
-            client: client.soft_clone
+            partition_spec: partition_spec
           ))
         end
 

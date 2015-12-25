@@ -17,8 +17,6 @@ module Aliyun
 
         attr_accessor :schema
 
-        attr_accessor :client
-
         # Upload data in block
         #
         # @see http://repo.aliyun.com/api-doc/Tunnel/put_create_upload_id/index.html Put Upload Block ID

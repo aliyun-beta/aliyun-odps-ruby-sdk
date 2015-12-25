@@ -20,8 +20,8 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           keys = %w(Tables Table)
-          Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            Struct::Table.new(_hash.merge(client: client.soft_clone))
+          Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+            Struct::Table.new(hash)
           end
         end
 
@@ -34,13 +34,13 @@ module Aliyun
           path = "/projects/#{client.current_project}/tables/#{name}"
           resp = client.get(path)
 
-          _hash = Utils.dig_value(resp.parsed_response, 'Table')
-          _hash.merge!(
+          hash = Utils.dig_value(resp.parsed_response, 'Table')
+          hash.merge!(
             'creation_time' => resp.headers['x-odps-creation-time'],
             'last_modified' => resp.headers['Last-Modified'],
             'owner' => resp.headers['x-odps-owner']
           )
-          Struct::Table.new(_hash.merge(client: client.soft_clone))
+          Struct::Table.new(hash)
         end
 
         # List partitions of table
@@ -49,7 +49,7 @@ module Aliyun
         #
         # @params name [String] specify the table name
         def partitions(name)
-          Struct::Table.new(name: name, client: client.soft_clone).partitions
+          Struct::Table.new(name: name).partitions
         end
       end
     end

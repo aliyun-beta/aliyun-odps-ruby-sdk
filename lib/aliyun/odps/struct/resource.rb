@@ -24,8 +24,6 @@ module Aliyun
 
         attr_accessor :resource_content
 
-        attr_accessor :client
-
         def resource_name=(value)
           self.name = value
         end

@@ -19,8 +19,6 @@ module Aliyun
 
         attr_accessor :schema
 
-        attr_accessor :client
-
         # Download data in block
         #
         # @see http://repo.aliyun.com/api-doc/Tunnel/get_table_download_id/index.html Get Download Block ID

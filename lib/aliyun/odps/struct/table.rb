@@ -16,8 +16,6 @@ module Aliyun
 
         attr_accessor :last_modified
 
-        attr_accessor :client
-
         attr_reader :services
 
         # List partitions of table

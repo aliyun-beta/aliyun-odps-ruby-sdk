@@ -27,8 +27,7 @@ module Aliyun
 
           Struct::UploadSession.new(result.merge(
             table_name: table_name,
-            partition_spec: options['partition_spec'],
-            client: client.soft_clone
+            partition_spec: options['partition_spec']
           ))
         end
 
