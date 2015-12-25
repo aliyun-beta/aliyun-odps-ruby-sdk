@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'httparty'
   spec.add_dependency 'addressable'
+  spec.add_dependency 'activesupport'
   spec.add_dependency 'gyoku'
 
   spec.add_development_dependency 'bundler'

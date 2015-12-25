@@ -2,13 +2,13 @@ module Aliyun
   module Odps
     #
     #
-    class Client
-      def projects
-        @services[:projects] = Client::ProjectsService.new(self)
-      end
+    class Client < Model
+      # def projects
+      #   @services[:projects] = Client::ProjectsService.new(self)
+      # end
 
-      def tunnels
-        @services[:tunnels] ||= Client::TunnelsService.new(self)
+      def table_tunnels
+        @services[:table_tunnels] ||= Client::TableTunnelsService.new(self)
       end
 
       ClientService = ::Struct.new(:client)
@@ -19,10 +19,10 @@ module Aliyun
         include Client::Projects
       end
 
-      require 'aliyun/odps/client/tunnels'
+      require 'aliyun/odps/client/table_tunnels'
 
-      class TunnelsService < ClientService
-        include Client::Tunnels
+      class TableTunnelsService < ClientService
+        include Client::TableTunnels
       end
 
       require 'aliyun/odps/client/tables'
@@ -47,6 +47,18 @@ module Aliyun
 
       class FunctionsService < ClientService
         include Client::Functions
+      end
+
+      require 'aliyun/odps/client/download_sessions'
+
+      class DownloadSessionsService < ClientService
+        include Client::DownloadSessions
+      end
+
+      require 'aliyun/odps/client/upload_sessions'
+
+      class UploadSessionsService < ClientService
+        include Client::UploadSessions
       end
     end
   end

@@ -139,5 +139,9 @@ module Aliyun
         end
       end
     end
+
+    class Resource < Model
+      extend Client::Resources
+    end
   end
 end

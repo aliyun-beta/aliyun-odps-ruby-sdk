@@ -18,6 +18,8 @@ module Aliyun
 
         attr_accessor :client
 
+        attr_reader :services
+
         # List partitions of table
         #
         # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
