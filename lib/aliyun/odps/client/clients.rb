@@ -48,6 +48,18 @@ module Aliyun
       class FunctionsService < ClientService
         include Client::Functions
       end
+
+      require 'aliyun/odps/client/download_sessions'
+
+      class DownloadSessionsService < ClientService
+        include Client::DownloadSessions
+      end
+
+      require 'aliyun/odps/client/upload_sessions'
+
+      class UploadSessionsService < ClientService
+        include Client::UploadSessions
+      end
     end
   end
 end

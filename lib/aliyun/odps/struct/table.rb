@@ -19,6 +19,8 @@ module Aliyun
 
         attr_accessor :client
 
+        attr_reader :services
+
         # List partitions of table
         #
         # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
@@ -32,6 +34,16 @@ module Aliyun
           Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
             Struct::Partition.new(_hash)
           end
+        end
+
+        def download_sessions
+          @services ||= {}
+          @services[:download_sessions] = Client::DownloadSessionsService.new(client)
+        end
+
+        def upload_sessions
+          @services ||= {}
+          @services[:upload_sessions] = Client::UploadSessionssService.new(client)
         end
 
       end
