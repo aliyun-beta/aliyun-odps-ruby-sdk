@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     module Struct
       class Resource < Base
-
         attr_accessor :name
 
         attr_accessor :owner
@@ -34,7 +33,6 @@ module Aliyun
         def to_hash
           { 'ResourceName' => name }
         end
-
       end
     end
   end

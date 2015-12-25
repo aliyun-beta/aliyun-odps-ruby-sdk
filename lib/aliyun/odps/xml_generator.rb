@@ -39,7 +39,6 @@ module Aliyun
           }
         )
       end
-
     end
   end
 end

@@ -3,7 +3,6 @@ module Aliyun
     class Client
       # Methods for Instances
       module Instances
-
         # List instances of project
         #
         # @see http://repo.aliyun.com/api-doc/Instance/get_instances/index.html Get instances

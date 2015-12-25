@@ -3,7 +3,6 @@ module Aliyun
     class Client
       # Methods for Functions
       module Functions
-
         # List Functions of project
         #
         # @see http://repo.aliyun.com/api-doc/Function/get_functions/index.html Get functions
