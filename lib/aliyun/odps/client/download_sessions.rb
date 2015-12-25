@@ -10,10 +10,15 @@ module Aliyun
         #
         # @params table_name [String] specify table name
         # @params partition_spec [String] specify partition spec
-        def init(table_name, partition_spec)
+        def init(table_name, partition_spec = nil)
           path = "/projects/#{client.current_project}/tables/#{table_name}"
-          query = { downloads: true, partition: partition_spec }
-          result = client.get(path, query: query).parsed_response
+          query = { downloads: true }
+          query.merge!(partition: partition_spec) if partition_spec
+
+          resp = client.post(path, query: query)
+          #binding.pry
+          result = JSON.parse(resp.parsed_response)
+          p result
 
           Struct::DownloadSession.new(result.merge(
             table_name: table_name,

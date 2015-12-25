@@ -1,7 +1,7 @@
 module Aliyun
   module Odps
     module Struct
-      class DownloadSession < Base
+      class UploadSession < Base
 
         attr_accessor :upload_id
 
