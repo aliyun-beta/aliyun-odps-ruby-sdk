@@ -15,7 +15,7 @@ module Aliyun
         # @option options [String] :maxitems (1000)
         def list(options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/functions"
+          path = "/projects/#{client.current_project}/registration/functions"
           query = Utils.hash_slice(options, 'name', 'owner', 'marker', 'maxitems')
           result = client.get(path, query: query).parsed_response
 
@@ -33,7 +33,7 @@ module Aliyun
         # @params class_type [String] specify class Path used by function
         # @params resources [Array<Struct::Resource>] specify resources used by function
         def create(name, class_type, resources = [])
-          path = "/projects/#{client.current_project}/functions"
+          path = "/projects/#{client.current_project}/registration/functions"
           body = XmlGenerator.generate_create_function_xml(name, class_type, resources)
           !!client.post(path, body: body)
         end
@@ -46,7 +46,7 @@ module Aliyun
         # @params class_type [String] specify class Path used by function
         # @params resources [Array<Struct::Resource>] specify resources used by function
         def update(name, class_type, resources = [])
-          path = "/projects/#{client.current_project}/functions/#{name}"
+          path = "/projects/#{client.current_project}/registration/functions/#{name}"
           body = XmlGenerator.generate_create_function_xml(name, class_type, resources)
           !!client.put(path, body: body)
         end
@@ -57,7 +57,7 @@ module Aliyun
         #
         # @params name [String] specify function name
         def delete(name)
-          path = "/projects/#{client.current_project}/functions/#{name}"
+          path = "/projects/#{client.current_project}/registration/functions/#{name}"
           !!client.delete(path)
         end
       end
