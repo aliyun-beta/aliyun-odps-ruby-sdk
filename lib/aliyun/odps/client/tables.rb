@@ -3,7 +3,6 @@ module Aliyun
     class Client
       # Methods for Tables
       module Tables
-
         # List tables in this project
         #
         # @see http://repo.aliyun.com/api-doc/Table/get_tables/index.html Get tables
@@ -17,7 +16,7 @@ module Aliyun
           Utils.stringify_keys!(options)
           path = "/projects/#{client.current_project}/tables"
           query = Utils.hash_slice(options, 'name', 'owner', 'marker', 'maxitems')
-          query.merge!( tables: true, expectmarker: true )
+          query.merge!(tables: true, expectmarker: true)
           result = client.get(path, query: query).parsed_response
 
           keys = %w(Tables Table)

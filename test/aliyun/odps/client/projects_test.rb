@@ -7,6 +7,6 @@ describe Aliyun::Odps::Client::Projects do
       'IlWd7Jcsls43DQjX5OXyemmRf1HyPN',
       endpoint: 'http://service.odps.aliyun.com/api'
     )
-    #assert client.projects.list, 'Should contain something'
+    # assert client.projects.list, 'Should contain something'
   end
 end

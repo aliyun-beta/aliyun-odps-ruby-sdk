@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     module Struct
       class Table < Base
-
         attr_accessor :name
 
         attr_accessor :table_id
@@ -33,7 +32,6 @@ module Aliyun
             Struct::Partition.new(_hash)
           end
         end
-
       end
     end
   end

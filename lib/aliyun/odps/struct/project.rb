@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     module Struct
       class Project < Base
-
         attr_accessor :name
 
         attr_accessor :comment
@@ -38,7 +37,6 @@ module Aliyun
           @services ||= {}
           @services[:instances] = Client::InstancesService.new(client)
         end
-
       end
     end
   end
