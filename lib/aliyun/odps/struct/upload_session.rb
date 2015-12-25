@@ -1,7 +1,7 @@
 module Aliyun
   module Odps
     module Struct
-      class DownloadSession < Base
+      class UploadSession < Base
 
         attr_accessor :upload_id
 
@@ -33,11 +33,11 @@ module Aliyun
           path = "/projects/#{client.current_project}/tables/#{table_name}"
 
           query = { blockid: blockid, uploadid: upload_id }
-          query.merge!(partition: partition_spec) unless partition_spec.empty?
+          query.merge!(partition: partition_spec) if partition_spec
 
           headers = {}
           headers.merge!( "x-odps-tunnel-version" => options["tunnel_version"] ) if options.key?('tunnel_version')
-          headers.merge!( "Accept-Encoding" => options["encoding"] ) if options.key?('encoding')
+          headers.merge!( "Content-Encoding" => options["encoding"] ) if options.key?('encoding')
 
           !!client.put(path, query: query, headers: headers, body: Utils.to_data(file_or_bin))
         end
@@ -49,9 +49,10 @@ module Aliyun
           path = "/projects/#{client.current_project}/tables/#{table_name}"
 
           query = { uploadid: upload_id }
-          query.merge!(partition: partition_spec) unless partition_spec.empty?
+          query.merge!(partition: partition_spec) if partition_spec
 
-          client.get(path, query: query).parsed_response
+          result = client.get(path, query: query).parsed_response
+          result.is_a?(String) ? JSON.parse(result) : result
         end
 
         # Complete a upload session
@@ -65,7 +66,7 @@ module Aliyun
           path = "/projects/#{client.current_project}/tables/#{table_name}"
 
           query = { uploadid: upload_id }
-          query.merge!(partition: partition_spec) unless partition_spec.empty?
+          query.merge!(partition: partition_spec) if partition_spec
 
           headers = {}
           headers.merge!( "x-odps-tunnel-version" => options["tunnel_version"] ) if options.key?('tunnel_version')
