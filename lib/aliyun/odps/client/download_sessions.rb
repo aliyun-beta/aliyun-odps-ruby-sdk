@@ -17,7 +17,8 @@ module Aliyun
 
           resp = client.post(path, query: query)
           #binding.pry
-          result = JSON.parse(resp.parsed_response)
+          result = resp.parsed_response
+          result = JSON.parse(result) if result.is_a?(String)
           p result
 
           Struct::DownloadSession.new(result.merge(

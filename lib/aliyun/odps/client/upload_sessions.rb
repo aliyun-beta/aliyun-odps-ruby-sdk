@@ -22,7 +22,8 @@ module Aliyun
           headers.merge!( "x-odps-tunnel-version" => options['tunnel_version'] ) if options.key?('tunnel_version')
 
           resp = client.post(path, query: query, headers: headers)
-          result = JSON.parse(resp.parsed_response)
+          result = resp.parsed_response
+          result = JSON.parse(result) if result.is_a?(String)
 
           Struct::UploadSession.new(result.merge(
             table_name: table_name,

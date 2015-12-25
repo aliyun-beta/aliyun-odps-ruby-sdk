@@ -7,8 +7,8 @@ module Aliyun
         @services[:projects] = Client::ProjectsService.new(self)
       end
 
-      def tunnels
-        @services[:tunnels] ||= Client::TunnelsService.new(self)
+      def table_tunnels
+        @services[:table_tunnels] ||= Client::TableTunnelsService.new(self)
       end
 
       ClientService = ::Struct.new(:client)
@@ -19,10 +19,10 @@ module Aliyun
         include Client::Projects
       end
 
-      require 'aliyun/odps/client/tunnels'
+      require 'aliyun/odps/client/table_tunnels'
 
-      class TunnelsService < ClientService
-        include Client::Tunnels
+      class TableTunnelsService < ClientService
+        include Client::TableTunnels
       end
 
       require 'aliyun/odps/client/tables'

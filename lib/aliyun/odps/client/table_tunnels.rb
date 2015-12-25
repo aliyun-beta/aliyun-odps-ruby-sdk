@@ -1,8 +1,8 @@
 module Aliyun
   module Odps
     class Client
-      # Methods for Tunnels
-      module Tunnels
+      # Methods for TableTunnels
+      module TableTunnels
 
         def download_sessions
           @services ||= {}
