@@ -2,10 +2,10 @@ module Aliyun
   module Odps
     #
     #
-    class Client
-      def projects
-        @services[:projects] = Client::ProjectsService.new(self)
-      end
+    class Client < Model
+      # def projects
+      #   @services[:projects] = Client::ProjectsService.new(self)
+      # end
 
       def table_tunnels
         @services[:table_tunnels] ||= Client::TableTunnelsService.new(self)

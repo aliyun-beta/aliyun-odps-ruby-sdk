@@ -1,5 +1,12 @@
+require 'aliyun/odps/client/instances'
+require 'aliyun/odps/client/tables'
+require 'aliyun/odps/client/resources'
+require 'aliyun/odps/client/functions'
+
 module Aliyun
   module Odps
+
+
     class Client
       # Methods for Projects
       module Projects
@@ -54,6 +61,19 @@ module Aliyun
           !!client.put("/projects/#{name}", body: body)
         end
       end
+    end
+    class Project < Model
+      extend Client::Projects
+
+      has_many :instances
+
+      has_many :functions
+
+      has_many :tables
+
+      has_many :resources
+
+
     end
   end
 end

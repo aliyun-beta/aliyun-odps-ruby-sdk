@@ -5,7 +5,6 @@ module Aliyun
       #
       #   it = Aliyun::Odps::Struct::InstanceTask.new(type: 'SQL', name: 'Test SQL', comment: 'Test', Query: 'Select * from test_table1', property: { 'key1' => 'value1' })
       class InstanceTask < Base
-
         # Supported value: SQL, SQLPLAN, MapReduce, DT, PLSQL
         attr_accessor :type
 
@@ -45,7 +44,6 @@ module Aliyun
             { 'Name' => key, 'Value' => value }
           end
         end
-
       end
     end
   end

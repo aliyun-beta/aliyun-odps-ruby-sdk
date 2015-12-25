@@ -3,7 +3,6 @@ module Aliyun
     class Client
       # Methods for Resources
       module Resources
-
         # List resources of project
         #
         # @see http://repo.aliyun.com/api-doc/Resource/get_resources/index.html Get resources
@@ -139,6 +138,10 @@ module Aliyun
           !!client.delete(path)
         end
       end
+    end
+
+    class Resource < Model
+      extend Client::Resources
     end
   end
 end
