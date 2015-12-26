@@ -8,37 +8,34 @@ module Aliyun
       before do
         class D
           extend Modelable
-          class << self
-            def list(options={})
-              return []
-            end
+        end
+        class DService < Aliyun::Odps::ServiceObject
+          def list(options={})
+            return []
+          end
 
-            def create(options={})
-              return self.new
-            end
+          def create(options={})
+            return D.new
           end
         end
         class M
           extend Modelable
-          has_many :ds, actions: [:create]
+          has_many :ds
         end
       end
 
       it "should support has_many" do
         begin
           m = M.new
-          assert(m.respond_to?(:ds), 'response to collection')
+          assert(m.respond_to?(:ds), 'response to service object')
 
-          assert_equal([], m.ds)
+          assert_equal(DService.build(m), m.ds)
 
-          assert(m.respond_to?(:create_d), 'response to create model')
+          assert(m.ds.respond_to?(:list), 'response to list model')
+          assert(m.ds.respond_to?(:create), 'response to list model')
 
-          assert_kind_of(D, m.create_d(name: 'abc'))
-
-          # must provide options when you call method of model class
-          assert_raises {
-            m.create_d
-          }
+          assert_kind_of(D, m.ds.create(name: 'abc'))
+          assert_equal([], m.ds.list())
         rescue Exception => e
           flunk(e)
         end

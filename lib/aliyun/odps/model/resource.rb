@@ -2,7 +2,9 @@ module Aliyun
   module Odps
     class Resource
       extend Aliyun::Odps::Modelable
-      extend Aliyun::Odps::Client::Resources
+    end
+    class ResourceService < Aliyun::Odps::ServiceObject
+      include Aliyun::Odps::Client::Resources
     end
   end
 end

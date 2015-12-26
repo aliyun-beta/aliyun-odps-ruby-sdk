@@ -8,7 +8,6 @@ module Aliyun
   module Odps
     class Project
       extend Aliyun::Odps::Modelable
-      extend Aliyun::Odps::Client::Projects
 
       has_many :instances
 
@@ -19,6 +18,10 @@ module Aliyun
       has_many :resources
 
 
+    end
+
+    class ProjectService < Aliyun::Odps::ServiceObject
+      include Aliyun::Odps::Client::Projects
     end
   end
 end

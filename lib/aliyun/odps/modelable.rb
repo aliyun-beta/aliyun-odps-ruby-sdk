@@ -1,33 +1,30 @@
 require 'active_support/all'
+require 'aliyun/odps/service_object'
 
 module Aliyun
   module Odps
     module Modelable
-      def client
-        Aliyun::Odps::Client.instance
-      end
+
+      # def client
+      #   Aliyun::Odps::Client.instance
+      # end
 
       def has_many(models, opts = {})
         # p "#{models.to_s.singularize.camelize}"
         mod = models.to_s.singularize
-        klass = "Aliyun::Odps::#{mod.camelize}".constantize
-        define_method(models) { |options = {}|
-          options ||= {}
-          klass.list(options)
+        klass = "Aliyun::Odps::#{mod.camelize}Service".constantize
+        define_method(models) {
+          klass.build(self)
         }
-        if opts[:actions]
-          opts[:actions].each do |action|
-            action = action.to_s
-            define_method("#{action}_#{mod}") {|options = {}|
-              raise "Can't #{action} object without params" if options.empty?
-              klass.send(action, options)
-            }
-          end
-        end
-      end
-
-      def update(options)
-        self.class.update(options)
+        # if opts[:actions]
+        #   opts[:actions].each do |action|
+        #     action = action.to_s
+        #     define_method("#{action}_#{mod}") {|options = {}|
+        #       raise "Can't #{action} object without params" if options.empty?
+        #       klass.send(action, options)
+        #     }
+        #   end
+        # end
       end
     end
   end
