@@ -44,6 +44,12 @@ module Aliyun
           include Client::Functions
         end
 
+        require 'aliyun/odps/client/table_tunnels'
+
+        class TableTunnelsService < ProjectService
+          include Client::TableTunnels
+        end
+
 
         def tables
           @services ||= {}
@@ -63,6 +69,11 @@ module Aliyun
         def instances
           @services ||= {}
           @services[:instances] = InstancesService.new(client, self)
+        end
+
+        def table_tunnels
+          @services ||= {}
+          @services[:table_tunnels] ||= TableTunnelsService.new(client, self)
         end
       end
     end

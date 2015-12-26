@@ -3,8 +3,10 @@ module Aliyun
     module Struct
       class UploadSession < Base
 
+        # required
         attr_accessor :upload_id
 
+        # required
         attr_accessor :table_name
 
         attr_accessor :partition_spec
@@ -17,6 +19,12 @@ module Aliyun
 
         attr_accessor :schema
 
+        # required
+        attr_accessor :project
+
+        # required
+        attr_accessor :client
+
         # Upload data in block
         #
         # @see http://repo.aliyun.com/api-doc/Tunnel/put_create_upload_id/index.html Put Upload Block ID
@@ -28,7 +36,7 @@ module Aliyun
         # @option options [String] :encoding specify the data compression format, supported value: Raw, Zlib(deflate), defalte/x-snappy-framed
         def upload(blockid, file_or_bin, options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/tables/#{table_name}"
+          path = "/projects/#{project.name}/tables/#{table_name}"
 
           query = { blockid: blockid, uploadid: upload_id }
           query.merge!(partition: partition_spec) if partition_spec
@@ -43,8 +51,8 @@ module Aliyun
         # View status of upload session
         #
         # @see http://repo.aliyun.com/api-doc/Tunnel/get_upload_session_status/index.html Get Upload Session Status
-        def status!
-          path = "/projects/#{client.current_project}/tables/#{table_name}"
+        def get_status
+          path = "/projects/#{project.name}/tables/#{table_name}"
 
           query = { uploadid: upload_id }
           query.merge!(partition: partition_spec) if partition_spec
@@ -61,7 +69,7 @@ module Aliyun
         # @option options [String] :tunnel_version specify the Tunnel API verion
         def complete(options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/tables/#{table_name}"
+          path = "/projects/#{project.name}/tables/#{table_name}"
 
           query = { uploadid: upload_id }
           query.merge!(partition: partition_spec) if partition_spec

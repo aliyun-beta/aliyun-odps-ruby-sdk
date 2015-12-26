@@ -3,8 +3,10 @@ module Aliyun
     module Struct
       class DownloadSession < Base
 
+        # required
         attr_accessor :download_id
 
+        # required
         attr_accessor :table_name
 
         attr_accessor :partition_spec
@@ -19,6 +21,12 @@ module Aliyun
 
         attr_accessor :schema
 
+        # required
+        attr_accessor :project
+
+        # required
+        attr_accessor :client
+
         # Download data in block
         #
         # @see http://repo.aliyun.com/api-doc/Tunnel/get_table_download_id/index.html Get Download Block ID
@@ -30,10 +38,10 @@ module Aliyun
         # @option options [String] :encoding specify the data compression format, supported value: Raw, Zlib, snappy
         def download(rowrange, columns, options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/tables/#{table_name}"
+          path = "/projects/#{project.name}/tables/#{table_name}"
 
           query = { data: true, downloadid: download_id, columns: columns, rowrange: rowrange }
-          query.merge!(partition: partition_spec) unless partition_spec.empty?
+          query.merge!(partition: options['partition_spec']) if options.key?('partition_spec')
 
           headers = {}
           headers.merge!( "x-odps-tunnel-version" => options["tunnel_version"] ) if options.key?('tunnel_version')

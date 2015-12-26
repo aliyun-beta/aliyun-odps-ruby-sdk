@@ -14,7 +14,7 @@ module Aliyun
         # @option options [String] :tunnel_version specify odps tunnel version
         def init(table_name, options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/tables/#{table_name}"
+          path = "/projects/#{project.name}/tables/#{table_name}"
           query = { uploads: true }
           query.merge!( partition: options['partition_spec'] ) if options.key?('partition_spec')
 
