@@ -22,9 +22,12 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           keys = %w(Instances Instance)
-          Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+          marker = Utils.dig_value(result, 'Instances', 'Marker')
+          max_items = Utils.dig_value(result, 'Instances', 'MaxItems')
+          instances = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
             Struct::Instance.new(hash.merge(project: project))
           end
+          Aliyun::Odps::List.new(marker, max_items, instances)
         end
 
         # Create a instance job

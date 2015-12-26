@@ -1,4 +1,5 @@
 require 'aliyun/odps/version'
+require 'aliyun/odps/list'
 require 'aliyun/odps/utils'
 require 'aliyun/odps/xml_generator'
 require 'aliyun/odps/authorization'

@@ -18,6 +18,8 @@ module Aliyun
         # @option options [String] :marker
         # @option options [String] :maxitems (1000)
         #
+        # @return [Aliyun::Odps::List]
+        #
         # TODO: http://git.oschina.net/newell_zlx/aliyun-odps-ruby-sdk/issues/2
         def list(options = {})
           Utils.stringify_keys!(options)
@@ -27,9 +29,12 @@ module Aliyun
           result = resp.parsed_response
 
           keys = %w(Projects Project)
-          Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
+          marker = Utils.dig_value(result, 'Projects', 'Marker')
+          max_items = Utils.dig_value(result, 'Projects', 'MaxItems')
+          projects = Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
             Struct::Project.new(hash)
           end
+          Aliyun::Odps::List.new(marker, max_items, projects)
         end
 
         # Get Project Information
