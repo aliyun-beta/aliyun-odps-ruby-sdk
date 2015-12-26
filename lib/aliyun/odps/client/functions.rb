@@ -32,12 +32,12 @@ module Aliyun
         # @see http://repo.aliyun.com/api-doc/Function/post_function/index.html Post function
         #
         # @params name [String] specify function name
-        # @params class_type [String] specify class Path used by function
+        # @params class_path [String] specify class Path used by function
         # @params resources [Array<Struct::Resource>] specify resources used by function
-        def create(name, class_type, resources = [])
+        def create(name, class_path, resources = [])
           path = "/projects/#{project.name}/registration/functions"
-          body = XmlGenerator.generate_create_function_xml(name, class_type, resources)
-          !!client.post(path, body: body)
+          body = XmlGenerator.generate_create_function_xml(name, class_path, resources)
+          client.post(path, body: body).headers['Location']
         end
 
         # Update function in project

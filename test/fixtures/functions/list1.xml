@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<Functions>
+    <Marker>dsdhfdasjfljdafyiadcnajkfdlkjalf</Marker>
+    <MaxItems>1</MaxItems>
+    <Function>
+        <Alias>tableFunc</Alias>
+        <Owner>ALIYUN$odpstest1@aliyun.com</Owner>
+        <ClassType>com.taobao.mrsstd.odpsudf.tableRes</ClassType>
+        <CreationTime>Wed, 09 Dec 2015 19:01:43 GMT</CreationTime>
+        <Resources>
+            <ResourceName>test_project/resources/tableRes.jar</ResourceName>
+            <ResourceName>test_project/resources/x_table2</ResourceName>
+        </Resources>
+    </Function>
+</Functions>
