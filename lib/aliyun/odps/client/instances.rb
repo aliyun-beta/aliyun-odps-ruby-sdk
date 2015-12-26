@@ -17,7 +17,7 @@ module Aliyun
         # @option options [String] :maxitems (1000)
         def list(options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/instances"
+          path = "/projects/#{project.name}/instances"
           query = Utils.hash_slice(options, 'datarange', 'status', 'jobname', 'onlyowner', 'marker', 'maxitems')
           result = client.get(path, query: query).parsed_response
 
@@ -36,7 +36,7 @@ module Aliyun
         # @params priority [Integer] Specify priority of the instance
         # @params tasks [Array<Struct::InstanceTask]> a list for instance_task
         def create(name, comment, priority, tasks = [])
-          path = "/projects/#{client.current_project}/instances"
+          path = "/projects/#{project.name}/instances"
           body = XmlGenerator.generate_create_instance_xml(name, comment, priority, tasks)
           client.post(path, body: body).headers['Location']
         end
@@ -49,7 +49,7 @@ module Aliyun
         #
         # @return Instance status: Suspended, Running, Terminated
         def status(name)
-          path = "/projects/#{client.current_project}/instances/#{name}"
+          path = "/projects/#{project.name}/instances/#{name}"
           result = client.get(path).parsed_response
           Utils.dig_value(result, 'Instance', 'Status')
         end
