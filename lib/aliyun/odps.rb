@@ -6,6 +6,7 @@ require 'aliyun/odps/configuration'
 require 'aliyun/odps/struct'
 require 'aliyun/odps/modelable'
 require 'aliyun/odps/client'
+require 'aliyun/odps/tunnel_router'
 
 # DEBUG
 require 'pry'

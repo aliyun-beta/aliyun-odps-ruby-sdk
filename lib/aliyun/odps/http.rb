@@ -5,6 +5,19 @@ require 'aliyun/odps/error'
 module Aliyun
   module Odps
     class Http # nodoc
+      include HTTParty
+
+      class BetterXmlParser < HTTParty::Parser
+
+        protected
+        def xml
+          MultiXml.parse(body)
+        rescue => e
+          body
+        end
+      end
+      parser BetterXmlParser
+
       attr_reader :access_key, :secret_key
 
       def initialize(access_key, secret_key)
@@ -52,7 +65,7 @@ module Aliyun
         options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI }
         p options
 
-        wrap(HTTParty.__send__(verb.downcase, path, options))
+        wrap(self.class.__send__(verb.downcase, path, options))
       end
 
       def wrap(response)
