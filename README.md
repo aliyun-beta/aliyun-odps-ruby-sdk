@@ -34,7 +34,7 @@ Here are some more guides for help you. Welcome to advice.
 
 + [Installation](./wiki/installation.md)
 + [Getting Started](./wiki/get_start.md)
-+ [Error](./wiki/error.md)
++ [Error Code](./wiki/error.md)
 
 ## Usage
 
