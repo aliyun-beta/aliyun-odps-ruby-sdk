@@ -23,7 +23,7 @@ module Aliyun
 
           keys = %w(Instances Instance)
           Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
-            Struct::Instance.new(hash)
+            Struct::Instance.new(hash.merge(project: project))
           end
         end
 
