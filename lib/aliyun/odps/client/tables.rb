@@ -14,7 +14,7 @@ module Aliyun
         # @option options [String] :maxitems (1000)
         def list(options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/tables"
+          path = "/projects/#{project.name}/tables"
           query = Utils.hash_slice(options, 'name', 'owner', 'marker', 'maxitems')
           query.merge!(tables: true, expectmarker: true)
           result = client.get(path, query: query).parsed_response
@@ -31,7 +31,7 @@ module Aliyun
         #
         # @params name [String] specify the table name
         def get(name)
-          path = "/projects/#{client.current_project}/tables/#{name}"
+          path = "/projects/#{project.name}/tables/#{name}"
           resp = client.get(path)
 
           hash = Utils.dig_value(resp.parsed_response, 'Table')

@@ -2,6 +2,7 @@ module Aliyun
   module Odps
     module Struct
       class Instance < Base
+        # required
         attr_accessor :name
 
         attr_accessor :owner
@@ -12,13 +13,19 @@ module Aliyun
 
         attr_accessor :end_time
 
+        # required
+        attr_accessor :project
+
+        # required
+        attr_accessor :client
+
         # Get task detail of instance
         #
         # @see http://repo.aliyun.com/api-doc/Instance/get_instance_detail/index.html Get instance detail
         #
         # @params task_name [String] specify task name
         def task_detail(task_name)
-          path = "/projects/#{client.current_project}/instances/#{name}"
+          path = "/projects/#{project.name}/instances/#{name}"
           query = { instancedetail: true, taskname: task_name }
           client.get(path, query: query).parsed_response
         end
@@ -29,7 +36,7 @@ module Aliyun
         #
         # @params task_name [String] specify task name
         def task_progress(task_name)
-          path = "/projects/#{client.current_project}/instances/#{name}"
+          path = "/projects/#{project.name}/instances/#{name}"
           query = { instanceprogress: true, taskname: task_name }
           client.get(path, query: query).parsed_response['Progress']
         end
@@ -40,7 +47,7 @@ module Aliyun
         #
         # @params task_name [String] specify task name
         def task_summary(task_name)
-          path = "/projects/#{client.current_project}/instances/#{name}"
+          path = "/projects/#{project.name}/instances/#{name}"
           query = { instancesummary: true, taskname: task_name }
           client.get(path, query: query).parsed_response
         end
@@ -49,7 +56,7 @@ module Aliyun
         #
         # @see http://repo.aliyun.com/api-doc/Instance/get_instance_task/index.html Get instance task
         def tasks
-          path = "/projects/#{client.current_project}/instances/#{name}"
+          path = "/projects/#{project.name}/instances/#{name}"
           query = { taskstatus: true }
           result = client.get(path, query: query).parsed_response
 
@@ -63,7 +70,7 @@ module Aliyun
         #
         # @see http://repo.aliyun.com/api-doc/Instance/put_instance_terminate/index.html Put instance terminated
         def terminate
-          path = "/projects/#{client.current_project}/instances/#{name}"
+          path = "/projects/#{project.name}/instances/#{name}"
           body = XmlGenerator.generate_put_instance_xml
           !!client.put(path, body: body)
         end

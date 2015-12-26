@@ -11,7 +11,7 @@ module Aliyun
         # @params table_name [String] specify table name
         # @params partition_spec [String] specify partition spec
         def init(table_name, partition_spec = nil)
-          path = "/projects/#{client.current_project}/tables/#{table_name}"
+          path = "/projects/#{project.name}/tables/#{table_name}"
           query = { downloads: true }
           query.merge!(partition: partition_spec) if partition_spec
 

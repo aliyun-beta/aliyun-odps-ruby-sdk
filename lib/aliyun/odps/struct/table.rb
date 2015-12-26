@@ -2,6 +2,7 @@ module Aliyun
   module Odps
     module Struct
       class Table < Base
+        # required
         attr_accessor :name
 
         attr_accessor :table_id
@@ -16,7 +17,11 @@ module Aliyun
 
         attr_accessor :last_modified
 
-        attr_reader :services
+        # required
+        attr_accessor :project
+
+        # required
+        attr_accessor :client
 
         # List partitions of table
         #
@@ -24,7 +29,7 @@ module Aliyun
         #
         # @params name [String] specify the table name
         def partitions
-          path = "/projects/#{client.current_project}/tables/#{name}"
+          path = "/projects/#{project.name}/tables/#{name}"
           result = client.get(path, query: { partitions: true }).parsed_response
 
           keys = %w(Partitions Partition)
