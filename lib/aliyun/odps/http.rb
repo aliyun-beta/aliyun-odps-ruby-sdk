@@ -7,10 +7,9 @@ module Aliyun
     class Http # nodoc
       attr_reader :access_key, :secret_key
 
-      def initialize(access_key, secret_key, endpoint)
+      def initialize(access_key, secret_key)
         @access_key = access_key
         @secret_key = secret_key
-        @endpoint = endpoint
       end
 
       def get(uri, options = {})
@@ -48,7 +47,7 @@ module Aliyun
         body = options.delete(:body)
 
         append_headers!(headers, verb, body, options.merge(path: resource))
-        path = @endpoint + resource
+        path = Aliyun::Odps.config.endpoint + resource
         # options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI, http_proxyaddr: "127.0.0.1", http_proxyport: "8888" }
         options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI }
         p options

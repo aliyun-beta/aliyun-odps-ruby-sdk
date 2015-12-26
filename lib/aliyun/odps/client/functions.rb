@@ -62,8 +62,5 @@ module Aliyun
       end
     end
 
-    class Function < Model
-      extend Client::Functions
-    end
   end
 end

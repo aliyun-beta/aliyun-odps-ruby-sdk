@@ -14,26 +14,55 @@ module Aliyun
 
         attr_accessor :properties
 
+        attr_accessor :client
+
         attr_reader :services
+
+        ProjectService = ::Struct.new(:client, :project)
+
+        require 'aliyun/odps/client/tables'
+
+        class TablesService < ProjectService
+          include Client::Tables
+        end
+
+        require 'aliyun/odps/client/resources'
+
+        class ResourcesService < ProjectService
+          include Client::Resources
+        end
+
+        require 'aliyun/odps/client/instances'
+
+        class InstancesService < ProjectService
+          include Client::Instances
+        end
+
+        require 'aliyun/odps/client/functions'
+
+        class FunctionsService < ProjectService
+          include Client::Functions
+        end
+
 
         def tables
           @services ||= {}
-          @services[:tables] = Client::TablesService.new(client)
+          @services[:tables] = TablesService.new(client, self)
         end
 
         def functions
           @services ||= {}
-          @services[:functions] = Client::FunctionsService.new(client)
+          @services[:functions] = FunctionsService.new(client, self)
         end
 
         def resources
           @services ||= {}
-          @services[:resources] = Client::ResourcesService.new(client)
+          @services[:resources] = ResourcesService.new(client, self)
         end
 
         def instances
           @services ||= {}
-          @services[:instances] = Client::InstancesService.new(client)
+          @services[:instances] = InstancesService.new(client, self)
         end
       end
     end

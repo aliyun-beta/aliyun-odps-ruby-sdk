@@ -3,10 +3,11 @@ require 'mocha/test_unit'
 
 module Aliyun
   module Odps
-    describe Model do
+    describe Modelable do
 
       before do
-        class D < Model
+        class D
+          extend Modelable
           class << self
             def list(options={})
               return []
@@ -17,7 +18,8 @@ module Aliyun
             end
           end
         end
-        class M < Model
+        class M
+          extend Modelable
           has_many :ds, actions: [:create]
         end
       end

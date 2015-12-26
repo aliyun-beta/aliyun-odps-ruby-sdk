@@ -55,9 +55,5 @@ module Aliyun
         end
       end
     end
-    class Instance < Model
-      extend Client::Instances
-
-    end
   end
 end

@@ -14,7 +14,7 @@ module Aliyun
         # @option options [String] :maxitems (1000)
         def list(options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/resources"
+          path = "/projects/#{project.name}/resources"
           query = Utils.hash_slice(options, 'name', 'owner', 'marker', 'maxitems')
           result = client.get(path, query: query).parsed_response
 
@@ -30,7 +30,7 @@ module Aliyun
         #
         # @params name [String] specify resource name
         def get(name)
-          path = "/projects/#{client.current_project}/resources/#{name}"
+          path = "/projects/#{project.name}/resources/#{name}"
           resp = client.get(path)
 
           hash = {
@@ -56,7 +56,7 @@ module Aliyun
         #
         # @params name [String] specify resource name
         def get_meta(name)
-          path = "/projects/#{client.current_project}/resources/#{name}"
+          path = "/projects/#{project.name}/resources/#{name}"
           resp = client.head(path)
 
           hash = {
@@ -87,7 +87,7 @@ module Aliyun
         # @option options [File|BinData] :file specify the source code or file path
         def create(type, name, options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/resources/"
+          path = "/projects/#{project.name}/resources/"
 
           headers = {
             'x-odps-resource-type' => type,
@@ -113,7 +113,7 @@ module Aliyun
         # @option options [File|Bin Data] :file specify the source code or file path
         def update(type, name, options = {})
           Utils.stringify_keys!(options)
-          path = "/projects/#{client.current_project}/resources/#{name}"
+          path = "/projects/#{project.name}/resources/#{name}"
 
           headers = {
             'x-odps-resource-type' => type,
@@ -133,15 +133,12 @@ module Aliyun
         #
         # @params name [String] specify the resource name
         def delete(name)
-          path = "/projects/#{client.current_project}/resources/#{name}"
+          path = "/projects/#{project.name}/resources/#{name}"
 
           !!client.delete(path)
         end
       end
     end
 
-    class Resource < Model
-      extend Client::Resources
-    end
   end
 end

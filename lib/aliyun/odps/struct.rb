@@ -13,5 +13,4 @@ module Aliyun
   end
 end
 
-require 'aliyun/odps/struct/project'
 Dir[File.join(File.dirname(__FILE__), 'struct/*.rb')].each { |f| require f }

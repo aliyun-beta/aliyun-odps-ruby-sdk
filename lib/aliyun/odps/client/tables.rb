@@ -53,9 +53,5 @@ module Aliyun
         end
       end
     end
-
-    class Table < Model
-      extend Client::Tables
-    end
   end
 end

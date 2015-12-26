@@ -1,11 +1,11 @@
 require 'aliyun/odps/version'
 require 'aliyun/odps/utils'
 require 'aliyun/odps/xml_generator'
-require 'aliyun/odps/struct'
 require 'aliyun/odps/authorization'
-require 'aliyun/odps/model'
-require 'aliyun/odps/client'
 require 'aliyun/odps/configuration'
+require 'aliyun/odps/struct'
+require 'aliyun/odps/modelable'
+require 'aliyun/odps/client'
 
 # DEBUG
 require 'pry'
