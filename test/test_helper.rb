@@ -5,9 +5,27 @@ require 'minitest/autorun'
 require 'webmock/minitest'
 
 Aliyun::Odps.configure do |config|
-  config.access_key = 'ilowzBTRmVJb5CUr'
-  config.secret_key = 'IlWd7Jcsls43DQjX5OXyemmRf1HyPN'
-  config.endpoint = 'http://service.odps.aliyun.com/api'
+  config.access_key = ENV['ALIYUN_ACCESS_KEY']
+  config.secret_key = ENV['ALIYUN_SECRET_KEY']
+  config.endpoint = "http://service.odps.aliyun.com/api"
+end
+
+def endpoint
+  Aliyun::Odps.config.endpoint
+end
+
+def stub_client_request(verb, path, request = {}, response = {})
+  headers = {
+    'Authorization' => /ODPS #{Aliyun::Odps.config.access_key}:\S*/
+  }.merge(request[:headers] || {})
+  request.merge!(headers: headers)
+  request.merge!(body: File.read(fixture_path(request.delete(:file_path))).split("\n").map(&:strip).join) if request.key?(:file_path)
+
+  status = response[:status] || 200
+  response.merge!(status: status)
+  response.merge!(body: File.new(fixture_path(response.delete(:file_path)))) if response.key?(:file_path)
+
+  stub_request(verb, path).with(request).to_return(response)
 end
 
 def fixture_path(path)

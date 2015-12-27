@@ -30,7 +30,7 @@ module Aliyun
               'Name' => name,
               'Comment' => comment,
               'Config' => {
-                'Property' => property
+                'Property' => property || { 'Name' => '', 'Value' => '' }
               },
               'Query!' => "<![CDATA[#{query}]]>"
             }

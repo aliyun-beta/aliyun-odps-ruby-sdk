@@ -9,7 +9,7 @@ module Aliyun
         #
         # @params options [Hash] options
         #
-        # @option options [String] :datarange 指定查询instance 开始运行的时间范围。格式为：daterange=[n1]:[n2] ，其中n1是指时间范围的开始，n2为结束。n1和n2是将时间日期转换成整型后的数值。省略n1，查询条件为截止到n2,格式为:n2；省略n2，查询条件为从n1开始截到现在，格式为 n1:；同时省略n1和n2等同于忽略daterange查询条件
+        # @option options [String] :datarange specify the starttime range time range
         # @option options [String] :status supported value: Running, Suspended, Terminated
         # @option jobname [String] :jobname specify the job name
         # @option onlyowner [String] :onlyowner (yes) supported value: yes, no
@@ -41,7 +41,9 @@ module Aliyun
         def create(name, comment, priority, tasks = [])
           path = "/projects/#{project.name}/instances"
           body = XmlGenerator.generate_create_instance_xml(name, comment, priority, tasks)
-          client.post(path, body: body).headers['Location']
+
+          location = client.post(path, body: body).headers['Location']
+          Aliyun::Odps::Struct::Instance.new(name: name, location: location, project: project, client: client)
         end
 
         # Get status of instance

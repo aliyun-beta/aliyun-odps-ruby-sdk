@@ -48,8 +48,6 @@ module Aliyun
             content: resp.parsed_response
           }
 
-          p hash
-
           Struct::Resource.new(hash)
         end
 
@@ -72,8 +70,6 @@ module Aliyun
             resource_size: resp.headers['x-odps-resource-size'],
             resource_type: resp.headers['x-odps-resource-type']
           }
-
-          p hash
 
           Struct::Resource.new(hash)
         end
@@ -101,7 +97,9 @@ module Aliyun
 
           body = options.key?('file') ? Utils.to_data(options[:file]) : nil
 
-          client.post(path, headers: headers, body: body).headers['Location']
+          location = client.post(path, headers: headers, body: body).headers['Location']
+
+          Aliyun::Odps::Struct::Resource.new(name: name, resource_type: type, comment: options['comment'], location: location)
         end
 
         # Update resource in project

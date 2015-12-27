@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tables>
+    <Marker/>
+    <MaxItems>2</MaxItems>
+    <Table>
+        <Name>test_df_test</Name>
+        <Owner>ALIYUN$odpstest1@aliyun.com</Owner>
+    </Table>
+    <Table>
+        <Name>test_test</Name>
+        <Owner>ALIYUN$odpstest1@aliyun.com</Owner>
+    </Table>
+</Tables>

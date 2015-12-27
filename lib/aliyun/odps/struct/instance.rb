@@ -13,6 +13,8 @@ module Aliyun
 
         attr_accessor :end_time
 
+        attr_accessor :location
+
         # required
         attr_accessor :project
 

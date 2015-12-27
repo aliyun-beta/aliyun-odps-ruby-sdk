@@ -26,6 +26,8 @@ module Aliyun
           result = JSON.parse(result) if result.is_a?(String)
 
           Struct::UploadSession.new(result.merge(
+            project: project,
+            client: client,
             table_name: table_name,
             partition_spec: options['partition_spec']
           ))

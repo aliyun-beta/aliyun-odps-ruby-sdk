@@ -12,6 +12,8 @@ module Aliyun
 
         attr_accessor :clusters
 
+        attr_accessor :property
+
         attr_accessor :properties
 
         attr_accessor :client
