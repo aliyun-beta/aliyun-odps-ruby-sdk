@@ -5,8 +5,35 @@ describe Aliyun::Odps::Struct::Table do
   let(:project) { Aliyun::Odps::Struct::Project.new(name: project_name, client: Aliyun::Odps::Client.instance) }
   let(:table) { Aliyun::Odps::Struct::Table.new(name: 'table1', project: project, client: Aliyun::Odps::Client.instance) }
 
-  it "should get partitions information" do
-    stub_fail_request(:get, %r[/projects/#{project_name}/tables/table1])
-    assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, table.partitions }
+  describe "partitions" do
+    it "should get partitions information" do
+      stub_client_request(
+        :get,
+        "#{endpoint}/projects/#{project_name}/tables/table1",
+        {
+          query: {
+            partitions: true
+          }
+        },
+        {
+          file_path: 'tables/partitions.xml',
+          headers: {
+            content_type: 'application/xml'
+          }
+        }
+      )
+
+      obj = table.partitions
+
+      assert_kind_of(Aliyun::Odps::List, obj)
+      assert_equal(nil, obj.marker)
+      assert_equal(2, obj.max_items)
+      assert_equal([{"Name"=>"sale_date", "Value"=>"20150915"}, {"Name"=>"region", "Value"=>"USA"}], obj[0].column)
+    end
+
+    it "should raise RequestError" do
+      stub_fail_request(:get, %r[/projects/#{project_name}/tables/table1])
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, table.partitions }
+    end
   end
 end

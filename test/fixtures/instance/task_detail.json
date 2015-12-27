@@ -1,32 +1,32 @@
 {"Instance": {
-        "JsonSummary": "{\n    \"Inputs\": {\"test_projec.test_table\": [12,\n            3048]},\n    \"Outputs\": {},\n    \"Stages\": {\n        \"M1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0\": {\n            \"InputRecordCountStats\": {\"input\": [12,\n                    12,\n                    12]},\n            \"InputRecordCounts\": {\"input\": 12},\n            \"OutputRecordCountStats\": {\"R2_1_Stg1\": [1,\n                    1,\n                    1]},\n            \"OutputRecordCounts\": {\"R2_1_Stg1\": {\"R2_1_Stg1\": 1}},\n            \"UserCounters\": {},\n            \"WorkerCount\": 1,\n            \"WriterBytes\": {\"R2_1_Stg1\": {\"R2_1_Stg1\": 29}}},\n        \"R2_1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0\": {\n            \"InputRecordCountStats\": {\"input\": [1,\n                    1,\n                    1]},\n            \"InputRecordCounts\": {\"input\": 1},\n            \"OutputRecordCountStats\": {\"R2_1_Stg1FS_239129\": [1,\n                    1,\n                    1]},\n            \"OutputRecordCounts\": {\"R2_1_Stg1FS_239129\": {\"R2_1_Stg1FS_239129\": 1}},\n            \"UserCounters\": {},\n            \"WorkerCount\": 1,\n            \"WriterBytes\": {\"R2_1_Stg1FS_239129\": {\"R2_1_Stg1FS_239129\": 384}}}}}",
-        "Stages": [{
-                "EndTime": 1449803207,
-                "FatalWorkers": [],
-                "Progress": 100,
-                "StageId": "M1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0",
-                "StartTime": 1449803201,
-                "Status": "Terminated",
-                "Workers": [{
-                        "EndTime": 1449803206,
-                        "GblCounter": "{\"Counters\":\"{\\\"CountersValue\\\":[]}\",\"CustomInfo\":{\"UserCounters\":\"{}\"},\"InputCounters\":{\"input\":{\"bytes\":3048,\"records\":12}},\"OutputCounters\":{\"R2_1_Stg1\":{\"bytes\":29,\"dumps\":0,\"records\":1}},\"PanguReadBytes\":[0,1037,1037,1037],\"PanguWriteBytes\":[0,0,0,0]}",
-                        "LogID": "d01UQXVPVGN1TVRnNExqYzBMRTlrY0hNdmRHVnpkRjl1WlhkZlkyOXVjMjlzWlY4eU1ERTFNVEl4TVRBek1EWXpORFF5TTJkdWNuWjJOek00WDFOUlRGOHdYekJmTUY5cWIySXdMMDB4WDFOMFp6RkFjM1JuYVRBeU1EUTNMblJpWXlNYWJj",
-                        "StartTime": 1449803206,
-                        "Status": "Terminated",
-                        "WorkerID": "Odps/test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0/M1_Stg1#0_0"}]},
-            {
-                "EndTime": 1449803216,
-                "FatalWorkers": [],
-                "Progress": 100,
-                "StageId": "R2_1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0",
-                "StartTime": 1449803201,
-                "Status": "Terminated",
-                "Workers": [{
-                        "EndTime": 1449803216,
-                        "GblCounter": "{\"Counters\":\"{\\\"CountersValue\\\":[]}\",\"CustomInfo\":{\"UserCounters\":\"{}\"},\"InputCounters\":{\"input\":{\"bytes\":29,\"groups\":1,\"merges\":0,\"records\":1}},\"OutputCounters\":{\"R2_1_Stg1FS_239129\":{\"bytes\":384,\"records\":1}},\"PanguReadBytes\":[0,0,1043,6],\"PanguWriteBytes\":[384,384,0,0]}",
-                        "LogID": "PU1UQXVPVGN1TWpBNExqYzJMRTlrY0hNdmRHVnpkRjl1WlhkZlkyOXVjMjlzWlY4eU1ERTFNVEl4TVRBek1EWXpORFF5TTJkdWNuWjJOek00WDFOUlRGOHdYekJmTUY5cWIySXdMMUl5WHpGZlUzUm5NVUJ6ZEdkcE1EVXdNekF1ZEdKakl6QWFiYw==",
-                        "StartTime": 1449803215,
-                        "Status": "Terminated",
-                        "WorkerID": "Odps/test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0/R2_1_Stg1#0_0"}]}],
-        "Summary": "Inputs:\n\ttest_projec.test_table: 12 (3048 bytes)\nOutputs:\nM1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0:\n\tWorker Count:1\n\tInput Records:\n\t\tinput: 12 (min: 12, max: 12, avg: 12)\n\tOutput Records:\n\t\tR2_1_Stg1: 1 (min: 1, max: 1, avg: 1)\nR2_1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0:\n\tWorker Count:1\n\tInput Records:\n\t\tinput: 1 (min: 1, max: 1, avg: 1)\n\tOutput Records:\n\t\tR2_1_Stg1FS_239129: 1 (min: 1, max: 1, avg: 1)\n"}}
+  "JsonSummary": "{\n    \"Inputs\": {\"test_projec.test_table\": [12,\n            3048]},\n    \"Outputs\": {},\n    \"Stages\": {\n        \"M1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0\": {\n            \"InputRecordCountStats\": {\"input\": [12,\n                    12,\n                    12]},\n            \"InputRecordCounts\": {\"input\": 12},\n            \"OutputRecordCountStats\": {\"R2_1_Stg1\": [1,\n                    1,\n                    1]},\n            \"OutputRecordCounts\": {\"R2_1_Stg1\": {\"R2_1_Stg1\": 1}},\n            \"UserCounters\": {},\n            \"WorkerCount\": 1,\n            \"WriterBytes\": {\"R2_1_Stg1\": {\"R2_1_Stg1\": 29}}},\n        \"R2_1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0\": {\n            \"InputRecordCountStats\": {\"input\": [1,\n                    1,\n                    1]},\n            \"InputRecordCounts\": {\"input\": 1},\n            \"OutputRecordCountStats\": {\"R2_1_Stg1FS_239129\": [1,\n                    1,\n                    1]},\n            \"OutputRecordCounts\": {\"R2_1_Stg1FS_239129\": {\"R2_1_Stg1FS_239129\": 1}},\n            \"UserCounters\": {},\n            \"WorkerCount\": 1,\n            \"WriterBytes\": {\"R2_1_Stg1FS_239129\": {\"R2_1_Stg1FS_239129\": 384}}}}}",
+  "Stages": [{
+    "EndTime": 1449803207,
+    "FatalWorkers": [],
+    "Progress": 100,
+    "StageId": "M1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0",
+    "StartTime": 1449803201,
+    "Status": "Terminated",
+    "Workers": [{
+      "EndTime": 1449803206,
+      "GblCounter": "{\"Counters\":\"{\\\"CountersValue\\\":[]}\",\"CustomInfo\":{\"UserCounters\":\"{}\"},\"InputCounters\":{\"input\":{\"bytes\":3048,\"records\":12}},\"OutputCounters\":{\"R2_1_Stg1\":{\"bytes\":29,\"dumps\":0,\"records\":1}},\"PanguReadBytes\":[0,1037,1037,1037],\"PanguWriteBytes\":[0,0,0,0]}",
+      "LogID": "d01UQXVPVGN1TVRnNExqYzBMRTlrY0hNdmRHVnpkRjl1WlhkZlkyOXVjMjlzWlY4eU1ERTFNVEl4TVRBek1EWXpORFF5TTJkdWNuWjJOek00WDFOUlRGOHdYekJmTUY5cWIySXdMMDB4WDFOMFp6RkFjM1JuYVRBeU1EUTNMblJpWXlNYWJj",
+      "StartTime": 1449803206,
+      "Status": "Terminated",
+      "WorkerID": "Odps/test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0/M1_Stg1#0_0"}]},
+      {
+        "EndTime": 1449803216,
+        "FatalWorkers": [],
+        "Progress": 100,
+        "StageId": "R2_1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0",
+        "StartTime": 1449803201,
+        "Status": "Terminated",
+        "Workers": [{
+          "EndTime": 1449803216,
+          "GblCounter": "{\"Counters\":\"{\\\"CountersValue\\\":[]}\",\"CustomInfo\":{\"UserCounters\":\"{}\"},\"InputCounters\":{\"input\":{\"bytes\":29,\"groups\":1,\"merges\":0,\"records\":1}},\"OutputCounters\":{\"R2_1_Stg1FS_239129\":{\"bytes\":384,\"records\":1}},\"PanguReadBytes\":[0,0,1043,6],\"PanguWriteBytes\":[384,384,0,0]}",
+          "LogID": "PU1UQXVPVGN1TWpBNExqYzJMRTlrY0hNdmRHVnpkRjl1WlhkZlkyOXVjMjlzWlY4eU1ERTFNVEl4TVRBek1EWXpORFF5TTJkdWNuWjJOek00WDFOUlRGOHdYekJmTUY5cWIySXdMMUl5WHpGZlUzUm5NVUJ6ZEdkcE1EVXdNekF1ZEdKakl6QWFiYw==",
+          "StartTime": 1449803215,
+          "Status": "Terminated",
+          "WorkerID": "Odps/test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0/R2_1_Stg1#0_0"}]}],
+          "Summary": "Inputs:\n\ttest_projec.test_table: 12 (3048 bytes)\nOutputs:\nM1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0:\n\tWorker Count:1\n\tInput Records:\n\t\tinput: 12 (min: 12, max: 12, avg: 12)\n\tOutput Records:\n\t\tR2_1_Stg1: 1 (min: 1, max: 1, avg: 1)\nR2_1_Stg1_test_projec_20151211030634423gnrvv738_SQL_0_0_0_job0:\n\tWorker Count:1\n\tInput Records:\n\t\tinput: 1 (min: 1, max: 1, avg: 1)\n\tOutput Records:\n\t\tR2_1_Stg1FS_239129: 1 (min: 1, max: 1, avg: 1)\n"}}
 

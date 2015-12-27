@@ -33,9 +33,13 @@ module Aliyun
           result = client.get(path, query: { partitions: true }).parsed_response
 
           keys = %w(Partitions Partition)
-          Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            Struct::Partition.new(_hash)
+          marker = Utils.dig_value(result, 'Partitions', 'Marker')
+          max_items = Utils.dig_value(result, 'Partitions', 'MaxItems')
+          parts = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+            Struct::Partition.new(hash)
           end
+
+          Aliyun::Odps::List.new(marker, max_items, parts)
         end
       end
     end
