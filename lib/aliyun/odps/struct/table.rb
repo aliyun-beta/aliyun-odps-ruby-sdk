@@ -27,10 +27,17 @@ module Aliyun
         #
         # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
         #
-        # @params name [String] specify the table name
-        def partitions
+        # @params options [Hash] options
+        # @option options [String] :marker specify marker for paginate
+        # @option options [String] :maxitems (1000) specify maxitems in this request
+        def partitions(options = {})
+          Utils.stringify_keys!(options)
           path = "/projects/#{project.name}/tables/#{name}"
-          result = client.get(path, query: { partitions: true }).parsed_response
+          query = Utils.hash_slice(options, 'marker', 'maxitems').merge(
+            partitions: true,
+            expectmarker: true
+          )
+          result = client.get(path, query: query).parsed_response
 
           keys = %w(Partitions Partition)
           marker = Utils.dig_value(result, 'Partitions', 'Marker')

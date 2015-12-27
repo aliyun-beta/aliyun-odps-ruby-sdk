@@ -7,13 +7,15 @@ describe Aliyun::Odps::Struct::Table do
 
   describe "partitions" do
     it "should get partitions information" do
+      query = { maxitems: 2, marker: 'cGFydDE9cGFydDEh' }
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/tables/table1",
         {
           query: {
-            partitions: true
-          }
+            partitions: true,
+            expectmarker: true
+          }.merge(query)
         },
         {
           file_path: 'tables/partitions.xml',
@@ -23,7 +25,7 @@ describe Aliyun::Odps::Struct::Table do
         }
       )
 
-      obj = table.partitions
+      obj = table.partitions(query)
 
       assert_kind_of(Aliyun::Odps::List, obj)
       assert_equal(nil, obj.marker)

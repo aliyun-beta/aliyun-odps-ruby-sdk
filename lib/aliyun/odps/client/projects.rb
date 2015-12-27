@@ -15,8 +15,8 @@ module Aliyun
         #
         # @params options [Hash] options
         # @option options [String] :owner specify the project owner
-        # @option options [String] :marker
-        # @option options [String] :maxitems (1000)
+        # @option options [String] :marker specify marker for paginate
+        # @option options [String] :maxitems (1000) specify maxitems in this request
         #
         # @return [Aliyun::Odps::List]
         #
