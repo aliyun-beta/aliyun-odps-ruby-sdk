@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+  <Name>test_project</Name>
+  <Comment>odps test project</Comment>
+  <State>AVAILABLE</State>
+  <ProjectGroupName> test_project </ProjectGroupName>
+  <Clusters>
+    <Cluster>
+      <Name>ODPS-STG</Name>
+      <QuotaID>1</QuotaID>
+    </Cluster>
+    <Cluster>
+      <Name>ODPS-STGCONTROL</Name>
+      <QuotaID>1</QuotaID>
+    </Cluster>
+  </Clusters>
+  <Property>{}</Property>
+  <Properties>
+    <Property>
+      <Name>READ_TABLE_MAX_ROW</Name>
+      <Value>10000</Value>
+    </Property>
+    <Property>
+      <Name>odps.changelogs.ttl</Name>
+      <Value>0</Value>
+    </Property>
+  </Properties>
+</Project>

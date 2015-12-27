@@ -20,8 +20,8 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           keys = %w(Tables Table)
-          marker = Utils.dig_value(result, 'Projects', 'Marker')
-          max_items = Utils.dig_value(result, 'Projects', 'MaxItems')
+          marker = Utils.dig_value(result, 'Tables', 'Marker')
+          max_items = Utils.dig_value(result, 'Tables', 'MaxItems')
           tables = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
             Struct::Table.new(hash)
           end

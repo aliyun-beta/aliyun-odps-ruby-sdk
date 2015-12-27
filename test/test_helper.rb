@@ -10,46 +10,22 @@ Aliyun::Odps.configure do |config|
   config.endpoint = "http://service.odps.aliyun.com/api"
 end
 
-def stub_get_request(path, file_path, options = {})
-  stub_client_request(:get, path, file_path, options)
+def endpoint
+  Aliyun::Odps.config.endpoint
 end
 
-def stub_put_request(path, file_path, options = {})
-  stub_client_request(:put, path, file_path, options)
-end
+def stub_client_request(verb, path, request = {}, response = {})
+  headers = {
+    'Authorization' => /ODPS #{Aliyun::Odps.config.access_key}:\S*/
+  }.merge(request[:headers] || {})
+  request.merge!(headers: headers)
+  request.merge!(body: File.read(fixture_path(request.delete(:file_path))).split("\n").map(&:strip).join) if request.key?(:file_path)
 
-def stub_post_request(path, file_path, options = {})
-  stub_client_request(:post, path, file_path, options)
-end
+  status = response[:status] || 200
+  response.merge!(status: status)
+  response.merge!(body: File.new(fixture_path(response.delete(:file_path)))) if response.key?(:file_path)
 
-def stub_delete_request(path, file_path, options = {})
-  stub_client_request(:delete, path, file_path, options)
-end
-
-def stub_head_request(path, file_path, options = {})
-  stub_client_request(:head, path, file_path, options)
-end
-
-def stub_client_request(verb, path, file_path, options = {})
-  request_hash = {
-    headers: {
-      'Authorization' => /ODPS #{Aliyun::Odps.config.access_key}:\S*/
-    }
-  }
-  request_hash.merge!(query: options[:query]) if options.key?(:query)
-  request_hash[:headers].merge!(options[:headers]) if options.key?(:headers)
-  request_hash.merge!(body: File.read(fixture_path(options[:request_body])).split("\n").map(&:strip).join) if options.key?(:request_body)
-
-  response_hash = {
-    status: options[:status] || 200,
-    headers: {
-      content_type: 'application/xml'
-    }
-  }
-  response_hash[:headers].merge!(options[:response_headers]) if options.key?(:response_headers)
-  response_hash.merge!(body: File.new(fixture_path(file_path))) unless file_path.empty?
-
-  stub_request(verb, path).with(request_hash).to_return(response_hash)
+  stub_request(verb, path).with(request).to_return(response)
 end
 
 def fixture_path(path)

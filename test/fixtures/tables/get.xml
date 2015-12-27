@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Table>
+  <Name>test_table</Name>
+  <TableId>029a5286716248ad92dde15d70060ec2</TableId>
+  <Comment></Comment>
+  <Schema format="Json">{"columns": [{ "comment": "", "label": "", "name": "name", "type": "string"}, { "comment": "", "label": "", "name": "nid", "type": "bigint"}, { "comment": "", "label": "", "name": "age", "type": "bigint"}], "comment": "", "createTime": 1449663525, "hubLifecycle": -1, "isVirtualView": false, "lastDDLTime": 1449663525, "lastModifiedTime": 1449663526, "lifecycle": -1, "owner": "ALIYUN$odpstest1@aliyun.com", "partitionKeys": [], "shardExist": false, "size": 0, "tableLabel": "", "tableName": "test_table"}</Schema>
+</Table>

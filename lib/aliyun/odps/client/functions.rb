@@ -37,7 +37,8 @@ module Aliyun
         def create(name, class_path, resources = [])
           path = "/projects/#{project.name}/registration/functions"
           body = XmlGenerator.generate_create_function_xml(name, class_path, resources)
-          client.post(path, body: body).headers['Location']
+          location = client.post(path, body: body).headers['Location']
+          Aliyun::Odps::Struct::Function.new(name: name, class_type: class_path, location: location)
         end
 
         # Update function in project
