@@ -27,5 +27,14 @@ module Aliyun
     def self.config
       @configuration
     end
+
+    def self.project
+      fail MissingProjectConfigurationError unless config.project
+
+      Aliyun::Odps::Struct::Project.new(
+        name: config.project,
+        client: Aliyun::Odps::Client.instance
+      )
+    end
   end
 end

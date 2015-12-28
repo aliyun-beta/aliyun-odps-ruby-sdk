@@ -40,5 +40,11 @@ module Aliyun
         super("Missing #{element} Element in xml")
       end
     end
+
+    class MissingProjectConfigurationError < Error
+      def initialize
+        super("Must config project first. Use Aliyun::Odps.configure {|config| config.project = 'your-project' }")
+      end
+    end
   end
 end
