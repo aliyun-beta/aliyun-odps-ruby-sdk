@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'aliyun/odps'
 
@@ -29,7 +32,11 @@ def stub_client_request(verb, path, request = {}, response = {})
 end
 
 def stub_fail_request(verb, path, request = {}, response = {})
-  response.merge!(status: 400, body: File.new(fixture_path('test_error.xml')), headers: { content_type: 'application/xml' })
+  response.merge!(
+    status: 400,
+    body: File.new(fixture_path(response[:file_path] || 'test_error.xml')),
+    headers: { content_type: response[:headers] && response[:headers][:content_type] || 'application/xml' }
+  )
   stub_client_request(verb, path, request, response)
 end
 

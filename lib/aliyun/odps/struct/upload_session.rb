@@ -46,7 +46,9 @@ module Aliyun
           query = { uploadid: upload_id }
           query.merge!(partition: partition_spec) if partition_spec
 
-          result = client.get(path, query: query).parsed_response
+          resp = client.get(path, query: query)
+
+          result = resp.parsed_response
           result.is_a?(String) ? JSON.parse(result) : result
         end
 

@@ -10,8 +10,8 @@
         <Comment>TaskComment</Comment>
         <Config>
           <Property>
-            <Name></Name>
-            <Value></Value>
+            <Name>key1</Name>
+            <Value>value1</Value>
           </Property>
         </Config>
         <Query>

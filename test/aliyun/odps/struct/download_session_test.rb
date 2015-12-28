@@ -43,7 +43,7 @@ describe Aliyun::Odps::Struct::DownloadSession do
     end
 
     it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/tables/table1])
+      stub_fail_request(:get, %r[/projects/#{project_name}/tables/table1], {}, file_path: 'tunnel_error.json', headers: { content_type: 'application/json' })
       assert_raises(Aliyun::Odps::RequestError) { assert_kind_of String, download_session.download("(1,100)", "uuid,name") }
     end
   end

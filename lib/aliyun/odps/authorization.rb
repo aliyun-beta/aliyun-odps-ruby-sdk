@@ -29,6 +29,7 @@ module Aliyun
         "#{PROVIDER} #{access_key}:#{signature_string.strip}"
       end
 
+      # @!visibility private
       def self.concat_content_string(verb, time, options = {})
         headers = options.fetch(:headers, {})
 
@@ -40,6 +41,7 @@ module Aliyun
         join_values(verb, time, headers, conon_headers, conon_resource)
       end
 
+      # @!visibility private
       def self.join_values(verb, time, headers, conon_headers, conon_resource)
         [
           verb,
@@ -50,6 +52,7 @@ module Aliyun
         ].join("\n") + conon_resource
       end
 
+      # @!visibility private
       def self.signature(secret_key, content_string)
         utf8_string = content_string.force_encoding('utf-8')
         Base64.encode64(
@@ -61,6 +64,7 @@ module Aliyun
         )
       end
 
+      # @!visibility private
       def self.get_cononicalized_odps_headers(headers)
         odps_headers = (headers || {}).select do |key, _|
           key.to_s.downcase.start_with?('x-odps-')
@@ -72,6 +76,7 @@ module Aliyun
         end.join("\n") + "\n"
       end
 
+      # @!visibility private
       def self.get_cononicalized_resource(path, query)
         conon_resource = path
         return conon_resource if query.nil? || query.empty?

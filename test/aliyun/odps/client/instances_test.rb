@@ -36,7 +36,7 @@ describe Aliyun::Odps::Client::Resources do
   describe "create" do
     it "should create new instance" do
       location = "#{endpoint}/projects/#{project_name}/instances/JobName"
-      task = Aliyun::Odps::Struct::InstanceTask.new(type: 'SQL', name: 'SqlTask', comment: 'TaskComment', query: 'SELECT * FROM test_table;')
+      task = Aliyun::Odps::Struct::InstanceTask.new(type: 'SQL', name: 'SqlTask', comment: 'TaskComment', property: { 'key1' => 'value1' }, query: 'SELECT * FROM test_table;')
       args = ['JobName', 'JobComment', 1, [task]]
       stub_client_request(
         :post,

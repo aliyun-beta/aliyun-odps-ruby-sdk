@@ -14,8 +14,8 @@ module Aliyun
         }
 
         def_attr :comment, :String
-        def_attr :property, :Hash, init_with: Proc.new { |value|
-          value.map do |key, value|
+        def_attr :property, :Hash, init_with: Proc.new { |hash|
+          hash.map do |key, value|
             { 'Name' => key, 'Value' => value }
           end
         }
