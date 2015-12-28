@@ -36,36 +36,23 @@ module Aliyun
 
             attr_reader attr
 
-            if options.key?(:init_with)
-              if options[:init_with].respond_to?(:call)
-                define_method("#{attr}=") do |value|
-                  instance_eval do
-                    instance_variable_set("@#{attr}", options[:init_with].call(value))
-                  end
-                end
+            init_with_block =
+              if options.key?(:init_with) && options[:init_with].respond_to?(:call)
+                init_with_block = options[:init_with]
               else
-                fail NotImplementedError, "init_with must respond to call, Please use Proc.new {|value| ... }"
+                case type.to_s
+                when 'Integer'
+                  Proc.new { |value| value.to_i }
+                when 'DateTime'
+                  Proc.new { |value| DateTime.parse(value) }
+                else
+                  Proc.new { |value| value }
+                end
               end
-            else
-              case type.to_s
-              when 'Integer'
-                define_method("#{attr}=") do |value|
-                  instance_eval do
-                    instance_variable_set("@#{attr}", value.to_i)
-                  end
-                end
-              when 'DateTime'
-                define_method("#{attr}=") do |value|
-                  instance_eval do
-                    instance_variable_set("@#{attr}", DateTime.parse(value))
-                  end
-                end
-              else
-                define_method("#{attr}=") do |value|
-                  instance_eval do
-                    instance_variable_set("@#{attr}", value)
-                  end
-                end
+
+            define_method("#{attr}=") do |value|
+              instance_eval do
+                instance_variable_set("@#{attr}", init_with_block.call(value))
               end
             end
 

@@ -28,10 +28,11 @@ def stub_client_request(verb, path, request = {}, response = {})
   stub_request(verb, path).with(request).to_return(response)
 end
 
-def fixture_path(path)
-  File.join(File.dirname(__FILE__), 'fixtures', path)
+def stub_fail_request(verb, path, request = {}, response = {})
+  response.merge!(status: 400, body: File.new(fixture_path('test_error.xml')), headers: { content_type: 'application/xml' })
+  stub_client_request(verb, path, request, response)
 end
 
-def stub_fail_request(verb, path)
-  stub_request(verb, path).to_return(status: 400, body: File.new(fixture_path('test_error.xml')), headers: { content_type: 'application/xml' })
+def fixture_path(path)
+  File.join(File.dirname(__FILE__), 'fixtures', path)
 end

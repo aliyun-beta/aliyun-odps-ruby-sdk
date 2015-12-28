@@ -7,12 +7,6 @@ module Aliyun
   module Odps
     class Authorization
       PROVIDER = 'ODPS'
-      OVERRIDE_RESPONSE_LIST = %w(
-        response-content-type response-content-language response-cache-control
-        logging response-content-encoding acl uploadId uploads partNumber group
-        link delete website location objectInfo response-expires
-        response-content-disposition cors lifecycle restore qos referer append
-        position)
 
       # @private
       #
@@ -31,9 +25,7 @@ module Aliyun
       # @return [String] the authorization string
       def self.get_authorization(access_key, secret_key, options = {})
         content_string = concat_content_string(options[:verb], options[:date], options)
-        #p content_string
         signature_string = signature(secret_key, content_string)
-        #p signature_string
         "#{PROVIDER} #{access_key}:#{signature_string.strip}"
       end
 

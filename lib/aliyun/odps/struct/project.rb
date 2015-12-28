@@ -72,6 +72,16 @@ module Aliyun
           @services ||= {}
           @services[:table_tunnels] ||= TableTunnelsService.new(client, self)
         end
+
+        def build_update_body
+          fail XmlElementMissingError, 'Comment' if comment.nil?
+
+          Utils.to_xml(
+            'Project' => {
+              'Name' => name,
+              'Comment' => comment
+            })
+        end
       end
     end
   end

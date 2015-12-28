@@ -36,10 +36,21 @@ module Aliyun
         # @params tasks [Array<Struct::InstanceTask]> a list for instance_task
         def create(name, comment, priority, tasks = [])
           path = "/projects/#{project.name}/instances"
-          body = XmlGenerator.generate_create_instance_xml(name, comment, priority, tasks)
 
-          location = client.post(path, body: body).headers['Location']
-          Aliyun::Odps::Struct::Instance.new(name: name, location: location, project: project, client: client)
+          instance = Struct::Instance.new(
+            name: name,
+            comment: comment,
+            priority: priority,
+            tasks: tasks,
+            client: client,
+            project: project
+          )
+
+          resp = client.post(path, body: instance.build_create_body)
+
+          instance.tap do |obj|
+            obj.location = resp.headers['Location']
+          end
         end
 
         # Get status of instance

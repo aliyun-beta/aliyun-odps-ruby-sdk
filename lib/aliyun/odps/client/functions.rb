@@ -32,9 +32,18 @@ module Aliyun
         # @params resources [Array<Struct::Resource>] specify resources used by function
         def create(name, class_path, resources = [])
           path = "/projects/#{project.name}/registration/functions"
-          body = XmlGenerator.generate_create_function_xml(name, class_path, resources)
-          location = client.post(path, body: body).headers['Location']
-          Aliyun::Odps::Struct::Function.new(name: name, class_type: class_path, location: location)
+
+          function = Struct::Function.new(
+            name: name,
+            class_type: class_path,
+            resources: resources
+          )
+
+          resp = client.post(path, body: function.build_create_body)
+
+          function.tap do |obj|
+            obj.location = resp.headers['Location']
+          end
         end
 
         # Update function in project
@@ -42,12 +51,17 @@ module Aliyun
         # @see http://repo.aliyun.com/api-doc/Function/put_function/index.html Put function
         #
         # @params name [String] specify function name
-        # @params class_type [String] specify class Path used by function
+        # @params class_path [String] specify class Path used by function
         # @params resources [Array<Struct::Resource>] specify resources used by function
-        def update(name, class_type, resources = [])
+        def update(name, class_path, resources = [])
           path = "/projects/#{project.name}/registration/functions/#{name}"
-          body = XmlGenerator.generate_create_function_xml(name, class_type, resources)
-          !!client.put(path, body: body)
+
+          function = Struct::Function.new(
+            name: name,
+            class_type: class_path,
+            resources: resources
+          )
+          !!client.put(path, body: function.build_create_body)
         end
 
         # Delete function in project

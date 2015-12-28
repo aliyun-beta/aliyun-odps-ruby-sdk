@@ -81,9 +81,13 @@ describe Aliyun::Odps::Client::Projects do
       assert(project_service.update('Projectname', comment: 'ProjectComment'), 'update success')
     end
 
+    it "should raise XmlElementMissingError" do
+      assert_raises(Aliyun::Odps::XmlElementMissingError) { assert(project_service.update('project_name'), 'update success') }
+    end
+
     it "should raise RequestError" do
       stub_fail_request(:put, %r[/projects/project_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert(project_service.update('project_name'), 'update success') }
+      assert_raises(Aliyun::Odps::RequestError) { assert(project_service.update('project_name', comment: 'Test Comment'), 'update success') }
     end
   end
 

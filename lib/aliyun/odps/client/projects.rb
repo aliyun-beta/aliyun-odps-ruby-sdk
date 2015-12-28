@@ -52,7 +52,12 @@ module Aliyun
         # @option options [String] :comment Comment of the project
         def update(name, options = {})
           Utils.stringify_keys!(options)
-          body = XmlGenerator.generate_update_project_xml(name, options)
+          project = Struct::Project.new(
+            name: name,
+            comment: options['comment'],
+            client: Aliyun::Odps::Client.instance
+          )
+          body = project.build_update_body
           !!client.put("/projects/#{name}", body: body)
         end
       end

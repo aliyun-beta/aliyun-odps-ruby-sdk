@@ -5,6 +5,7 @@ module Aliyun
     class List
       include Enumerable
       extend Forwardable
+
       attr_reader :marker, :max_items
       def_delegators :@objects, :[], :each, :size, :inspect
 

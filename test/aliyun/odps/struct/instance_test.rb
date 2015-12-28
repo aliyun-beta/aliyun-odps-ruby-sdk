@@ -95,7 +95,7 @@ describe Aliyun::Odps::Struct::Instance do
     end
   end
 
-  describe "tasks" do
+  describe "list_tasks" do
     it "should get tasks" do
       stub_client_request(
         :get,
@@ -113,13 +113,13 @@ describe Aliyun::Odps::Struct::Instance do
         }
       )
 
-      obj = instance.tasks
+      obj = instance.list_tasks
       assert_kind_of(Array, obj)
     end
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, instance.tasks }
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, instance.list_tasks }
     end
   end
 
