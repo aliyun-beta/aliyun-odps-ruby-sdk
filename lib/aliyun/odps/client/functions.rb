@@ -18,13 +18,9 @@ module Aliyun
           query = Utils.hash_slice(options, 'name', 'owner', 'marker', 'maxitems')
           result = client.get(path, query: query).parsed_response
 
-          keys = %w(Functions Function)
-          marker = Utils.dig_value(result, 'Functions', 'Marker')
-          max_items = Utils.dig_value(result, 'Functions', 'MaxItems')
-          functions = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+          Aliyun::Odps::List.build(result, %w(Functions Function)) do |hash|
             Struct::Function.new(hash)
           end
-          Aliyun::Odps::List.new(marker, max_items, functions)
         end
 
         # Register function in project

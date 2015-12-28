@@ -18,13 +18,9 @@ module Aliyun
           query = Utils.hash_slice(options, 'name', 'owner', 'marker', 'maxitems')
           result = client.get(path, query: query).parsed_response
 
-          keys = %w(Resources Resource)
-          marker = Utils.dig_value(result, 'Resources', 'Marker')
-          max_items = Utils.dig_value(result, 'Resources', 'MaxItems')
-          resources = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+          Aliyun::Odps::List.build(result, %w(Resources Resource)) do |hash|
             Struct::Resource.new(hash)
           end
-          Aliyun::Odps::List.new(marker, max_items, resources)
         end
 
         # Get resource of project

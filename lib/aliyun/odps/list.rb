@@ -13,6 +13,16 @@ module Aliyun
         @max_items = max_items.to_i
         @objects = objects
       end
+
+      def self.build(result, keys, &block)
+        top_key = keys.first
+        marker = Utils.dig_value(result, top_key, 'Marker')
+        max_items = Utils.dig_value(result, top_key, 'MaxItems')
+        objects = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+          yield hash
+        end
+        new(marker, max_items, objects)
+      end
     end
   end
 end

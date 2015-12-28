@@ -27,13 +27,9 @@ module Aliyun
           resp = client.get('/projects', query: query)
           result = resp.parsed_response
 
-          keys = %w(Projects Project)
-          marker = Utils.dig_value(result, 'Projects', 'Marker')
-          max_items = Utils.dig_value(result, 'Projects', 'MaxItems')
-          projects = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
+          Aliyun::Odps::List.build(result, %w(Projects Project)) do |hash|
             Struct::Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
           end
-          Aliyun::Odps::List.new(marker, max_items, projects)
         end
 
         # Get Project Information
