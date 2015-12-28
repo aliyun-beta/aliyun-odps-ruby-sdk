@@ -50,6 +50,22 @@ module Aliyun
         # @params options [Hash] options
         # @option options [String] :comment specify table comment
         def create(name, schema, options = {})
+          Utils.stringify_keys!(options)
+
+          table = Model::Table.new(
+            name: name,
+            schema: schema,
+            project: project
+          )
+          table.comment = options['comment'] if options.key?('comment')
+
+          task = Model::InstanceTask.new(
+            name: 'SQLCreateTableTask',
+            type: 'SQL',
+            query: table.generate_create_sql
+          )
+
+          project.instances.create('SQLCreateTableInstance', 'Create Table', 5, [task])
         end
 
         # List partitions of table

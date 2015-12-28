@@ -27,7 +27,7 @@ module Aliyun
           {
             'SQL' => {
               'Name' => name,
-              'Comment' => comment,
+              'Comment' => comment || '',
               'Config' => {
                 'Property' => property || { 'Name' => '', 'Value' => '' }
               },

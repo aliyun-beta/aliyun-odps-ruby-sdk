@@ -35,6 +35,8 @@ module Aliyun
         # @params priority [Integer] Specify priority of the instance
         # @params tasks [Array<Model::InstanceTask]> a list for instance_task
         def create(name, comment, priority, tasks = [])
+          #fail PriorityInvalidError if priority.to_i == 0
+
           path = "/projects/#{project.name}/instances"
 
           instance = Model::Instance.new(

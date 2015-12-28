@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Instance>
+  <Job>
+    <Name>JobName</Name>
+    <Comment>JobComment</Comment>
+    <Priority>1</Priority>
+    <Tasks>
+      <SQL>
+        <Name>SqlTask</Name>
+        <Comment></Comment>
+        <Config>
+          <Property>
+            <Name></Name>
+            <Value></Value>
+          </Property>
+        </Config>
+        <Query>
+          <![CDATA[SELECT * FROM test_table;]]>
+        </Query>
+      </SQL>
+    </Tasks>
+  </Job>
+</Instance>

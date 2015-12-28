@@ -41,7 +41,25 @@ describe Aliyun::Odps::Model::Table do
 
   describe "create" do
     it "should generate correct sql" do
-      
+      table = Aliyun::Odps::Model::Table.new(
+        name: 'test_table',
+        project: project,
+        schema: {
+          columns: [{name: 'uuid', type: 'bigint', comment: 'major key'}],
+          partitions: [{name: 'name', type: 'string'}, {name: 'name2', type: 'string', comment: 'test partition comment'}]
+        })
+
+      assert_equal("CREATE TABLE mock_project_name.`test_table` (`uuid` bigint COMMENT 'major key') PARTITIONED BY (`name` string, `name2` string COMMENT 'test partition comment');", table.generate_create_sql)
+    end
+
+    it "should generate correct sql with schema object" do
+      schema = Aliyun::Odps::Model::TableSchema.new({
+        columns: [{name: 'uuid', type: 'bigint', comment: 'major key'}],
+        partitions: [{name: 'name', type: 'string'}, {name: 'name2', type: 'string', comment: 'test partition comment'}]
+      })
+      table = Aliyun::Odps::Model::Table.new(name: 'test_table', comment: 'table comment', project: project, schema: schema)
+
+      assert_equal("CREATE TABLE mock_project_name.`test_table` (`uuid` bigint COMMENT 'major key') COMMENT 'table comment' PARTITIONED BY (`name` string, `name2` string COMMENT 'test partition comment');", table.generate_create_sql)
     end
   end
 end

@@ -52,10 +52,14 @@ module Aliyun
 
         def generate_create_sql
           sql = ""
-          sql += "CREATE TABLE #{project.name}.`#{name}` "
-          sql += "(" + schema.columns.map{|column| "`#{column.name}` #{column.type} #{column.comment}"}.join(", ") + ") " if schema && schema.columns
-          sql += "#{comment} " if comment
-          sql += "PARTITIONED BY (" + schema.partitions.map{|column| "`#{column.name}` #{column.type} #{column.comment}"}.join(", ") + ") " if schema && schema.partitions
+          sql += "CREATE TABLE #{project.name}.`#{name}`"
+          sql += " (" + schema.columns.map do |column|
+            "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : "")
+          end.join(", ") + ")" if schema && schema.columns
+          sql += " COMMENT '#{comment}'" if comment
+          sql += " PARTITIONED BY (" + schema.partitions.map do |column|
+            "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : "")
+          end.join(", ") + ")" if schema && schema.partitions
           sql += ";"
         end
       end
