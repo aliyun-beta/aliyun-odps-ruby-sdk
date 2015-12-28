@@ -1,6 +1,6 @@
 module Aliyun
   module Odps
-    class Client
+    module Clients
       # Methods for Functions
       module Functions
         # List Functions of project

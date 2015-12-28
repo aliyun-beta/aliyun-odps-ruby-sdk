@@ -1,12 +1,11 @@
-require 'aliyun/odps/client/instances'
-require 'aliyun/odps/client/tables'
-require 'aliyun/odps/client/resources'
-require 'aliyun/odps/client/functions'
+require 'aliyun/odps/clients/instances'
+require 'aliyun/odps/clients/tables'
+require 'aliyun/odps/clients/resources'
+require 'aliyun/odps/clients/functions'
 
 module Aliyun
   module Odps
-
-    class Client
+    module Clients
       # Methods for Projects
       module Projects
         # List all projects

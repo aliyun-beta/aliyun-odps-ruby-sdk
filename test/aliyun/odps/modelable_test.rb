@@ -25,20 +25,23 @@ module Aliyun
       end
 
       it "should support has_many" do
-        begin
-          m = M.new
-          assert(m.respond_to?(:ds), 'response to service object')
 
-          assert_equal(DService.build(m), m.ds)
+        m = M.new
+        assert(m.respond_to?(:ds), 'response to service object')
 
-          assert(m.ds.respond_to?(:list), 'response to list model')
-          assert(m.ds.respond_to?(:create), 'response to list model')
+        assert_equal(DService.build(m), m.ds)
 
-          assert_kind_of(D, m.ds.create(name: 'abc'))
-          assert_equal([], m.ds.list())
-        rescue Exception => e
-          flunk(e)
-        end
+        assert(m.ds.respond_to?(:list), 'response to list model')
+        assert(m.ds.respond_to?(:create), 'response to create model')
+
+        assert_kind_of(D, m.ds.create(name: 'abc'))
+        assert_equal([], m.ds.list())
+
+        assert_nil(m.ds.project)
+
+        assert(Aliyun::Odps::Client.instance.respond_to?(:projects), 'client has projects')
+        assert_kind_of(Aliyun::Odps::ProjectService, Aliyun::Odps::Client.instance.projects)
+        assert_nil(Aliyun::Odps::Client.instance.projects.project, "Client's projects doesn't have a project")
       end
     end
   end

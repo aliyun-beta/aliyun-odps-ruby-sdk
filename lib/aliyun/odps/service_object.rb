@@ -5,6 +5,18 @@ module Aliyun
         Aliyun::Odps::Client.instance
       end
 
+      def project
+        # so far doesn't support 2nd level object
+        case master.class
+          when Project
+            master
+          #when Client
+          else
+            nil
+        end
+
+      end
+
       attr_reader :master
 
       def initialize(master, options = {})

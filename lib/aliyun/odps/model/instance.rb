@@ -1,3 +1,4 @@
+require 'aliyun/odps/clients/instances'
 
 module Aliyun
   module Odps
@@ -6,7 +7,7 @@ module Aliyun
     end
 
     class InstanceService < Aliyun::Odps::ServiceObject
-      include Aliyun::Odps::Client::Instances
+      include Aliyun::Odps::Clients::Instances
     end
   end
 end
