@@ -78,7 +78,7 @@ module Aliyun
         # @params name [String] specify resource name
         # @params options [Hash] options
         # @option options [String] :comment specify resource comment
-        # @option options [String] :table specify table or table partition name
+        # @option options [String] :table specify table or table partition name, if your table have partitions, must contains partition spec together with format: tab1 partition(region='bj',year='2011')
         # @option options [File|BinData] :file specify the source code or file path
         def create(type, name, options = {})
           Utils.stringify_keys!(options)
