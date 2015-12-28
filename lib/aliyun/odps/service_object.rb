@@ -6,8 +6,7 @@ module Aliyun
       end
 
       def project
-        # so far doesn't support 2nd level object
-        @master.kind_of?(Model::Project) ?  @master : @master.try(:project)
+        @master.kind_of?(Model::Project) ? @master : @master.try(:project)
       end
 
       attr_reader :master

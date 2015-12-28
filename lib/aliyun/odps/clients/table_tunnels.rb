@@ -1,5 +1,3 @@
-require 'aliyun/odps/struct/project'
-
 module Aliyun
   module Odps
     module Clients

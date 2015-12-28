@@ -61,7 +61,7 @@ module Aliyun
 
           keys = %w(Instance Tasks Task)
           Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
-            Struct::InstanceTask.new(hash)
+            Model::InstanceTask.new(hash)
           end
         end
 

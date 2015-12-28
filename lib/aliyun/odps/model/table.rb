@@ -38,7 +38,7 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           Aliyun::Odps::List.build(result, %w(Partitions Partition)) do |hash|
-            Struct::Partition.new(hash)
+            Model::Partition.new(hash)
           end
         end
 

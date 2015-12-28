@@ -20,11 +20,11 @@ module Aliyun
           fail XmlElementMissingError, 'Resources' if resources.empty?
 
           Utils.to_xml(
-              'Function' => {
-                  'Alias' => name,
-                  'ClassType' => class_type,
-                  'Resources' => resources.map(&:to_hash)
-              }
+            'Function' => {
+              'Alias' => name,
+              'ClassType' => class_type,
+              'Resources' => resources.map(&:to_hash)
+            }
           )
         end
       end
