@@ -1,11 +1,12 @@
 require 'aliyun/odps/version'
+require 'aliyun/odps/list'
 require 'aliyun/odps/utils'
-require 'aliyun/odps/xml_generator'
-require 'aliyun/odps/struct'
 require 'aliyun/odps/authorization'
-require 'aliyun/odps/model'
-require 'aliyun/odps/client'
 require 'aliyun/odps/configuration'
+require 'aliyun/odps/struct'
+require 'aliyun/odps/modelable'
+require 'aliyun/odps/client'
+require 'aliyun/odps/tunnel_router'
 
 # DEBUG
 require 'pry'
@@ -25,6 +26,14 @@ module Aliyun
 
     def self.config
       @configuration
+    end
+
+    def self.project
+      fail MissingProjectConfigurationError unless config.project
+
+      Aliyun::Odps::Model::Project.new(
+        name: config.project
+      )
     end
   end
 end

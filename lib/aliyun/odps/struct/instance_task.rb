@@ -6,25 +6,24 @@ module Aliyun
       #   it = Aliyun::Odps::Struct::InstanceTask.new(type: 'SQL', name: 'Test SQL', comment: 'Test', Query: 'Select * from test_table1', property: { 'key1' => 'value1' })
       class InstanceTask < Base
         # Supported value: SQL, SQLPLAN, MapReduce, DT, PLSQL
-        attr_accessor :type
 
-        attr_accessor :name
+        def_attr :name, :String, required: true
+        def_attr :type, :String, required: true, init_with: Proc.new { |value|
+          fail "Not support type: #{v}" unless %w{SQL SQLPLAN MapReduce DT PLSQL}.include?(value)
+          value
+        }
 
-        attr_accessor :comment
-
-        attr_accessor :property
-
-        attr_accessor :query
-
-        attr_accessor :start_time
-
-        attr_accessor :end_time
-
-        attr_accessor :status
-
-        attr_accessor :histories
-
-        attr_accessor :client
+        def_attr :comment, :String
+        def_attr :property, :Hash, init_with: Proc.new { |hash|
+          hash.map do |key, value|
+            { 'Name' => key, 'Value' => value }
+          end
+        }
+        def_attr :query, :String
+        def_attr :start_time, :DateTime
+        def_attr :end_time, :DateTime
+        def_attr :status, :String
+        def_attr :histories, :Array
 
         def to_hash
           {
@@ -32,18 +31,13 @@ module Aliyun
               'Name' => name,
               'Comment' => comment,
               'Config' => {
-                'Property' => property
+                'Property' => property || { 'Name' => '', 'Value' => '' }
               },
               'Query!' => "<![CDATA[#{query}]]>"
             }
           }
         end
 
-        def property=(property_hash)
-          @property = property_hash.map do |key, value|
-            { 'Name' => key, 'Value' => value }
-          end
-        end
       end
     end
   end
