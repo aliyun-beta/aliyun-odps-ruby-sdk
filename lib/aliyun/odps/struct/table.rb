@@ -2,39 +2,36 @@ module Aliyun
   module Odps
     module Struct
       class Table < Base
-        # required
-        attr_accessor :name
 
-        attr_accessor :table_id
+        def_attr :project, :Project, required: true
+        def_attr :client, :Client, required: true
 
-        attr_accessor :comment
-
-        attr_accessor :owner
-
-        attr_accessor :schema
-
-        attr_accessor :creation_time
-
-        attr_accessor :last_modified
-
-        # required
-        attr_accessor :project
-
-        # required
-        attr_accessor :client
+        def_attr :name, :String, required: true
+        def_attr :table_id, :String
+        def_attr :comment, :String
+        def_attr :owner, :String
+        def_attr :schema, :Hash
+        def_attr :creation_time, :DateTime
+        def_attr :last_modified, :DateTime
 
         # List partitions of table
         #
         # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
         #
-        # @params name [String] specify the table name
-        def partitions
+        # @params options [Hash] options
+        # @option options [String] :marker specify marker for paginate
+        # @option options [String] :maxitems (1000) specify maxitems in this request
+        def partitions(options = {})
+          Utils.stringify_keys!(options)
           path = "/projects/#{project.name}/tables/#{name}"
-          result = client.get(path, query: { partitions: true }).parsed_response
+          query = Utils.hash_slice(options, 'marker', 'maxitems').merge(
+            partitions: true,
+            expectmarker: true
+          )
+          result = client.get(path, query: query).parsed_response
 
-          keys = %w(Partitions Partition)
-          Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            Struct::Partition.new(_hash)
+          Aliyun::Odps::List.build(result, %w(Partitions Partition)) do |hash|
+            Struct::Partition.new(hash)
           end
         end
       end

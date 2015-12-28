@@ -9,7 +9,7 @@ module Aliyun
         #
         # @params options [Hash] options
         #
-        # @option options [String] :datarange 指定查询instance 开始运行的时间范围。格式为：daterange=[n1]:[n2] ，其中n1是指时间范围的开始，n2为结束。n1和n2是将时间日期转换成整型后的数值。省略n1，查询条件为截止到n2,格式为:n2；省略n2，查询条件为从n1开始截到现在，格式为 n1:；同时省略n1和n2等同于忽略daterange查询条件
+        # @option options [String] :datarange specify the starttime range time range
         # @option options [String] :status supported value: Running, Suspended, Terminated
         # @option jobname [String] :jobname specify the job name
         # @option onlyowner [String] :onlyowner (yes) supported value: yes, no
@@ -21,13 +21,9 @@ module Aliyun
           query = Utils.hash_slice(options, 'datarange', 'status', 'jobname', 'onlyowner', 'marker', 'maxitems')
           result = client.get(path, query: query).parsed_response
 
-          keys = %w(Instances Instance)
-          marker = Utils.dig_value(result, 'Instances', 'Marker')
-          max_items = Utils.dig_value(result, 'Instances', 'MaxItems')
-          instances = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
-            Struct::Instance.new(hash.merge(project: project))
+          Aliyun::Odps::List.build(result, %w(Instances Instance)) do |hash|
+            Struct::Instance.new(hash.merge(project: project, client: project.client))
           end
-          Aliyun::Odps::List.new(marker, max_items, instances)
         end
 
         # Create a instance job
@@ -40,8 +36,21 @@ module Aliyun
         # @params tasks [Array<Struct::InstanceTask]> a list for instance_task
         def create(name, comment, priority, tasks = [])
           path = "/projects/#{project.name}/instances"
-          body = XmlGenerator.generate_create_instance_xml(name, comment, priority, tasks)
-          client.post(path, body: body).headers['Location']
+
+          instance = Struct::Instance.new(
+            name: name,
+            comment: comment,
+            priority: priority,
+            tasks: tasks,
+            client: client,
+            project: project
+          )
+
+          resp = client.post(path, body: instance.build_create_body)
+
+          instance.tap do |obj|
+            obj.location = resp.headers['Location']
+          end
         end
 
         # Get status of instance

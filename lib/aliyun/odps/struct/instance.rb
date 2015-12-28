@@ -2,22 +2,19 @@ module Aliyun
   module Odps
     module Struct
       class Instance < Base
-        # required
-        attr_accessor :name
 
-        attr_accessor :owner
+        def_attr :project, :Project, required: true
+        def_attr :client, :Client, required: true
 
-        attr_accessor :status
-
-        attr_accessor :start_time
-
-        attr_accessor :end_time
-
-        # required
-        attr_accessor :project
-
-        # required
-        attr_accessor :client
+        def_attr :name, :String, required: true
+        def_attr :owner, :String
+        def_attr :comment, :String
+        def_attr :priority, :Integer
+        def_attr :tasks, :Array
+        def_attr :status, :String
+        def_attr :start_time, :DateTime
+        def_attr :end_time, :DateTime
+        def_attr :location, :String
 
         # Get task detail of instance
         #
@@ -55,7 +52,7 @@ module Aliyun
         # Get tasks of instance
         #
         # @see http://repo.aliyun.com/api-doc/Instance/get_instance_task/index.html Get instance task
-        def tasks
+        def list_tasks
           path = "/projects/#{project.name}/instances/#{name}"
           query = { taskstatus: true }
           result = client.get(path, query: query).parsed_response
@@ -71,9 +68,30 @@ module Aliyun
         # @see http://repo.aliyun.com/api-doc/Instance/put_instance_terminate/index.html Put instance terminated
         def terminate
           path = "/projects/#{project.name}/instances/#{name}"
-          body = XmlGenerator.generate_put_instance_xml
+
+          body = Utils.to_xml(
+            'Instance' => { 'Status' => 'Terminated' }
+          )
           !!client.put(path, body: body)
         end
+
+        def build_create_body
+          fail XmlElementMissingError, 'Comment' if comment.nil?
+          fail XmlElementMissingError, 'Priority' if priority.nil?
+          fail XmlElementMissingError, 'Tasks' if tasks.empty?
+
+          Utils.to_xml(
+            'Instance' => {
+              'Job' => {
+                'Name' => name,
+                'Comment' => comment,
+                'Priority' => priority,
+                'Tasks' => tasks.map(&:to_hash)
+              }
+            }
+          )
+        end
+
       end
     end
   end

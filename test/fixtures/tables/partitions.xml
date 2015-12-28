@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Partitions>
+  <Marker/>
+  <MaxItems>2</MaxItems>
+  <Partition>
+    <Column Name="sale_date" Value="20150915"/>
+    <Column Name="region" Value="USA"/>
+  </Partition>
+  <Partition>
+    <Column Name="sale_date" Value="20150916"/>
+    <Column Name="region" Value="CHINA"/>
+  </Partition>
+</Partitions>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Function>
+    <Alias>Extract_Name</Alias>
+    <ClassType>ExtractName2</ClassType>
+    <Resources>
+        <ResourceName>Extract_Name.py</ResourceName>
+    </Resources>
+</Function>

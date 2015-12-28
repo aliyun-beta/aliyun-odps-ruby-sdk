@@ -19,13 +19,9 @@ module Aliyun
           query.merge!(tables: true, expectmarker: true)
           result = client.get(path, query: query).parsed_response
 
-          keys = %w(Tables Table)
-          marker = Utils.dig_value(result, 'Projects', 'Marker')
-          max_items = Utils.dig_value(result, 'Projects', 'MaxItems')
-          tables = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
-            Struct::Table.new(hash)
+          Aliyun::Odps::List.build(result, %w(Tables Table)) do |hash|
+            Struct::Table.new(hash.merge(project: project, client: project.client))
           end
-          Aliyun::Odps::List.new(marker, max_items, tables)
         end
 
         # Get Table
@@ -41,7 +37,9 @@ module Aliyun
           hash.merge!(
             'creation_time' => resp.headers['x-odps-creation-time'],
             'last_modified' => resp.headers['Last-Modified'],
-            'owner' => resp.headers['x-odps-owner']
+            'owner' => resp.headers['x-odps-owner'],
+            'project' => project,
+            'client' => project.client
           )
           Struct::Table.new(hash)
         end

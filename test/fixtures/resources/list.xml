@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Resources>
+    <Marker/>
+    <MaxItems>3</MaxItems>
+    <Resource>
+        <Name>cross_project_table1_resource</Name>
+        <Owner>ALIYUN$odpstest1@aliyun.com</Owner>
+        <LastUpdator>ALIYUN$odpstest1@aliyun.com</LastUpdator>
+        <Comment/>
+        <ResourceType>table</ResourceType>
+        <LocalPath/>
+        <CreationTime>Thu, 22 Jan 2015 13:19:05 GMT</CreationTime>
+        <LastModifiedTime>Wed, 09 Dec 2015 18:52:09 GMT</LastModifiedTime>
+        <TableName>test_project1.cross_project_table1</TableName>
+    </Resource>
+    <Resource>
+        <Name>cross_project_table_partition1_resource</Name>
+        <Owner>ALIYUN$odpstest1@aliyun.com</Owner>
+        <LastUpdator>ALIYUN$odpstest1@aliyun.com</LastUpdator>
+        <Comment/>
+        <ResourceType>table</ResourceType>
+        <LocalPath/>
+        <CreationTime>Fri, 23 Jan 2015 01:45:09 GMT</CreationTime>
+        <LastModifiedTime>Wed, 09 Dec 2015 18:52:17 GMT</LastModifiedTime>
+        <TableName>test_project1.cross_project_table_partition1</TableName>
+    </Resource>
+    <Resource>
+        <Name>cross_project_test_resource</Name>
+        <Owner>ALIYUN$odpstest1@aliyun.com</Owner>
+        <LastUpdator>ALIYUN$odpstest1@aliyun.com</LastUpdator>
+        <Comment/>
+        <ResourceType>table</ResourceType>
+        <LocalPath/>
+        <CreationTime>Thu, 22 Jan 2015 08:50:54 GMT</CreationTime>
+        <LastModifiedTime>Thu, 22 Jan 2015 08:56:45 GMT</LastModifiedTime>
+        <TableName>test_project1.cross_project_partition_test</TableName>
+    </Resource>
+</Resources>

@@ -2,16 +2,16 @@ module Aliyun
   module Odps
     class Error < StandardError; end
 
-    # [Aliyun::Oss::RequestError] when OSS give a Non 2xx response
+    # [Aliyun::Odps::RequestError] when Odps give a Non 2xx response
     class RequestError < Error
-      # Error Code defined by OSS
+      # Error Code defined by Odps
       attr_reader :code
 
-      # Error Message defined by OSS
+      # Error Message defined by Odps
       attr_reader :message
 
       # It's the UUID to uniquely identifies this request;
-      # When you can't solve the problem, you can request help from the OSS development engineer with the RequestId.
+      # When you can't solve the problem, you can request help from the ODPS development engineer with the RequestId.
       attr_reader :request_id
 
       # The Origin Httparty Response
@@ -32,6 +32,18 @@ module Aliyun
         @request_id = response.headers['x-odps-request-id']
         @origin_response = response
         super("#{@request_id} - #{@code}: #{@message}")
+      end
+    end
+
+    class XmlElementMissingError < Error
+      def initialize(element)
+        super("Missing #{element} Element in xml")
+      end
+    end
+
+    class MissingProjectConfigurationError < Error
+      def initialize
+        super("Must config project first. Use Aliyun::Odps.configure {|config| config.project = 'your-project' }")
       end
     end
   end

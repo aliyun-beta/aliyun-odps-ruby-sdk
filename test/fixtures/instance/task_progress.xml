@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Progress>
+  <Stage ID=" sql_20120828172125_01346145623_anonymous_9762723958344470770_0_job0_M2_Stg1">
+    <Status>Terminated</Status>
+    <TerminatedWorkers>1</TerminatedWorkers>
+    <RunningWorkers>0</RunningWorkers>
+    <TotalWorkers>1</TotalWorkers>
+    <InputRecords>500</InputRecords>
+    <OutputRecords>1000</OutputRecords>
+  </Stage>
+  <Stage ID=" sql_20120828172125_01346145623_anonymous_9762723958344470770_0_job1_M2_Stg1" />
+</Progress>

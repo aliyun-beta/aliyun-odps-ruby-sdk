@@ -14,8 +14,8 @@ module Aliyun
         #
         # @params options [Hash] options
         # @option options [String] :owner specify the project owner
-        # @option options [String] :marker
-        # @option options [String] :maxitems (1000)
+        # @option options [String] :marker specify marker for paginate
+        # @option options [String] :maxitems (1000) specify maxitems in this request
         #
         # @return [Aliyun::Odps::List]
         #
@@ -24,16 +24,11 @@ module Aliyun
           Utils.stringify_keys!(options)
           query = Utils.hash_slice(options, 'owner', 'marker', 'maxitems')
           resp = client.get('/projects', query: query)
-          p 888, resp.headers
           result = resp.parsed_response
 
-          keys = %w(Projects Project)
-          marker = Utils.dig_value(result, 'Projects', 'Marker')
-          max_items = Utils.dig_value(result, 'Projects', 'MaxItems')
-          projects = Utils.wrap(Utils.dig_value(result, *keys)).map do |_hash|
-            Struct::Project.new(hash)
+          Aliyun::Odps::List.build(result, %w(Projects Project)) do |hash|
+            Struct::Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
           end
-          Aliyun::Odps::List.new(marker, max_items, projects)
         end
 
         # Get Project Information
@@ -44,7 +39,7 @@ module Aliyun
         def get(name)
           result = client.get("/projects/#{name}").parsed_response
           hash = Utils.dig_value(result, 'Project')
-          Struct::Project.new(hash)
+          Struct::Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
         end
 
         # Update Project Information
@@ -56,7 +51,12 @@ module Aliyun
         # @option options [String] :comment Comment of the project
         def update(name, options = {})
           Utils.stringify_keys!(options)
-          body = XmlGenerator.generate_update_project_xml(name, options)
+          project = Struct::Project.new(
+            name: name,
+            comment: options['comment'],
+            client: Aliyun::Odps::Client.instance
+          )
+          body = project.build_update_body
           !!client.put("/projects/#{name}", body: body)
         end
       end

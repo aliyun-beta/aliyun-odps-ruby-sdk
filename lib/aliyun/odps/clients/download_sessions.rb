@@ -16,12 +16,13 @@ module Aliyun
           query.merge!(partition: partition_spec) if partition_spec
 
           resp = client.post(path, query: query)
-          #binding.pry
+
           result = resp.parsed_response
           result = JSON.parse(result) if result.is_a?(String)
-          p result
 
           Struct::DownloadSession.new(result.merge(
+            project: project,
+            client: client,
             table_name: table_name,
             partition_spec: partition_spec
           ))

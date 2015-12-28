@@ -3,27 +3,16 @@ module Aliyun
     module Struct
       class UploadSession < Base
 
-        # required
-        attr_accessor :upload_id
+        def_attr :project, :Project, required: true
+        def_attr :client, :Client, required: true
 
-        # required
-        attr_accessor :table_name
-
-        attr_accessor :partition_spec
-
-        attr_accessor :status
-
-        attr_accessor :owner
-
-        attr_accessor :initiated
-
-        attr_accessor :schema
-
-        # required
-        attr_accessor :project
-
-        # required
-        attr_accessor :client
+        def_attr :upload_id, :String, required: true
+        def_attr :table_name, :String, required: true
+        def_attr :partition_spec, :String
+        def_attr :status, :String
+        def_attr :owner, :String
+        def_attr :initiated, :DateTime
+        def_attr :schema, :Hash
 
         # Upload data in block
         #
@@ -57,7 +46,9 @@ module Aliyun
           query = { uploadid: upload_id }
           query.merge!(partition: partition_spec) if partition_spec
 
-          result = client.get(path, query: query).parsed_response
+          resp = client.get(path, query: query)
+
+          result = resp.parsed_response
           result.is_a?(String) ? JSON.parse(result) : result
         end
 

@@ -2,54 +2,51 @@ module Aliyun
   module Odps
     module Struct
       class Project < Base
-        attr_accessor :name
 
-        attr_accessor :comment
+        def_attr :client, :Client, required: true
 
-        attr_accessor :project_group_name
-
-        attr_accessor :state
-
-        attr_accessor :clusters
-
-        attr_accessor :properties
-
-        attr_accessor :client
+        def_attr :name, :String, required: true
+        def_attr :comment, :String
+        def_attr :project_group_name, :String
+        def_attr :state, :String
+        def_attr :clusters, :Hash
+        def_attr :property, :String
+        def_attr :properties, :Hash
 
         attr_reader :services
 
-        ProjectService = ::Struct.new(:clients, :project)
-
-        # require 'aliyun/odps/clients/tables'
+        # ProjectService = ::Struct.new(:client, :project)
+        #
+        # require 'aliyun/odps/client/tables'
         #
         # class TablesService < ProjectService
         #   include Client::Tables
         # end
         #
-        # require 'aliyun/odps/clients/resources'
+        # require 'aliyun/odps/client/resources'
         #
         # class ResourcesService < ProjectService
         #   include Client::Resources
         # end
         #
-        # require 'aliyun/odps/clients/instances'
+        # require 'aliyun/odps/client/instances'
         #
         # class InstancesService < ProjectService
         #   include Client::Instances
         # end
         #
-        # require 'aliyun/odps/clients/functions'
+        # require 'aliyun/odps/client/functions'
         #
         # class FunctionsService < ProjectService
         #   include Client::Functions
         # end
         #
-        # require 'aliyun/odps/clients/table_tunnels'
+        # require 'aliyun/odps/client/table_tunnels'
         #
         # class TableTunnelsService < ProjectService
         #   include Client::TableTunnels
         # end
-
+        #
         #
         # def tables
         #   @services ||= {}
@@ -75,6 +72,16 @@ module Aliyun
         #   @services ||= {}
         #   @services[:table_tunnels] ||= TableTunnelsService.new(client, self)
         # end
+
+        def build_update_body
+          fail XmlElementMissingError, 'Comment' if comment.nil?
+
+          Utils.to_xml(
+            'Project' => {
+              'Name' => name,
+              'Comment' => comment
+            })
+        end
       end
     end
   end

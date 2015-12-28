@@ -2,15 +2,27 @@ module Aliyun
   module Odps
     module Struct
       class Function < Base
-        attr_accessor :alias
+        def_attr :name, :String, required: true
+        def_attr :owner, :String
+        def_attr :class_type, :String
+        def_attr :creation_time, :DateTime
+        def_attr :resources, :Array
+        def_attr :location, :String
 
-        attr_accessor :owner
+        alias_method :alias=, :name=
 
-        attr_accessor :class_type
+        def build_create_body
+          fail XmlElementMissingError, 'ClassType' if class_type.nil?
+          fail XmlElementMissingError, 'Resources' if resources.empty?
 
-        attr_accessor :creation_time
-
-        attr_accessor :resources
+          Utils.to_xml(
+            'Function' => {
+              'Alias' => name,
+              'ClassType' => class_type,
+              'Resources' => resources.map(&:to_hash)
+            }
+          )
+        end
       end
     end
   end

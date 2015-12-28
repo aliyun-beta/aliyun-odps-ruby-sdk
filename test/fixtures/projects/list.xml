@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<Projects>
+    <Marker>YV8wOTEzMDIwMDQyX3N0Z18zNzEq</Marker>
+    <MaxItems>2</MaxItems>
+    <Project>
+        <Name>a456</Name>
+        <Comment/>
+        <Owner>ALIYUN$odpstest1@aliyun.com</Owner>
+        <State>AVAILABLE</State>
+        <LastModifiedTime>Wed, 14 Oct 2015 09:58:47 GMT</LastModifiedTime>
+        <CreationTime>Mon, 22 Dec 2014 12:10:18 GMT</CreationTime>
+    </Project>
+    <Project>
+        <Name>a_0913020042_stg_371</Name>
+        <Comment>test replication prj</Comment>
+        <Owner>ALIYUN$odpstest5@aliyun-inc.com</Owner>
+        <State>FROZEN</State>
+        <LastModifiedTime>Sat, 12 Sep 2015 18:00:43 GMT</LastModifiedTime>
+        <CreationTime>Sat, 12 Sep 2015 18:00:43 GMT</CreationTime>
+    </Project>
+</Projects>
