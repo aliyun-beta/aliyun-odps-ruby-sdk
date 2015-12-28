@@ -17,7 +17,15 @@ module Aliyun
         def_attr :table_id, :String
         def_attr :comment, :String
         def_attr :owner, :String
-        def_attr :schema, :Hash
+        def_attr :schema, :TableSchema, init_with: Proc.new {|value|
+          case value
+          when Model::TableSchema
+            value
+          when Hash
+            value = JSON.parse(value['__content__']) if value.key?('__content__')
+            Model::TableSchema.new(value)
+          end
+        }
         def_attr :creation_time, :DateTime
         def_attr :last_modified, :DateTime
 
@@ -42,6 +50,14 @@ module Aliyun
           end
         end
 
+        def generate_create_sql
+          sql = ""
+          sql += "CREATE TABLE #{project.name}.`#{name}` "
+          sql += "(" + schema.columns.map{|column| "`#{column.name}` #{column.type} #{column.comment}"}.join(", ") + ") " if schema && schema.columns
+          sql += "#{comment} " if comment
+          sql += "PARTITIONED BY (" + schema.partitions.map{|column| "`#{column.name}` #{column.type} #{column.comment}"}.join(", ") + ") " if schema && schema.partitions
+          sql += ";"
+        end
       end
 
       class TableService < Aliyun::Odps::ServiceObject

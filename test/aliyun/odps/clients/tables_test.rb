@@ -60,7 +60,8 @@ describe Aliyun::Odps::Clients::Tables do
       assert_equal(DateTime.parse('Wed, 09 Dec 2015 12:18:45 GMT'), obj.creation_time)
       assert_equal(DateTime.parse('Wed, 09 Dec 2015 12:18:46 GMT'), obj.last_modified)
       assert_equal('ALIYUN$odpstest1@aliyun.com', obj.owner)
-      assert_equal({"format"=>"Json", "__content__"=>"{\"columns\": [{ \"comment\": \"\", \"label\": \"\", \"name\": \"name\", \"type\": \"string\"}, { \"comment\": \"\", \"label\": \"\", \"name\": \"nid\", \"type\": \"bigint\"}, { \"comment\": \"\", \"label\": \"\", \"name\": \"age\", \"type\": \"bigint\"}], \"comment\": \"\", \"createTime\": 1449663525, \"hubLifecycle\": -1, \"isVirtualView\": false, \"lastDDLTime\": 1449663525, \"lastModifiedTime\": 1449663526, \"lifecycle\": -1, \"owner\": \"ALIYUN$odpstest1@aliyun.com\", \"partitionKeys\": [], \"shardExist\": false, \"size\": 0, \"tableLabel\": \"\", \"tableName\": \"test_table\"}"}, obj.schema)
+      assert_kind_of(Aliyun::Odps::Model::TableSchema, obj.schema)
+      assert_equal(3, obj.schema.columns.size)
     end
 
     it "should raise RequestError" do

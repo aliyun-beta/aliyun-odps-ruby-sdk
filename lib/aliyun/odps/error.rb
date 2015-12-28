@@ -58,5 +58,11 @@ module Aliyun
         super("Not Support Resource Type: #{type.to_s}")
       end
     end
+
+    class NotSupportColumnTypeError < Error
+      def initialize(type)
+        super("Not Support Column Type: #{type.to_s}")
+      end
+    end
   end
 end

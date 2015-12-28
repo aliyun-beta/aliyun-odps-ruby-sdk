@@ -38,4 +38,10 @@ describe Aliyun::Odps::Model::Table do
       assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, table.partitions }
     end
   end
+
+  describe "create" do
+    it "should generate correct sql" do
+      
+    end
+  end
 end

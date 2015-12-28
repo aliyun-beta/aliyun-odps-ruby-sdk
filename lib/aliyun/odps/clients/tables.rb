@@ -43,6 +43,15 @@ module Aliyun
           Model::Table.new(hash)
         end
 
+        # Create Table
+        #
+        # @params name [String] specify table name
+        # @params schema [Struct::TableSchema] specify table schema
+        # @params options [Hash] options
+        # @option options [String] :comment specify table comment
+        def create(name, schema, options = {})
+        end
+
         # List partitions of table
         #
         # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
