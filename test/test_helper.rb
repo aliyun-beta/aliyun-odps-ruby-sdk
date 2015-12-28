@@ -8,8 +8,8 @@ require 'minitest/autorun'
 require 'webmock/minitest'
 
 Aliyun::Odps.configure do |config|
-  config.access_key = ENV['ALIYUN_ACCESS_KEY']
-  config.secret_key = ENV['ALIYUN_SECRET_KEY']
+  config.access_key = ENV['ALIYUN_ACCESS_KEY'] || ''
+  config.secret_key = ENV['ALIYUN_SECRET_KEY'] || ''
   config.endpoint = "http://service.odps.aliyun.com/api"
 end
 

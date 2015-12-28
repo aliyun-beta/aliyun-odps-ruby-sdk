@@ -19,7 +19,7 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           Aliyun::Odps::List.build(result, %w(Functions Function)) do |hash|
-            Struct::Function.new(hash)
+            Model::Function.new(hash)
           end
         end
 
@@ -29,11 +29,11 @@ module Aliyun
         #
         # @params name [String] specify function name
         # @params class_path [String] specify class Path used by function
-        # @params resources [Array<Struct::Resource>] specify resources used by function
+        # @params resources [Array<Model::Resource>] specify resources used by function
         def create(name, class_path, resources = [])
           path = "/projects/#{project.name}/registration/functions"
 
-          function = Struct::Function.new(
+          function = Model::Function.new(
             name: name,
             class_type: class_path,
             resources: resources
@@ -52,11 +52,11 @@ module Aliyun
         #
         # @params name [String] specify function name
         # @params class_path [String] specify class Path used by function
-        # @params resources [Array<Struct::Resource>] specify resources used by function
+        # @params resources [Array<Model::Resource>] specify resources used by function
         def update(name, class_path, resources = [])
           path = "/projects/#{project.name}/registration/functions/#{name}"
 
-          function = Struct::Function.new(
+          function = Model::Function.new(
             name: name,
             class_type: class_path,
             resources: resources

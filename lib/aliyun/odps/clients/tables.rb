@@ -20,7 +20,7 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           Aliyun::Odps::List.build(result, %w(Tables Table)) do |hash|
-            Struct::Table.new(hash.merge(project: project, client: project.client))
+            Model::Table.new(hash.merge(project: project))
           end
         end
 
@@ -38,10 +38,9 @@ module Aliyun
             'creation_time' => resp.headers['x-odps-creation-time'],
             'last_modified' => resp.headers['Last-Modified'],
             'owner' => resp.headers['x-odps-owner'],
-            'project' => project,
-            'client' => project.client
+            'project' => project
           )
-          Struct::Table.new(hash)
+          Model::Table.new(hash)
         end
 
         # List partitions of table
@@ -50,7 +49,7 @@ module Aliyun
         #
         # @params name [String] specify the table name
         def partitions(name)
-          Struct::Table.new(name: name).partitions
+          Model::Table.new(name: name).partitions
         end
       end
     end

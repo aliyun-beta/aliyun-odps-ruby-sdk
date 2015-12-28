@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Struct::UploadSession do
+describe Aliyun::Odps::Model::UploadSession do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Struct::Project.new(name: project_name, client: Aliyun::Odps::Client.instance) }
-  let(:upload_session) { Aliyun::Odps::Struct::UploadSession.new(table_name: 'table1', upload_id: '1122wwssddd33222', project: project, client: Aliyun::Odps::Client.instance) }
+  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
+  let(:upload_session) { Aliyun::Odps::Model::UploadSession.new(table_name: 'table1', upload_id: '1122wwssddd33222', project: project) }
 
   describe "upload" do
     it "should can upload" do

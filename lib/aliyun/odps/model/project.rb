@@ -7,7 +7,8 @@ require 'aliyun/odps/model/table_tunnel'
 
 module Aliyun
   module Odps
-    class Project
+    module Model
+    class Project < Struct::Base
       extend Aliyun::Odps::Modelable
 
       has_many :instances
@@ -20,11 +21,29 @@ module Aliyun
 
       has_many :table_tunnels
 
+      # def_attr :client, :Client, required: true
+      def_attr :name, :String, required: true
+      def_attr :comment, :String
+      def_attr :project_group_name, :String
+      def_attr :state, :String
+      def_attr :clusters, :Hash
+      def_attr :property, :String
+      def_attr :properties, :Hash
 
+      def build_update_body
+        fail XmlElementMissingError, 'Comment' if comment.nil?
+
+        Utils.to_xml(
+            'Project' => {
+                'Name' => name,
+                'Comment' => comment
+            })
+      end
     end
 
     class ProjectService < Aliyun::Odps::ServiceObject
       include Aliyun::Odps::Clients::Projects
     end
   end
+end
 end

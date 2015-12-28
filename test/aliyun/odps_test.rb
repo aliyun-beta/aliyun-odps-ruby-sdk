@@ -11,7 +11,7 @@ describe Aliyun::Odps do
         config.project = 'test_project'
       end
 
-      assert_kind_of(Aliyun::Odps::Struct::Project, Aliyun::Odps.project)
+      assert_kind_of(Aliyun::Odps::Model::Project, Aliyun::Odps.project)
     end
 
     it "should raise MissingProjectConfiguration" do
@@ -20,7 +20,7 @@ describe Aliyun::Odps do
       end
 
       assert_raises(Aliyun::Odps::MissingProjectConfigurationError) do
-        assert_kind_of(Aliyun::Odps::Struct::Project, Aliyun::Odps.project)
+        assert_kind_of(Aliyun::Odps::Model::Project, Aliyun::Odps.project)
       end
     end
   end

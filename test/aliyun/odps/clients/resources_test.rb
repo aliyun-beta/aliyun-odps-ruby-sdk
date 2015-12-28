@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Aliyun::Odps::Clients::Resources do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Struct::Project.new(name: project_name, clients: Aliyun::Odps::Client.instance) }
+  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name, clients: Aliyun::Odps::Client.instance) }
 
   describe "list" do
     it "should list resources" do
@@ -57,7 +57,7 @@ describe Aliyun::Odps::Clients::Resources do
 
       obj = project.resources.get('resource_name')
 
-      assert_kind_of(Aliyun::Odps::Struct::Resource, obj)
+      assert_kind_of(Aliyun::Odps::Model::Resource, obj)
       assert_equal('resource_name', obj.name)
       assert_equal('', obj.last_updator)
       assert_equal('ALIYUN$odpstest1@aliyun.com', obj.owner)
@@ -71,7 +71,7 @@ describe Aliyun::Odps::Clients::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/resources/resource_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Struct::Resource, project.resources.get('resource_name') }
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Model::Resource, project.resources.get('resource_name') }
     end
   end
 
@@ -97,7 +97,7 @@ describe Aliyun::Odps::Clients::Resources do
 
       obj = project.resources.get_meta('resource_name')
 
-      assert_kind_of(Aliyun::Odps::Struct::Resource, obj)
+      assert_kind_of(Aliyun::Odps::Model::Resource, obj)
       assert_equal('resource_name', obj.name)
       assert_equal('', obj.last_updator)
       assert_equal('ALIYUN$odpstest1@aliyun.com', obj.owner)
@@ -111,7 +111,7 @@ describe Aliyun::Odps::Clients::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:head, %r[/projects/#{project_name}/resources/resource_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Struct::Resource, project.resources.get_meta('resource_name') }
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Model::Resource, project.resources.get_meta('resource_name') }
     end
 
   end
@@ -139,7 +139,7 @@ describe Aliyun::Odps::Clients::Resources do
 
       obj = project.resources.create(*args)
 
-      assert_kind_of(Aliyun::Odps::Struct::Resource, obj)
+      assert_kind_of(Aliyun::Odps::Model::Resource, obj)
       assert_equal('resource_name', obj.name)
       assert_equal('py', obj.resource_type)
       assert_equal('test comment', obj.comment)

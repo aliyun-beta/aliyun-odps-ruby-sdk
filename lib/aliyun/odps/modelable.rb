@@ -5,14 +5,10 @@ module Aliyun
   module Odps
     module Modelable
 
-      # def client
-      #   Aliyun::Odps::Client.instance
-      # end
-
       def has_many(models, opts = {})
         # p "#{models.to_s.singularize.camelize}"
         mod = models.to_s.singularize
-        klass = "Aliyun::Odps::#{mod.camelize}Service".constantize
+        klass = "Aliyun::Odps::Model::#{mod.camelize}Service".constantize
         define_method(models) {
           klass.build(self)
         }

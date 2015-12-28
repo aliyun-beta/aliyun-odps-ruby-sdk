@@ -19,7 +19,7 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           Aliyun::Odps::List.build(result, %w(Resources Resource)) do |hash|
-            Struct::Resource.new(hash)
+            Model::Resource.new(hash)
           end
         end
 
@@ -44,7 +44,7 @@ module Aliyun
             content: resp.parsed_response
           }
 
-          Struct::Resource.new(hash)
+          Model::Resource.new(hash)
         end
 
         # Get resource information in project
@@ -67,7 +67,7 @@ module Aliyun
             resource_type: resp.headers['x-odps-resource-type']
           }
 
-          Struct::Resource.new(hash)
+          Model::Resource.new(hash)
         end
 
         # Create resource in project
@@ -95,7 +95,7 @@ module Aliyun
 
           location = client.post(path, headers: headers, body: body).headers['Location']
 
-          Aliyun::Odps::Struct::Resource.new(name: name, resource_type: type, comment: options['comment'], location: location)
+          Aliyun::Odps::Model::Resource.new(name: name, resource_type: type, comment: options['comment'], location: location)
         end
 
         # Update resource in project

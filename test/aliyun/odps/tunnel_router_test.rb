@@ -22,7 +22,7 @@ describe Aliyun::Odps::TunnelRouter do
       }
     )
 
-    assert_equal("http://#{tunnel_server}", Aliyun::Odps::TunnelRouter.new(client).get_tunnel_endpoint(project_name))
+    assert_equal("http://#{tunnel_server}", Aliyun::Odps::TunnelRouter.new().get_tunnel_endpoint(project_name))
   end
 
   it "should return nil when raise RequestError" do
@@ -37,6 +37,6 @@ describe Aliyun::Odps::TunnelRouter do
       }
     )
 
-    assert_nil(Aliyun::Odps::TunnelRouter.new(client).get_tunnel_endpoint(project_name))
+    assert_nil(Aliyun::Odps::TunnelRouter.new().get_tunnel_endpoint(project_name))
   end
 end

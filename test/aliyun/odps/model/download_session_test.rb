@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Struct::DownloadSession do
+describe Aliyun::Odps::Model::DownloadSession do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Struct::Project.new(name: project_name, client: Aliyun::Odps::Client.instance) }
-  let(:download_session) { Aliyun::Odps::Struct::DownloadSession.new(table_name: 'table1', download_id: '1122wwssddd33222', project: project, client: Aliyun::Odps::Client.instance) }
+  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
+  let(:download_session) { Aliyun::Odps::Model::DownloadSession.new(table_name: 'table1', download_id: '1122wwssddd33222', project: project) }
 
   describe "download" do
     it "should can download" do

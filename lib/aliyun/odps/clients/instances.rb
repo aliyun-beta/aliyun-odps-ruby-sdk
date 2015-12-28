@@ -22,7 +22,7 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           Aliyun::Odps::List.build(result, %w(Instances Instance)) do |hash|
-            Struct::Instance.new(hash.merge(project: project, client: project.client))
+            Model::Instance.new(hash.merge(project: project))
           end
         end
 
@@ -33,11 +33,11 @@ module Aliyun
         # @params name [String] Specify the instance name
         # @params comment [String] Specify comment of the instance
         # @params priority [Integer] Specify priority of the instance
-        # @params tasks [Array<Struct::InstanceTask]> a list for instance_task
+        # @params tasks [Array<Model::InstanceTask]> a list for instance_task
         def create(name, comment, priority, tasks = [])
           path = "/projects/#{project.name}/instances"
 
-          instance = Struct::Instance.new(
+          instance = Model::Instance.new(
             name: name,
             comment: comment,
             priority: priority,

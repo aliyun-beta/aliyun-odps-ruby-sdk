@@ -20,6 +20,10 @@ module Aliyun
           fail "Missing attribute: #{missing_attrs.join(',')}" unless missing_attrs.empty?
         end
 
+        def client
+          Aliyun::Odps::Client.instance
+        end
+
         class << self
           attr_reader :required_attrs
 

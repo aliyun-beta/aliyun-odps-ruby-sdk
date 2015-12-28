@@ -8,13 +8,13 @@ module Aliyun
 
         # require 'aliyun/odps/clients/download_sessions'
         #
-        # class DownloadSessionsService < Aliyun::Odps::Struct::Project::ProjectService
+        # class DownloadSessionsService < Aliyun::Odps::Model::Project::ProjectService
         #   include Clients::DownloadSessions
         # end
         #
         # require 'aliyun/odps/clients/upload_sessions'
         #
-        # class UploadSessionsService < Aliyun::Odps::Struct::Project::ProjectService
+        # class UploadSessionsService < Aliyun::Odps::Model::Project::ProjectService
         #   include Clients::UploadSessions
         # end
         #

@@ -7,14 +7,7 @@ module Aliyun
 
       def project
         # so far doesn't support 2nd level object
-        case master.class
-          when Project
-            master
-          #when Client
-          else
-            nil
-        end
-
+        @master.kind_of?(Model::Project) ?  @master : @master.try(:project)
       end
 
       attr_reader :master

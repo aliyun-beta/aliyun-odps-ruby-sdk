@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Struct::Instance do
+describe Aliyun::Odps::Model::Instance do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Struct::Project.new(name: project_name, client: Aliyun::Odps::Client.instance) }
-  let(:instance) { Aliyun::Odps::Struct::Instance.new(name: 'instance_name', project: project, client: Aliyun::Odps::Client.instance) }
+  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
+  let(:instance) { Aliyun::Odps::Model::Instance.new(name: 'instance_name', project: project) }
 
   describe "task_detail" do
     it "should get task detail information" do
