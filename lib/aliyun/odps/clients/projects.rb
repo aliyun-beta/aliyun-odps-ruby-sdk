@@ -1,12 +1,11 @@
-require 'aliyun/odps/client/instances'
-require 'aliyun/odps/client/tables'
-require 'aliyun/odps/client/resources'
-require 'aliyun/odps/client/functions'
+require 'aliyun/odps/clients/instances'
+require 'aliyun/odps/clients/tables'
+require 'aliyun/odps/clients/resources'
+require 'aliyun/odps/clients/functions'
 
 module Aliyun
   module Odps
-
-    class Client
+    module Clients
       # Methods for Projects
       module Projects
         # List all projects
@@ -28,7 +27,7 @@ module Aliyun
           result = resp.parsed_response
 
           Aliyun::Odps::List.build(result, %w(Projects Project)) do |hash|
-            Struct::Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
+            Model::Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
           end
         end
 
@@ -40,7 +39,7 @@ module Aliyun
         def get(name)
           result = client.get("/projects/#{name}").parsed_response
           hash = Utils.dig_value(result, 'Project')
-          Struct::Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
+          Model::Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
         end
 
         # Update Project Information
@@ -52,7 +51,7 @@ module Aliyun
         # @option options [String] :comment Comment of the project
         def update(name, options = {})
           Utils.stringify_keys!(options)
-          project = Struct::Project.new(
+          project = Model::Project.new(
             name: name,
             comment: options['comment'],
             client: Aliyun::Odps::Client.instance

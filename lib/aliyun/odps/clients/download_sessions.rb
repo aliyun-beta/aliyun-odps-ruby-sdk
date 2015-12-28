@@ -1,6 +1,6 @@
 module Aliyun
   module Odps
-    class Client
+    module Clients
       # Methods for DownloadSessions
       module DownloadSessions
 
@@ -20,7 +20,7 @@ module Aliyun
           result = resp.parsed_response
           result = JSON.parse(result) if result.is_a?(String)
 
-          Struct::DownloadSession.new(result.merge(
+          Model::DownloadSession.new(result.merge(
             project: project,
             client: client,
             table_name: table_name,

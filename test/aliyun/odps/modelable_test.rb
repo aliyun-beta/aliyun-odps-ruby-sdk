@@ -6,42 +6,42 @@ module Aliyun
     describe Modelable do
 
       before do
-        class D
+        class Model::D
           extend Modelable
-          class << self
-            def list(options={})
-              return []
-            end
+        end
+        class Model::DService < Aliyun::Odps::ServiceObject
+          def list(options={})
+            return []
+          end
 
-            def create(options={})
-              return self.new
-            end
+          def create(options={})
+            return Model::D.new
           end
         end
-        class M
+        class Model::M
           extend Modelable
-          has_many :ds, actions: [:create]
+          has_many :ds
         end
       end
 
       it "should support has_many" do
-        begin
-          m = M.new
-          assert(m.respond_to?(:ds), 'response to collection')
 
-          assert_equal([], m.ds)
+        m = Model::M.new
+        assert(m.respond_to?(:ds), 'response to service object')
 
-          assert(m.respond_to?(:create_d), 'response to create model')
+        assert_equal(Model::DService.build(m), m.ds)
 
-          assert_kind_of(D, m.create_d(name: 'abc'))
+        assert(m.ds.respond_to?(:list), 'response to list model')
+        assert(m.ds.respond_to?(:create), 'response to create model')
 
-          # must provide options when you call method of model class
-          assert_raises {
-            m.create_d
-          }
-        rescue Exception => e
-          flunk(e)
-        end
+        assert_kind_of(Model::D, m.ds.create(name: 'abc'))
+        assert_equal([], m.ds.list())
+
+        assert_nil(m.ds.project)
+
+        assert(Aliyun::Odps::Client.instance.respond_to?(:projects), 'client has projects')
+        assert_kind_of(Aliyun::Odps::Model::ProjectService, Aliyun::Odps::Client.instance.projects)
+        assert_nil(Aliyun::Odps::Client.instance.projects.project, "Client's projects doesn't have a project")
       end
     end
   end

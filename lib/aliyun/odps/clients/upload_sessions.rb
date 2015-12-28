@@ -1,6 +1,6 @@
 module Aliyun
   module Odps
-    class Client
+    module Clients
       # Methods for UploadSessions
       module UploadSessions
 
@@ -25,7 +25,7 @@ module Aliyun
           result = resp.parsed_response
           result = JSON.parse(result) if result.is_a?(String)
 
-          Struct::UploadSession.new(result.merge(
+          Model::UploadSession.new(result.merge(
             project: project,
             client: client,
             table_name: table_name,

@@ -1,8 +1,9 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Client::Functions do
+describe Aliyun::Odps::Clients::UploadSessions do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Struct::Project.new(name: project_name, client: Aliyun::Odps::Client.instance) }
+  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
+  let(:table) { Aliyun::Odps::Model::Table.new(name: 'table_name', project: project) }
 
   describe "init" do
     it "should init upload session" do
@@ -25,19 +26,18 @@ describe Aliyun::Odps::Client::Functions do
         }
       )
 
-      obj = project.table_tunnels.upload_sessions.init('table_name', tunnel_version: '2.0')
+      obj = table.upload_sessions.init('table_name', tunnel_version: '2.0')
 
-      assert_kind_of(Aliyun::Odps::Struct::UploadSession, obj)
+      assert_kind_of(Aliyun::Odps::Model::UploadSession, obj)
       assert_equal('table_name', obj.table_name)
       assert_equal("201512111331099692b70a0079c5f2", obj.upload_id)
       assert_equal('normal', obj.status)
       assert_equal(project, obj.project)
-      assert_equal(project.client, obj.client)
     end
 
     it "should raise RequestError" do
       stub_fail_request(:post, %r[/projects/#{project_name}/tables/table_name], {}, file_path: 'tunnel_error.json', headers: { content_type: 'application/json' })
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Struct::UploadSession, project.table_tunnels.upload_sessions.init('table_name') }
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Model::UploadSession, table.upload_sessions.init('table_name') }
     end
   end
 end

@@ -1,8 +1,7 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Client::Projects do
-  let(:client) { Aliyun::Odps::Client.instance }
-  let(:project_service) { Aliyun::Odps::Client::ProjectsService.new(client) }
+describe Aliyun::Odps::Clients::Projects do
+  let(:project_service) { Aliyun::Odps::Client.instance.projects }
 
   describe "list" do
     it 'should list projects' do
@@ -26,7 +25,6 @@ describe Aliyun::Odps::Client::Projects do
       assert_kind_of(Aliyun::Odps::List, obj)
       assert_equal('YV8wOTEzMDIwMDQyX3N0Z18zNzEq', obj.marker)
       assert_equal(2, obj.max_items)
-      assert_equal(client, obj[0].client)
     end
 
     it "should raise RequestError" do
@@ -51,8 +49,7 @@ describe Aliyun::Odps::Client::Projects do
 
       obj = project_service.get('project_name')
 
-      assert_kind_of(Aliyun::Odps::Struct::Project, obj)
-      assert_equal(client, obj.client)
+      assert_kind_of(Aliyun::Odps::Model::Project, obj)
       assert_equal('test_project', obj.name)
       assert_equal('odps test project', obj.comment)
       assert_equal('AVAILABLE', obj.state)
@@ -64,7 +61,7 @@ describe Aliyun::Odps::Client::Projects do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/project_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Struct::Project, project_service.get('project_name') }
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Model::Project, project_service.get('project_name') }
     end
   end
 
