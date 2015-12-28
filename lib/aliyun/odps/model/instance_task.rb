@@ -3,10 +3,8 @@ module Aliyun
     module Model
       # @example:
       #
-      #   it = Aliyun::Odps::Struct::InstanceTask.new(type: 'SQL', name: 'Test SQL', comment: 'Test', Query: 'Select * from test_table1', property: { 'key1' => 'value1' })
+      #   it = Aliyun::Odps::Model::InstanceTask.new(type: 'SQL', name: 'Test SQL', comment: 'Test', Query: 'Select * from test_table1', property: { 'key1' => 'value1' })
       class InstanceTask < Struct::Base
-        # Supported value: SQL, SQLPLAN, MapReduce, DT, PLSQL
-
         def_attr :name, :String, required: true
         def_attr :type, :String, required: true, init_with: Proc.new { |value|
           fail "Not support type: #{v}" unless %w{SQL SQLPLAN MapReduce DT PLSQL}.include?(value)

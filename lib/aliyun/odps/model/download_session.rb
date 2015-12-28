@@ -40,6 +40,7 @@ module Aliyun
           client.get(path, query: query, headers: headers).parsed_response
         end
       end
+
       class DownloadSessionService < Aliyun::Odps::ServiceObject
         include Aliyun::Odps::Clients::DownloadSessions
       end

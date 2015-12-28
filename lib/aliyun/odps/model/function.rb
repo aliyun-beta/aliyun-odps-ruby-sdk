@@ -4,6 +4,8 @@ module Aliyun
   module Odps
     module Model
       class Function < Struct::Base
+        extend Aliyun::Odps::Modelable
+
         def_attr :name, :String, required: true
         def_attr :owner, :String
         def_attr :class_type, :String
@@ -25,8 +27,8 @@ module Aliyun
               }
           )
         end
-        extend Aliyun::Odps::Modelable
       end
+
       class FunctionService < Aliyun::Odps::ServiceObject
         include Aliyun::Odps::Clients::Functions
       end
