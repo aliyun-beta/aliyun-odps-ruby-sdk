@@ -46,5 +46,17 @@ module Aliyun
         super("Must config project first. Use Aliyun::Odps.configure {|config| config.project = 'your-project' }")
       end
     end
+
+    class NotSupportTaskTypeError < Error
+      def initialize(type)
+        super("Not Support Task Type: #{type.to_s}")
+      end
+    end
+
+    class NotSupportResourceTypeError < Error
+      def initialize(type)
+        super("Not Support Resource Type: #{type.to_s}")
+      end
+    end
   end
 end

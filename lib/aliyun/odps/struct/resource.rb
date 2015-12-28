@@ -7,7 +7,10 @@ module Aliyun
         def_attr :owner, :String
         def_attr :last_updator, :String
         def_attr :comment, :String
-        def_attr :resource_type, :String
+        def_attr :resource_type, :String, init_with: Proc.new {|value|
+          fail NotSupportResourceTypeError, value unless %w{py jar archive file table}.include?(value)
+          value
+        }
         def_attr :local_path, :String
         def_attr :creation_time, :DateTime
         def_attr :last_modified_time, :DateTime

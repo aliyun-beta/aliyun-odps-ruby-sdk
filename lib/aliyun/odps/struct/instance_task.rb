@@ -9,7 +9,7 @@ module Aliyun
 
         def_attr :name, :String, required: true
         def_attr :type, :String, required: true, init_with: Proc.new { |value|
-          fail "Not support type: #{v}" unless %w{SQL SQLPLAN MapReduce DT PLSQL}.include?(value)
+          fail NotSupportTaskTypeError, value unless %w{SQL SQLPLAN MapReduce DT PLSQL}.include?(value)
           value
         }
 
