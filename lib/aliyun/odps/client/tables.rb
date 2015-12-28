@@ -23,7 +23,7 @@ module Aliyun
           marker = Utils.dig_value(result, 'Tables', 'Marker')
           max_items = Utils.dig_value(result, 'Tables', 'MaxItems')
           tables = Utils.wrap(Utils.dig_value(result, *keys)).map do |hash|
-            Struct::Table.new(hash)
+            Struct::Table.new(hash.merge(project: project, client: project.client))
           end
           Aliyun::Odps::List.new(marker, max_items, tables)
         end
@@ -41,7 +41,9 @@ module Aliyun
           hash.merge!(
             'creation_time' => resp.headers['x-odps-creation-time'],
             'last_modified' => resp.headers['Last-Modified'],
-            'owner' => resp.headers['x-odps-owner']
+            'owner' => resp.headers['x-odps-owner'],
+            'project' => project,
+            'client' => project.client
           )
           Struct::Table.new(hash)
         end

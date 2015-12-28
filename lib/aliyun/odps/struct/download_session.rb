@@ -3,29 +3,17 @@ module Aliyun
     module Struct
       class DownloadSession < Base
 
-        # required
-        attr_accessor :download_id
+        def_attr :project, :Project, required: true
+        def_attr :client, :Client, required: true
 
-        # required
-        attr_accessor :table_name
-
-        attr_accessor :partition_spec
-
-        attr_accessor :record_count
-
-        attr_accessor :status
-
-        attr_accessor :owner
-
-        attr_accessor :initiated
-
-        attr_accessor :schema
-
-        # required
-        attr_accessor :project
-
-        # required
-        attr_accessor :client
+        def_attr :download_id, :String, required: true
+        def_attr :table_name, :String, required: true
+        def_attr :partition_spec, :String
+        def_attr :record_count, :Integer
+        def_attr :status, :String
+        def_attr :owner, :String
+        def_attr :initiated, :DateTime
+        def_attr :schema, :String
 
         # Download data in block
         #

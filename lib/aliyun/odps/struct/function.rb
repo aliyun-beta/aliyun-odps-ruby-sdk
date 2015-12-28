@@ -2,21 +2,14 @@ module Aliyun
   module Odps
     module Struct
       class Function < Base
-        attr_accessor :name
+        def_attr :name, :String, required: true
+        def_attr :owner, :String
+        def_attr :class_type, :String
+        def_attr :creation_time, :DateTime
+        def_attr :resources, :Array
+        def_attr :location, :String
 
-        attr_accessor :owner
-
-        attr_accessor :class_type
-
-        attr_accessor :creation_time
-
-        attr_accessor :resources
-
-        attr_accessor :location
-
-        def alias=(value)
-          self.name = value
-        end
+        alias_method :alias=, :name=
       end
     end
   end

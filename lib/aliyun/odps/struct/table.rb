@@ -2,26 +2,17 @@ module Aliyun
   module Odps
     module Struct
       class Table < Base
-        # required
-        attr_accessor :name
 
-        attr_accessor :table_id
+        def_attr :project, :Project, required: true
+        def_attr :client, :Client, required: true
 
-        attr_accessor :comment
-
-        attr_accessor :owner
-
-        attr_accessor :schema
-
-        attr_accessor :creation_time
-
-        attr_accessor :last_modified
-
-        # required
-        attr_accessor :project
-
-        # required
-        attr_accessor :client
+        def_attr :name, :String, required: true
+        def_attr :table_id, :String
+        def_attr :comment, :String
+        def_attr :owner, :String
+        def_attr :schema, :Hash
+        def_attr :creation_time, :DateTime
+        def_attr :last_modified, :DateTime
 
         # List partitions of table
         #

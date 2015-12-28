@@ -2,24 +2,16 @@ module Aliyun
   module Odps
     module Struct
       class Instance < Base
-        # required
-        attr_accessor :name
 
-        attr_accessor :owner
+        def_attr :project, :Project, required: true
+        def_attr :client, :Client, required: true
 
-        attr_accessor :status
-
-        attr_accessor :start_time
-
-        attr_accessor :end_time
-
-        attr_accessor :location
-
-        # required
-        attr_accessor :project
-
-        # required
-        attr_accessor :client
+        def_attr :name, :String, required: true
+        def_attr :owner, :String
+        def_attr :status, :String
+        def_attr :start_time, :DateTime
+        def_attr :end_time, :DateTime
+        def_attr :location, :String
 
         # Get task detail of instance
         #

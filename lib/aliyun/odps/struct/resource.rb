@@ -2,48 +2,21 @@ module Aliyun
   module Odps
     module Struct
       class Resource < Base
-        attr_accessor :name
 
-        attr_accessor :owner
+        def_attr :name, :String, required: true
+        def_attr :owner, :String
+        def_attr :last_updator, :String
+        def_attr :comment, :String
+        def_attr :resource_type, :String
+        def_attr :local_path, :String
+        def_attr :creation_time, :DateTime
+        def_attr :last_modified_time, :DateTime
+        def_attr :table_name, :String
+        def_attr :resource_size, :Integer
+        def_attr :content, :String
+        def_attr :location, :String
 
-        attr_accessor :last_updator
-
-        attr_accessor :comment
-
-        attr_accessor :resource_type
-
-        attr_accessor :local_path
-
-        attr_accessor :creation_time
-
-        attr_accessor :last_modified_time
-
-        attr_accessor :table_name
-
-        attr_accessor :resource_size
-
-        attr_accessor :content
-
-        attr_accessor :location
-
-        def resource_name=(value)
-          self.name = value
-        end
-
-        %w{last_modified_time creation_time}.each do |attr|
-          define_method "#{attr}=" do |value|
-            begin
-              time = DateTime.parse(value)
-              instance_variable_set("@#{attr}", time)
-            rescue => e
-              puts "Invalid Time"
-            end
-          end
-        end
-
-        def resource_size=(value)
-          @resource_size = value.to_i
-        end
+        alias_method :resource_name=, :name=
 
         def to_hash
           { 'ResourceName' => name }
