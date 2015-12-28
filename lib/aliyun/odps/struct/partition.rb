@@ -2,7 +2,7 @@ module Aliyun
   module Odps
     module Struct
       class Partition < Base
-        attr_accessor :column
+        def_attr :column, :Hash, required: true
       end
     end
   end

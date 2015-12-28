@@ -2,21 +2,16 @@ module Aliyun
   module Odps
     module Struct
       class Project < Base
-        attr_accessor :name
 
-        attr_accessor :comment
+        def_attr :client, :Client, required: true
 
-        attr_accessor :project_group_name
-
-        attr_accessor :state
-
-        attr_accessor :clusters
-
-        attr_accessor :property
-
-        attr_accessor :properties
-
-        attr_accessor :client
+        def_attr :name, :String, required: true
+        def_attr :comment, :String
+        def_attr :project_group_name, :String
+        def_attr :state, :String
+        def_attr :clusters, :Hash
+        def_attr :property, :String
+        def_attr :properties, :Hash
 
         attr_reader :services
 

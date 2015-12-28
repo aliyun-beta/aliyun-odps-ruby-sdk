@@ -9,8 +9,15 @@ module Aliyun
             send(m, value) if self.respond_to?(m)
           end
 
-          attrs = (self.class.required_attrs || []) - attributes.keys.map(&:to_s)
-          fail "Missing attribute: #{attrs.join(',')}" unless attrs.empty?
+          validate_required
+        end
+
+        def validate_required
+          missing_attrs = []
+          (self.class.required_attrs || []).each do |attr|
+            missing_attrs.push(attr) if send(attr).nil?
+          end
+          fail "Missing attribute: #{missing_attrs.join(',')}" unless missing_attrs.empty?
         end
 
         class << self
