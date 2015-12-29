@@ -64,5 +64,23 @@ module Aliyun
         super("Not Support Column Type: #{type.to_s}")
       end
     end
+
+    class PriorityInvalidError < Error
+      def initialize
+        super("Priority must more than or equal to zero.")
+      end
+    end
+
+    class InstanceTaskNotSuccessError < Error
+      def initialize(task)
+        super("Task #{task.name} #{task.status}")
+      end
+    end
+
+    class InstanceNameInvalidError < Error
+      def initialize(name)
+        super("Instance name should match pattern: '([a-z]|[A-Z]){1,}([a-z]|[A-Z]|[\d]|_)*")
+      end
+    end
   end
 end

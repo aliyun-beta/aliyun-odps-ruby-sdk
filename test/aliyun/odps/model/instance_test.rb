@@ -142,4 +142,9 @@ describe Aliyun::Odps::Model::Instance do
     end
   end
 
+  it "wait_for_terminated should sleep until instance terminated" do
+    Kernel.stubs(:sleep)
+    instance.stubs(:get_status).returns(['Running', 'Running', 'Terminated'])
+    instance.wait_for_terminated
+  end
 end

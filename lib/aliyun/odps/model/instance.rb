@@ -77,8 +77,35 @@ module Aliyun
           !!client.put(path, body: body)
         end
 
+        # Get status
+        #
+        # @see http://repo.aliyun.com/api-doc/Instance/get_instance/index.html Get instance
+        #
+        # @return Instance status: Suspended, Running, Terminated
+        def get_status
+          path = "/projects/#{project.name}/instances/#{name}"
+          result = client.get(path).parsed_response
+          Utils.dig_value(result, 'Instance', 'Status')
+        end
+
+        # pending until the instance terminate
+        #
+        # @raise InstanceTaskNotSuccessError if task not success
+        def wait_for_success(interval = 0.01)
+          wait_for_terminated(interval)
+
+          list_tasks.each do |task|
+            if task.status.upcase != 'SUCCESS'
+              fail InstanceTaskNotSuccessError, task
+            end
+          end
+        end
+
+        def wait_for_terminated(interval = 0.01)
+          sleep interval while get_status != 'Terminated'
+        end
+
         def build_create_body
-          fail XmlElementMissingError, 'Comment' if comment.nil?
           fail XmlElementMissingError, 'Priority' if priority.nil?
           fail XmlElementMissingError, 'Tasks' if tasks.empty?
 
@@ -86,7 +113,7 @@ module Aliyun
             'Instance' => {
               'Job' => {
                 'Name' => name,
-                'Comment' => comment,
+                'Comment' => comment || '',
                 'Priority' => priority,
                 'Tasks' => tasks.map(&:to_hash)
               }

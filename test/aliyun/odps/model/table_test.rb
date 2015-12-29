@@ -62,4 +62,5 @@ describe Aliyun::Odps::Model::Table do
       assert_equal("CREATE TABLE mock_project_name.`test_table` (`uuid` bigint COMMENT 'major key') COMMENT 'table comment' PARTITIONED BY (`name` string, `name2` string COMMENT 'test partition comment');", table.generate_create_sql)
     end
   end
+
 end

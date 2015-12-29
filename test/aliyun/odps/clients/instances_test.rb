@@ -35,9 +35,9 @@ describe Aliyun::Odps::Clients::Resources do
 
   describe "create" do
     it "should create new instance" do
-      location = "#{endpoint}/projects/#{project_name}/instances/JobName"
+      location = "#{endpoint}/projects/#{project_name}/instances/UUIDJobName"
       task = Aliyun::Odps::Model::InstanceTask.new(type: 'SQL', name: 'SqlTask', comment: 'TaskComment', property: { 'key1' => 'value1' }, query: 'SELECT * FROM test_table;')
-      args = ['JobName', 'JobComment', 1, [task]]
+      args = [[task], name: 'JobName', comment: 'JobComment', priority: 1]
       stub_client_request(
         :post,
         "#{endpoint}/projects/#{project_name}/instances",
@@ -53,14 +53,14 @@ describe Aliyun::Odps::Clients::Resources do
 
       instance = project.instances.create(*args)
       assert_kind_of(Aliyun::Odps::Model::Instance, instance)
-      assert_equal('JobName', instance.name)
+      assert_equal('UUIDJobName', instance.name)
       assert_equal(location, instance.location)
     end
 
     it "should create new instance without task comment" do
       location = "#{endpoint}/projects/#{project_name}/instances/JobName"
       task = Aliyun::Odps::Model::InstanceTask.new(type: 'SQL', name: 'SqlTask', query: 'SELECT * FROM test_table;')
-      args = ['JobName', 'JobComment', 1, [task]]
+      args = [[task], name: 'JobName', comment: 'JobComment', priority: 1]
       stub_client_request(
         :post,
         "#{endpoint}/projects/#{project_name}/instances",
@@ -83,7 +83,7 @@ describe Aliyun::Odps::Clients::Resources do
     it "should raise RequestError" do
       stub_fail_request(:post, %r[/projects/#{project_name}/instances])
       task = Aliyun::Odps::Model::InstanceTask.new(type: 'SQL', name: 'sql1', comment: 'test SQL', query: 'select * from table1 limit 1;')
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of String, project.instances.create('newinstance', 'Test Instance', 1, [task]) }
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of String, project.instances.create([task]) }
     end
   end
 

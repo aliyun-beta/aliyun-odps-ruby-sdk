@@ -70,4 +70,46 @@ describe Aliyun::Odps::Clients::Tables do
     end
   end
 
+  describe "create" do
+    it "should create table" do
+      Aliyun::Odps::Utils.stubs(:generate_uuid).returns('instance20151229111744707cc8')
+      Aliyun::Odps::Model::Instance.any_instance.stubs(:wait_for_terminated).returns(true)
+      location = "#{endpoint}/projects/#{project_name}/instances/NewJobName"
+      stub_client_request(
+        :post,
+        "#{endpoint}/projects/#{project_name}/instances",
+        {
+          file_path: 'tables/create.xml'
+        },
+        {
+          headers: {
+            Location: location
+          }
+        }
+      )
+      stub_client_request(
+        :get,
+        "#{endpoint}/projects/#{project_name}/instances/NewJobName",
+        {
+          query: {
+            'taskstatus' => true
+          }
+        },
+        {
+          file_path: 'instances/status.xml'
+        }
+      )
+
+      schema = Aliyun::Odps::Model::TableSchema.new({
+        columns: [{name: 'uuid', type: 'bigint', comment: 'major key'}],
+        partitions: [{name: 'name', type: 'string'}, {name: 'name2', type: 'string', comment: 'test partition comment'}]
+      })
+
+      obj = project.tables.create('test_table1', schema, comment: 'sql comment')
+
+      assert_kind_of(Aliyun::Odps::Model::Table, obj)
+    end
+
+  end
+
 end

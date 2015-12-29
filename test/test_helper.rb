@@ -6,6 +6,7 @@ require 'aliyun/odps'
 
 require 'minitest/autorun'
 require 'webmock/minitest'
+require 'mocha/test_unit'
 
 Aliyun::Odps.configure do |config|
   config.access_key = ENV['ALIYUN_ACCESS_KEY'] || ''

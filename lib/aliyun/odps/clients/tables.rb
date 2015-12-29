@@ -49,6 +49,10 @@ module Aliyun
         # @params schema [Struct::TableSchema] specify table schema
         # @params options [Hash] options
         # @option options [String] :comment specify table comment
+        #
+        # @raise InstanceTaskFail
+        #
+        # @return Model::Table
         def create(name, schema, options = {})
           Utils.stringify_keys!(options)
 
@@ -65,7 +69,11 @@ module Aliyun
             query: table.generate_create_sql
           )
 
-          project.instances.create('SQLCreateTableInstance', 'Create Table', 5, [task])
+          instance = project.instances.create([task])
+
+          instance.wait_for_success
+
+          table
         end
 
         # List partitions of table

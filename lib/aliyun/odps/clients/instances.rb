@@ -30,28 +30,38 @@ module Aliyun
         #
         # @see http://repo.aliyun.com/api-doc/Instance/post_instance/index.html Post Instance
         #
-        # @params name [String] Specify the instance name
-        # @params comment [String] Specify comment of the instance
-        # @params priority [Integer] Specify priority of the instance
         # @params tasks [Array<Model::InstanceTask]> a list for instance_task
-        def create(name, comment, priority, tasks = [])
-          #fail PriorityInvalidError if priority.to_i == 0
+        # @params options [String] options
+        # @option options [String] :name Specify the instance name
+        # @option options [String] :comment Specify comment of the instance
+        # @option options [Integer] :priority Specify priority of the instance
+        def create(tasks = [], options = {})
+          Utils.stringify_keys!(options)
 
-          path = "/projects/#{project.name}/instances"
+          name = options.key?('name') ? options['name'] : Utils.generate_uuid('instance')
 
           instance = Model::Instance.new(
             name: name,
-            comment: comment,
-            priority: priority,
             tasks: tasks,
-            client: client,
-            project: project
+            project: project,
+            priority: 9,
+            client: client
           )
+
+          if options.key?('priority')
+            fail PriorityInvalidError if options['priority'] < 0
+            instance.priority = options['priority']
+          end
+
+          instance.comment = options['comment'] if options['comment']
+
+          path = "/projects/#{project.name}/instances"
 
           resp = client.post(path, body: instance.build_create_body)
 
           instance.tap do |obj|
             obj.location = resp.headers['Location']
+            obj.name = obj.location.split("/").last if obj.location
           end
         end
 
@@ -63,9 +73,12 @@ module Aliyun
         #
         # @return Instance status: Suspended, Running, Terminated
         def status(name)
-          path = "/projects/#{project.name}/instances/#{name}"
-          result = client.get(path).parsed_response
-          Utils.dig_value(result, 'Instance', 'Status')
+          instance = Model::Instance.new(
+            name: name,
+            project: project
+          )
+
+          instance.get_status
         end
       end
     end

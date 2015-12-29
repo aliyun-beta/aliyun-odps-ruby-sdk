@@ -93,6 +93,10 @@ module Aliyun
             hash[key.to_s] = hash.delete(key)
           end
         end
+
+        def generate_uuid(flag)
+          "#{flag}#{Time.now.strftime('%Y%m%d%H%M%S')}#{SecureRandom.hex(3)}"
+        end
       end
     end
   end
