@@ -21,7 +21,9 @@ module Aliyun
           result = client.get(path, query: query).parsed_response
 
           Aliyun::Odps::List.build(result, %w(Partitions Partition)) do |hash|
-            Model::Partition.new(hash)
+            partition = {}
+            hash['Column'].map {|h| partition[h['Name']] = h['Value'] }
+            partition
           end
         end
 

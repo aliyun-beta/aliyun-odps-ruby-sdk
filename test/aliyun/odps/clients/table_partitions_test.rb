@@ -30,12 +30,15 @@ describe Aliyun::Odps::Clients::TablePartitions do
       assert_kind_of(Aliyun::Odps::List, obj)
       assert_equal(nil, obj.marker)
       assert_equal(2, obj.max_items)
-      assert_equal([{"Name"=>"sale_date", "Value"=>"20150915"}, {"Name"=>"region", "Value"=>"USA"}], obj[0].column)
+      assert_equal({ "sale_date" => "20150915", "region" => "USA" }, obj[0])
+      assert_equal({ "sale_date" => "20150916", "region" => "CHINA" }, obj[1])
     end
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/tables/table1])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, table.table_partitions.list }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of Array, table.table_partitions.list
+      end
     end
   end
 

@@ -18,7 +18,10 @@ describe Aliyun::Odps::TunnelRouter do
         }
       },
       {
-        body: tunnel_server
+        body: tunnel_server,
+        headers: {
+          content_type: 'application/xml'
+        }
       }
     )
 

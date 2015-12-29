@@ -30,7 +30,8 @@ describe Aliyun::Odps::Model::Table do
       assert_kind_of(Aliyun::Odps::List, obj)
       assert_equal(nil, obj.marker)
       assert_equal(2, obj.max_items)
-      assert_equal([{"Name"=>"sale_date", "Value"=>"20150915"}, {"Name"=>"region", "Value"=>"USA"}], obj[0].column)
+      assert_equal({ "sale_date" => "20150915", "region" => "USA" }, obj[0])
+      assert_equal({ "sale_date" => "20150916", "region" => "CHINA" }, obj[1])
     end
 
     it "should raise RequestError" do
