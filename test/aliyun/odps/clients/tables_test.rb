@@ -109,7 +109,27 @@ describe Aliyun::Odps::Clients::Tables do
 
       assert_kind_of(Aliyun::Odps::Model::Table, obj)
     end
+  end
 
+  describe "delete" do
+    it "should delete table" do
+      Aliyun::Odps::Utils.stubs(:generate_uuid).returns('instance20151229111744707cc8')
+      location = "#{endpoint}/projects/#{project_name}/instances/NewJobName"
+      stub_client_request(
+        :post,
+        "#{endpoint}/projects/#{project_name}/instances",
+        {
+          file_path: 'tables/delete.xml'
+        },
+        {
+          headers: {
+            Location: location
+          }
+        }
+      )
+
+      assert(project.tables.delete('test_table1'), "delete table success")
+    end
   end
 
 end

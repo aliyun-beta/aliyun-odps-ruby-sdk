@@ -76,6 +76,28 @@ module Aliyun
           table
         end
 
+        # Delete Table
+        #
+        # @params name [String]
+        #
+        # @raise RequestError
+        #
+        # @return true
+        def delete(name)
+          table = Model::Table.new(
+            name: name,
+            project: project
+          )
+
+          task = Model::InstanceTask.new(
+            name: 'SQLDropTableTask',
+            type: 'SQL',
+            query: table.generate_drop_sql
+          )
+
+          !!project.instances.create([task])
+        end
+
         # List partitions of table
         #
         # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions

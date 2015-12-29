@@ -62,6 +62,10 @@ module Aliyun
           end.join(", ") + ")" if schema && schema.partitions
           sql += ";"
         end
+
+        def generate_drop_sql
+          "DROP TABLE IF EXISTS #{project.name}.`#{name}`;"
+        end
       end
 
       class TableService < Aliyun::Odps::ServiceObject
