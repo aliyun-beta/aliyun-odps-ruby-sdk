@@ -9,11 +9,14 @@ module Aliyun
         # @see http://repo.aliyun.com/api-doc/Tunnel/post_create_download_session/index.html Post Download Session
         #
         # @params table_name [String] specify table name
-        # @params partition_spec [String] specify partition spec
-        def init(table_name, partition_spec = nil)
+        # @params partition [Hash] specify partition spec, format: { 'key1': 'value1', 'key2': 'value2' }
+        def init(table_name, partition = {})
           path = "/projects/#{project.name}/tables/#{table_name}"
           query = { downloads: true }
-          query.merge!(partition: partition_spec) if partition_spec
+
+          unless partition.empty?
+            query.merge!(partition: generate_partition_spec(partition))
+          end
 
           resp = client.post(path, query: query)
 
@@ -24,8 +27,14 @@ module Aliyun
             project: project,
             client: client,
             table_name: table_name,
-            partition_spec: partition_spec
+            partition_spec: query[:partition]
           ))
+        end
+
+        private
+
+        def generate_partition_spec(partition)
+          partition.map { |k, v| "#{k}=#{v}" }.join(',')
         end
 
       end
