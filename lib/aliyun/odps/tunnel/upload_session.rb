@@ -4,6 +4,7 @@ module Aliyun
       extend Aliyun::Odps::Modelable
 
       def_attr :project, :Project, required: true
+      def_attr :client, :Client, required: true
 
       def_attr :upload_id, :String, required: true
       def_attr :table_name, :String, required: true

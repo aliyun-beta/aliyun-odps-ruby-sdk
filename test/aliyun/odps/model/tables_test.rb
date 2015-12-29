@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Aliyun::Odps::Tables do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Project.new(name: project_name, clients: Aliyun::Odps::Client.instance) }
+  let(:project) { Aliyun::Odps.project(project_name) }
 
   describe "list" do
     it "should list tables" do
@@ -30,7 +30,7 @@ describe Aliyun::Odps::Tables do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/tables])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, project.tables.list }
+      assert_raises(Aliyun::Odps::RequestError) { project.tables.list }
     end
   end
 
@@ -66,7 +66,7 @@ describe Aliyun::Odps::Tables do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/tables/table_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Table, project.tables.get("table_name") }
+      assert_raises(Aliyun::Odps::RequestError) { project.tables.get("table_name") }
     end
   end
 

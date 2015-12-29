@@ -21,7 +21,7 @@ module Aliyun
         result = resp.parsed_response
 
         Aliyun::Odps::List.build(result, %w(Projects Project)) do |hash|
-          Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
+          Project.new(hash.merge(client: client))
         end
       end
 
@@ -33,7 +33,7 @@ module Aliyun
       def get(name)
         result = client.get("/projects/#{name}").parsed_response
         hash = Utils.dig_value(result, 'Project')
-        Project.new(hash.merge(client: Aliyun::Odps::Client.instance))
+        Project.new(hash.merge(client: client))
       end
 
       # Update Project Information
@@ -48,7 +48,7 @@ module Aliyun
         project = Project.new(
           name: name,
           comment: options['comment'],
-          client: Aliyun::Odps::Client.instance
+          client: client
         )
         body = project.build_update_body
         !!client.put("/projects/#{name}", body: body)

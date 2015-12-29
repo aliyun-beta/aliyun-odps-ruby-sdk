@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe Aliyun::Odps::Projects do
-  let(:project_service) { Aliyun::Odps::Client.instance.projects }
+  let(:client) { Aliyun::Odps::Client.new }
 
   describe "list" do
     it 'should list projects' do
@@ -20,7 +20,7 @@ describe Aliyun::Odps::Projects do
         }
       )
 
-      obj = project_service.list(query)
+      obj = client.projects.list(query)
 
       assert_kind_of(Aliyun::Odps::List, obj)
       assert_equal('YV8wOTEzMDIwMDQyX3N0Z18zNzEq', obj.marker)
@@ -29,7 +29,9 @@ describe Aliyun::Odps::Projects do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::List, project_service.list }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Aliyun::Odps::List, client.projects.list)
+      end
     end
   end
 
@@ -47,7 +49,7 @@ describe Aliyun::Odps::Projects do
         }
       )
 
-      obj = project_service.get('project_name')
+      obj = client.projects.get('project_name')
 
       assert_kind_of(Aliyun::Odps::Project, obj)
       assert_equal('test_project', obj.name)
@@ -61,7 +63,9 @@ describe Aliyun::Odps::Projects do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/project_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Project, project_service.get('project_name') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Aliyun::Odps::Project, client.projects.get('project_name'))
+      end
     end
   end
 
@@ -75,16 +79,20 @@ describe Aliyun::Odps::Projects do
         }
       )
 
-      assert(project_service.update('Projectname', comment: 'ProjectComment'), 'update success')
+      assert(client.projects.update('Projectname', comment: 'ProjectComment'), 'update success')
     end
 
     it "should raise XmlElementMissingError" do
-      assert_raises(Aliyun::Odps::XmlElementMissingError) { assert(project_service.update('project_name'), 'update success') }
+      assert_raises(Aliyun::Odps::XmlElementMissingError) do
+        client.projects.update('project_name')
+      end
     end
 
     it "should raise RequestError" do
       stub_fail_request(:put, %r[/projects/project_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert(project_service.update('project_name', comment: 'Test Comment'), 'update success') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        client.projects.update('project_name', comment: 'Test Comment')
+      end
     end
   end
 

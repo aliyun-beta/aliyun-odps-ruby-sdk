@@ -1,8 +1,17 @@
 require 'test_helper'
 
 describe Aliyun::Odps::UploadSessions do
+  let(:endpoint) { 'http://mock-dt.odps.aliyun.com' }
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
+  let(:project) { Aliyun::Odps.project(project_name) }
+
+  before do
+    Aliyun::Odps::TunnelRouter.stubs(:get_tunnel_endpoint).returns(endpoint)
+  end
+
+  after do
+    Aliyun::Odps::TunnelRouter.unstub(:get_tunnel_endpoint)
+  end
 
   describe "init" do
     it "should init upload session" do
@@ -35,8 +44,18 @@ describe Aliyun::Odps::UploadSessions do
     end
 
     it "should raise RequestError" do
-      stub_fail_request(:post, %r[/projects/#{project_name}/tables/table_name], {}, file_path: 'tunnel_error.json', headers: { content_type: 'application/json' })
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::UploadSession, project.table_tunnels.upload_sessions.init('table_name') }
+      stub_fail_request(
+        :post,
+        %r[/projects/#{project_name}/tables/table_name],
+        {},
+        {
+          file_path: 'tunnel_error.json',
+          headers: { content_type: 'application/json' }
+        }
+      )
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Aliyun::Odps::UploadSession, project.table_tunnels.upload_sessions.init('table_name'))
+      end
     end
   end
 end

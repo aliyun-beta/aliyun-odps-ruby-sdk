@@ -1,8 +1,17 @@
 require 'test_helper'
 
 describe Aliyun::Odps::DownloadSessions do
+  let(:endpoint) { 'http://mock-dt.odps.aliyun.com' }
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
+  let(:project) { Aliyun::Odps.project(project_name) }
+
+  before do
+    Aliyun::Odps::TunnelRouter.stubs(:get_tunnel_endpoint).returns(endpoint)
+  end
+
+  after do
+    Aliyun::Odps::TunnelRouter.unstub(:get_tunnel_endpoint)
+  end
 
   describe "init" do
     it "should init new download session" do
@@ -41,7 +50,8 @@ describe Aliyun::Odps::DownloadSessions do
         }
       )
       assert_raises(Aliyun::Odps::RequestError) do
-        assert_kind_of(Aliyun::Odps::DownloadSession, project.table_tunnels.download_sessions.init('table_name'))
+        obj = project.table_tunnels.download_sessions.init('table_name')
+        assert_kind_of(Aliyun::Odps::DownloadSession, obj)
       end
     end
 

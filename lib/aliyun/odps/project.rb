@@ -15,7 +15,8 @@ module Aliyun
       has_many :resources
       has_many :table_tunnels
 
-      # def_attr :client, :Client, required: true
+      def_attr :client, :Client, required: true
+
       def_attr :name, :String, required: true
       def_attr :comment, :String
       def_attr :project_group_name, :String

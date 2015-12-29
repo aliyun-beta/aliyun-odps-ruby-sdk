@@ -31,6 +31,12 @@ module Aliyun
           partition_spec: options['partition_spec']
         ))
       end
+
+      private
+
+      def client
+        master.client
+      end
     end
   end
 end

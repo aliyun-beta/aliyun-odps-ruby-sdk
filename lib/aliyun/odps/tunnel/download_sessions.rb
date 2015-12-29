@@ -25,6 +25,7 @@ module Aliyun
 
         DownloadSession.new(result.merge(
           project: project,
+          client: client,
           table_name: table_name,
           partition_spec: query[:partition]
         ))
@@ -34,6 +35,10 @@ module Aliyun
 
       def generate_partition_spec(partition)
         partition.map { |k, v| "#{k}=#{v}" }.join(',')
+      end
+
+      def client
+        master.client
       end
     end
   end

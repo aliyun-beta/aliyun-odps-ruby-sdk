@@ -6,11 +6,9 @@ module Aliyun
     class Client < ServiceObject
       extend Aliyun::Odps::Modelable
 
-      include Singleton
+      has_many :projects
 
-      has_many :projects #no actions through client
-
-      attr_reader :access_key, :secret_key, :opts
+      attr_reader :access_key, :secret_key, :endpoint, :opts
 
       # Initialize a object
       #
@@ -19,11 +17,11 @@ module Aliyun
       # @option opts [String] :endpoint endpoint for API
       #
       # @return [Response]
-      def initialize
-        @access_key = Aliyun::Odps.config.access_key
-        @secret_key = Aliyun::Odps.config.secret_key
-        @opts = Aliyun::Odps.config.options
-        @services = {}
+      def initialize(config = Aliyun::Odps.config)
+        @access_key = config.access_key
+        @secret_key = config.secret_key
+        @endpoint = config.endpoint
+        @opts = config.options
       end
 
       %w(get put post delete options head).each do |method|
@@ -35,7 +33,7 @@ module Aliyun
       private
 
       def http
-        @http ||= Http.new(access_key, secret_key)
+        @http ||= Http.new(access_key, secret_key, endpoint)
       end
     end
   end

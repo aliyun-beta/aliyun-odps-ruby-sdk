@@ -1,8 +1,8 @@
 module Aliyun
   module Odps
     class TunnelRouter
-      def get_tunnel_endpoint(project_name)
-        host = Aliyun::Odps::Client.instance.get(
+      def self.get_tunnel_endpoint(client, project_name)
+        host = client.get(
           "/projects/#{project_name}/tunnel",
           query: { service: true, curr_project: project_name }
         ).parsed_response

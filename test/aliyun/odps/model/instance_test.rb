@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Aliyun::Odps::Instance do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
+  let(:project) { Aliyun::Odps.project(project_name) }
   let(:instance) { Aliyun::Odps::Instance.new(name: 'instance_name', project: project) }
 
   describe "task_detail" do
@@ -31,7 +31,9 @@ describe Aliyun::Odps::Instance do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Hash, instance.task_detail('task_name') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Hash, instance.task_detail('task_name'))
+      end
     end
   end
 
@@ -61,7 +63,9 @@ describe Aliyun::Odps::Instance do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Hash, instance.task_progress('task_name') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Hash, instance.task_progress('task_name'))
+      end
     end
   end
 
@@ -91,7 +95,9 @@ describe Aliyun::Odps::Instance do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Hash, instance.task_summary('task_name') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Hash, instance.task_summary('task_name'))
+      end
     end
   end
 
@@ -119,7 +125,9 @@ describe Aliyun::Odps::Instance do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, instance.list_tasks }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Array, instance.list_tasks)
+      end
     end
   end
 
@@ -138,7 +146,9 @@ describe Aliyun::Odps::Instance do
 
     it "should raise RequestError" do
       stub_fail_request(:put, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert instance.terminate }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert(instance.terminate, "should terminate success")
+      end
     end
   end
 

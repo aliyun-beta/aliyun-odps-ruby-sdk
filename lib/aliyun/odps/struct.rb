@@ -21,7 +21,7 @@ module Aliyun
         end
 
         def client
-          Aliyun::Odps::Client.instance
+          project.client
         end
 
         class << self
@@ -66,5 +66,3 @@ module Aliyun
     end
   end
 end
-
-Dir[File.join(File.dirname(__FILE__), 'struct/*.rb')].each { |f| require f }

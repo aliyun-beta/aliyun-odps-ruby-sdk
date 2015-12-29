@@ -2,7 +2,7 @@ module Aliyun
   module Odps
     class ServiceObject
       def client
-        Aliyun::Odps::Client.instance
+        master.is_a?(Client) ? master : project.client
       end
 
       def project

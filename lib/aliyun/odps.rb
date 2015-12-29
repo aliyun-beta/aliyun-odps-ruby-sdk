@@ -20,24 +20,25 @@ module Aliyun
     # Your code goes here...
     class << self
       attr_writer :configuration
-    end
 
-    def self.configure
-      @configuration ||= Configuration.new
-      yield @configuration if block_given?
-      @configuration
-    end
+      def configure
+        @configuration ||= Configuration.new
+        yield @configuration if block_given?
+        @configuration
+      end
 
-    def self.config
-      @configuration
-    end
+      def config
+        @configuration
+      end
 
-    def self.project(name = nil)
-      fail MissingProjectConfigurationError unless config.project
+      def project(name = nil)
+        fail MissingProjectConfigurationError unless config.project
 
-      Aliyun::Odps::Project.new(
-        name: name || config.project
-      )
+        Aliyun::Odps::Project.new(
+          name: name || config.project,
+          client: Aliyun::Odps::Client.new
+        )
+      end
     end
   end
 end

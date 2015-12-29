@@ -9,6 +9,12 @@ module Aliyun
 
       has_many :download_sessions
       has_many :upload_sessions
+
+      def client
+        config = Aliyun::Odps.config.dup
+        config.endpoint = TunnelRouter.get_tunnel_endpoint(project.client, project.name)
+        Aliyun::Odps::Client.new(config)
+      end
     end
   end
 end

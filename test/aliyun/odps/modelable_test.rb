@@ -39,9 +39,9 @@ module Aliyun
 
         assert_nil(m.ds.project)
 
-        assert(Aliyun::Odps::Client.instance.respond_to?(:projects), 'client has projects')
-        assert_kind_of(Aliyun::Odps::Projects, Aliyun::Odps::Client.instance.projects)
-        assert_nil(Aliyun::Odps::Client.instance.projects.project, "Client's projects doesn't have a project")
+        assert(Aliyun::Odps::Client.new.respond_to?(:projects), 'client has projects')
+        assert_kind_of(Aliyun::Odps::Projects, Aliyun::Odps::Client.new.projects)
+        assert_nil(Aliyun::Odps::Client.new.projects.project, "Client's projects doesn't have a project")
       end
     end
   end

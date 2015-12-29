@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Aliyun::Odps::Resources do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
+  let(:project) { Aliyun::Odps.project(project_name) }
 
   describe "list instances" do
     it "should return list object" do
@@ -29,14 +29,22 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/instances])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, project.instances.list }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Array, project.instances.list)
+      end
     end
   end
 
   describe "create" do
     it "should create new instance" do
       location = "#{endpoint}/projects/#{project_name}/instances/UUIDJobName"
-      task = Aliyun::Odps::InstanceTask.new(type: 'SQL', name: 'SqlTask', comment: 'TaskComment', property: { 'key1' => 'value1' }, query: 'SELECT * FROM test_table;')
+      task = Aliyun::Odps::InstanceTask.new(
+        type: 'SQL',
+        name: 'SqlTask',
+        comment: 'TaskComment',
+        property: { 'key1' => 'value1' },
+        query: 'SELECT * FROM test_table;'
+      )
       args = [[task], name: 'JobName', comment: 'JobComment', priority: 1]
       stub_client_request(
         :post,
@@ -82,8 +90,15 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:post, %r[/projects/#{project_name}/instances])
-      task = Aliyun::Odps::InstanceTask.new(type: 'SQL', name: 'sql1', comment: 'test SQL', query: 'select * from table1 limit 1;')
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of String, project.instances.create([task]) }
+      task = Aliyun::Odps::InstanceTask.new(
+        type: 'SQL',
+        name: 'sql1',
+        comment: 'test SQL',
+        query: 'select * from table1 limit 1;'
+      )
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(String, project.instances.create([task]))
+      end
     end
   end
 
@@ -105,7 +120,9 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/instances/newinstance])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Hash, project.instances.status('newinstance') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Hash, project.instances.status('newinstance'))
+      end
     end
   end
 

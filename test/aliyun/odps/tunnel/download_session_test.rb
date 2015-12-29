@@ -1,9 +1,25 @@
 require 'test_helper'
 
 describe Aliyun::Odps::DownloadSession do
+  let(:endpoint) { 'http://mock-dt.odps.aliyun.com' }
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
-  let(:download_session) { Aliyun::Odps::DownloadSession.new(table_name: 'table1', download_id: '1122wwssddd33222', project: project) }
+  let(:project) { Aliyun::Odps.project(project_name) }
+  let(:download_session) do
+    Aliyun::Odps::DownloadSession.new(
+      table_name: 'table1',
+      download_id: '1122wwssddd33222',
+      client: project.table_tunnels.client,
+      project: project
+    )
+  end
+
+  before do
+    Aliyun::Odps::TunnelRouter.stubs(:get_tunnel_endpoint).returns(endpoint)
+  end
+
+  after do
+    Aliyun::Odps::TunnelRouter.unstub(:get_tunnel_endpoint)
+  end
 
   describe "download" do
     it "should can download" do
@@ -43,8 +59,18 @@ describe Aliyun::Odps::DownloadSession do
     end
 
     it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/tables/table1], {}, file_path: 'tunnel_error.json', headers: { content_type: 'application/json' })
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of String, download_session.download("(1,100)", "uuid,name") }
+      stub_fail_request(
+        :get,
+        %r[/projects/#{project_name}/tables/table1],
+        {},
+        {
+          file_path: 'tunnel_error.json',
+          headers: { content_type: 'application/json' }
+        }
+      )
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(String, download_session.download("(1,100)", "uuid,name"))
+      end
     end
   end
 

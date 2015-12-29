@@ -2,7 +2,7 @@ require 'test_helper'
 
 describe Aliyun::Odps::Resources do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Project.new(name: project_name, clients: Aliyun::Odps::Client.instance) }
+  let(:project) { Aliyun::Odps.project(project_name) }
 
   describe "list" do
     it "should list resources" do
@@ -30,7 +30,7 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/resources])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, project.resources.list }
+      assert_raises(Aliyun::Odps::RequestError) { project.resources.list }
     end
   end
 
@@ -71,7 +71,7 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/resources/resource_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Resource, project.resources.get('resource_name') }
+      assert_raises(Aliyun::Odps::RequestError) { project.resources.get('resource_name') }
     end
   end
 
@@ -111,7 +111,7 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:head, %r[/projects/#{project_name}/resources/resource_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Resource, project.resources.get_meta('resource_name') }
+      assert_raises(Aliyun::Odps::RequestError) { project.resources.get_meta('resource_name') }
     end
 
   end
@@ -148,7 +148,9 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:post, %r[/projects/#{project_name}/resources/])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of String, project.resources.create('py', 'resource_name', file: 'Hello') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        project.resources.create('py', 'resource_name', file: 'Hello')
+      end
     end
   end
 
@@ -178,7 +180,9 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:put, %r[/projects/#{project_name}/resources/resource_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert project.resources.update('py', 'resource_name', file: 'Hello') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        project.resources.update('py', 'resource_name', file: 'Hello')
+      end
     end
   end
 
@@ -193,7 +197,9 @@ describe Aliyun::Odps::Resources do
 
     it "should raise RequestError" do
       stub_fail_request(:delete , %r[/projects/#{project_name}/resources/resource_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert project.resources.delete('resource_name') }
+      assert_raises(Aliyun::Odps::RequestError) do
+        project.resources.delete('resource_name')
+      end
     end
   end
 end

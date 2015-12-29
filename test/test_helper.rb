@@ -12,6 +12,7 @@ Aliyun::Odps.configure do |config|
   config.access_key = ENV['ALIYUN_ACCESS_KEY'] || ''
   config.secret_key = ENV['ALIYUN_SECRET_KEY'] || ''
   config.endpoint = "http://service.odps.aliyun.com/api"
+  config.project = ENV['ALIYUN_PROJECT'] || 'mock_project_name'
 end
 
 def endpoint
