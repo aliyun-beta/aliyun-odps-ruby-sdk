@@ -25,7 +25,7 @@ describe Aliyun::Odps::Model::Table do
         }
       )
 
-      obj = table.list_partitions(query)
+      obj = table.partitions(query)
 
       assert_kind_of(Aliyun::Odps::List, obj)
       assert_equal(nil, obj.marker)
@@ -35,7 +35,7 @@ describe Aliyun::Odps::Model::Table do
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/tables/table1])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, table.list_partitions }
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, table.partitions }
     end
   end
 

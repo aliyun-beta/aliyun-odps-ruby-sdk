@@ -1,4 +1,5 @@
 require 'aliyun/odps/clients/tables'
+require 'aliyun/odps/model/table_partition'
 require 'aliyun/odps/model/download_session'
 require 'aliyun/odps/model/upload_session'
 
@@ -11,7 +12,7 @@ module Aliyun
         has_many :download_sessions
         has_many :upload_sessions
 
-        has_many :partitions
+        has_many :table_partitions
 
         def_attr :project, :Project, required: true
 
@@ -38,8 +39,8 @@ module Aliyun
         # @params options [Hash] options
         # @option options [String] :marker specify marker for paginate
         # @option options [String] :maxitems (1000) specify maxitems in this request
-        def list_partitions(options = {})
-          partitions.list(options)
+        def partitions(options = {})
+          table_partitions.list(options)
         end
 
         def generate_create_sql
