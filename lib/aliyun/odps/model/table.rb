@@ -11,6 +11,8 @@ module Aliyun
         has_many :download_sessions
         has_many :upload_sessions
 
+        has_many :partitions
+
         def_attr :project, :Project, required: true
 
         def_attr :name, :String, required: true
@@ -36,18 +38,8 @@ module Aliyun
         # @params options [Hash] options
         # @option options [String] :marker specify marker for paginate
         # @option options [String] :maxitems (1000) specify maxitems in this request
-        def partitions(options = {})
-          Utils.stringify_keys!(options)
-          path = "/projects/#{project.name}/tables/#{name}"
-          query = Utils.hash_slice(options, 'marker', 'maxitems').merge(
-            partitions: true,
-            expectmarker: true
-          )
-          result = client.get(path, query: query).parsed_response
-
-          Aliyun::Odps::List.build(result, %w(Partitions Partition)) do |hash|
-            Model::Partition.new(hash)
-          end
+        def list_partitions(options = {})
+          partitions.list(options)
         end
 
         def generate_create_sql
