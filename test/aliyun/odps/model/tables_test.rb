@@ -1,8 +1,8 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Clients::Tables do
+describe Aliyun::Odps::Tables do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name, clients: Aliyun::Odps::Client.instance) }
+  let(:project) { Aliyun::Odps::Project.new(name: project_name, clients: Aliyun::Odps::Client.instance) }
 
   describe "list" do
     it "should list tables" do
@@ -53,27 +53,27 @@ describe Aliyun::Odps::Clients::Tables do
 
       obj = project.tables.get("test_table")
 
-      assert_kind_of(Aliyun::Odps::Model::Table, obj)
+      assert_kind_of(Aliyun::Odps::Table, obj)
       assert_equal('test_table', obj.name)
       assert_equal('029a5286716248ad92dde15d70060ec2', obj.table_id)
       assert_equal(nil, obj.comment)
       assert_equal(DateTime.parse('Wed, 09 Dec 2015 12:18:45 GMT'), obj.creation_time)
       assert_equal(DateTime.parse('Wed, 09 Dec 2015 12:18:46 GMT'), obj.last_modified)
       assert_equal('ALIYUN$odpstest1@aliyun.com', obj.owner)
-      assert_kind_of(Aliyun::Odps::Model::TableSchema, obj.schema)
+      assert_kind_of(Aliyun::Odps::TableSchema, obj.schema)
       assert_equal(3, obj.schema.columns.size)
     end
 
     it "should raise RequestError" do
       stub_fail_request(:get, %r[/projects/#{project_name}/tables/table_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Model::Table, project.tables.get("table_name") }
+      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Aliyun::Odps::Table, project.tables.get("table_name") }
     end
   end
 
   describe "create" do
     it "should create table" do
       Aliyun::Odps::Utils.stubs(:generate_uuid).returns('instance20151229111744707cc8')
-      Aliyun::Odps::Model::Instance.any_instance.stubs(:wait_for_terminated).returns(true)
+      Aliyun::Odps::Instance.any_instance.stubs(:wait_for_terminated).returns(true)
       location = "#{endpoint}/projects/#{project_name}/instances/NewJobName"
       stub_client_request(
         :post,
@@ -100,14 +100,14 @@ describe Aliyun::Odps::Clients::Tables do
         }
       )
 
-      schema = Aliyun::Odps::Model::TableSchema.new({
+      schema = Aliyun::Odps::TableSchema.new({
         columns: [{name: 'uuid', type: 'bigint', comment: 'major key'}],
         partitions: [{name: 'name', type: 'string'}, {name: 'name2', type: 'string', comment: 'test partition comment'}]
       })
 
       obj = project.tables.create('test_table1', schema, comment: 'sql comment')
 
-      assert_kind_of(Aliyun::Odps::Model::Table, obj)
+      assert_kind_of(Aliyun::Odps::Table, obj)
     end
   end
 

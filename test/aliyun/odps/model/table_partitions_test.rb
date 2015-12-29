@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Clients::TablePartitions do
+describe Aliyun::Odps::TablePartitions do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name, clients: Aliyun::Odps::Client.instance) }
-  let(:table) { Aliyun::Odps::Model::Table.new(name: 'table1', project: project) }
+  let(:project) { Aliyun::Odps::Project.new(name: project_name, clients: Aliyun::Odps::Client.instance) }
+  let(:table) { Aliyun::Odps::Table.new(name: 'table1', project: project) }
 
   describe "list" do
     it "should get partitions" do
@@ -48,7 +48,7 @@ describe Aliyun::Odps::Clients::TablePartitions do
   describe "create" do
     it "should create partition" do
       Aliyun::Odps::Utils.stubs(:generate_uuid).returns('instance20151229111744707cc8')
-      Aliyun::Odps::Model::Instance.any_instance.stubs(:wait_for_terminated).returns(true)
+      Aliyun::Odps::Instance.any_instance.stubs(:wait_for_terminated).returns(true)
       location = "#{endpoint}/projects/#{project_name}/instances/NewJobName"
       stub_client_request(
         :post,

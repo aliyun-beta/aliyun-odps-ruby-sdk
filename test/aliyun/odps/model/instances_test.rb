@@ -1,8 +1,8 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Clients::Resources do
+describe Aliyun::Odps::Resources do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
+  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
 
   describe "list instances" do
     it "should return list object" do
@@ -36,7 +36,7 @@ describe Aliyun::Odps::Clients::Resources do
   describe "create" do
     it "should create new instance" do
       location = "#{endpoint}/projects/#{project_name}/instances/UUIDJobName"
-      task = Aliyun::Odps::Model::InstanceTask.new(type: 'SQL', name: 'SqlTask', comment: 'TaskComment', property: { 'key1' => 'value1' }, query: 'SELECT * FROM test_table;')
+      task = Aliyun::Odps::InstanceTask.new(type: 'SQL', name: 'SqlTask', comment: 'TaskComment', property: { 'key1' => 'value1' }, query: 'SELECT * FROM test_table;')
       args = [[task], name: 'JobName', comment: 'JobComment', priority: 1]
       stub_client_request(
         :post,
@@ -52,14 +52,14 @@ describe Aliyun::Odps::Clients::Resources do
       )
 
       instance = project.instances.create(*args)
-      assert_kind_of(Aliyun::Odps::Model::Instance, instance)
+      assert_kind_of(Aliyun::Odps::Instance, instance)
       assert_equal('UUIDJobName', instance.name)
       assert_equal(location, instance.location)
     end
 
     it "should create new instance without task comment" do
       location = "#{endpoint}/projects/#{project_name}/instances/JobName"
-      task = Aliyun::Odps::Model::InstanceTask.new(type: 'SQL', name: 'SqlTask', query: 'SELECT * FROM test_table;')
+      task = Aliyun::Odps::InstanceTask.new(type: 'SQL', name: 'SqlTask', query: 'SELECT * FROM test_table;')
       args = [[task], name: 'JobName', comment: 'JobComment', priority: 1]
       stub_client_request(
         :post,
@@ -75,14 +75,14 @@ describe Aliyun::Odps::Clients::Resources do
       )
 
       instance = project.instances.create(*args)
-      assert_kind_of(Aliyun::Odps::Model::Instance, instance)
+      assert_kind_of(Aliyun::Odps::Instance, instance)
       assert_equal('JobName', instance.name)
       assert_equal(location, instance.location)
     end
 
     it "should raise RequestError" do
       stub_fail_request(:post, %r[/projects/#{project_name}/instances])
-      task = Aliyun::Odps::Model::InstanceTask.new(type: 'SQL', name: 'sql1', comment: 'test SQL', query: 'select * from table1 limit 1;')
+      task = Aliyun::Odps::InstanceTask.new(type: 'SQL', name: 'sql1', comment: 'test SQL', query: 'select * from table1 limit 1;')
       assert_raises(Aliyun::Odps::RequestError) { assert_kind_of String, project.instances.create([task]) }
     end
   end

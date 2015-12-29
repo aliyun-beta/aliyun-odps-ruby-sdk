@@ -8,7 +8,7 @@ module Aliyun
       def has_many(models, opts = {})
         # p "#{models.to_s.singularize.camelize}"
         mod = models.to_s.singularize
-        klass = "Aliyun::Odps::Model::#{mod.camelize}Service".constantize
+        klass = "Aliyun::Odps::#{mod.camelize}s".constantize
         define_method(models) {
           klass.build(self)
         }
@@ -25,5 +25,3 @@ module Aliyun
     end
   end
 end
-
-Dir[File.join(File.dirname(__FILE__), 'model/*.rb')].each { |f| require f }

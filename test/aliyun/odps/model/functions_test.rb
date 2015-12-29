@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Clients::Functions do
+describe Aliyun::Odps::Functions do
   let(:endpoint) { Aliyun::Odps.config.endpoint }
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
+  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
 
   describe "list functions" do
     it "should return list object" do
@@ -37,7 +37,7 @@ describe Aliyun::Odps::Clients::Functions do
   describe "create" do
     it "should create function" do
       location = "#{endpoint}/projects/test_project/registration/functions/Extract_Name"
-      resource = Aliyun::Odps::Model::Resource.new(name: 'Extract_Name.py')
+      resource = Aliyun::Odps::Resource.new(name: 'Extract_Name.py')
       args = ['Extract_Name', 'ExtractName', [resource]]
       stub_client_request(
         :post,
@@ -53,7 +53,7 @@ describe Aliyun::Odps::Clients::Functions do
       )
 
       obj = project.functions.create(*args)
-      assert_kind_of(Aliyun::Odps::Model::Function, obj)
+      assert_kind_of(Aliyun::Odps::Function, obj)
       assert_equal(location, obj.location)
       assert_equal('Extract_Name', obj.name)
       assert_equal('ExtractName', obj.class_type)
@@ -61,14 +61,14 @@ describe Aliyun::Odps::Clients::Functions do
 
     it "should raise RequestError" do
       stub_fail_request(:post, %r[/projects/#{project_name}/registration/functions])
-      resource = Aliyun::Odps::Model::Resource.new(name: 'function1')
+      resource = Aliyun::Odps::Resource.new(name: 'function1')
       assert_raises(Aliyun::Odps::RequestError) { assert project.functions.create('functio1', 'functions/1.py', [resource]) }
     end
   end
 
   describe "update" do
     it "should update exist function" do
-      resource = Aliyun::Odps::Model::Resource.new(name: 'Extract_Name.py')
+      resource = Aliyun::Odps::Resource.new(name: 'Extract_Name.py')
       args = ['Extract_Name', 'ExtractName2', [resource]]
       stub_client_request(
         :put,
@@ -82,7 +82,7 @@ describe Aliyun::Odps::Clients::Functions do
 
     it "should raise RequestError" do
       stub_fail_request(:put, %r[/projects/#{project_name}/registration/functions/function1])
-      resource = Aliyun::Odps::Model::Resource.new(name: 'function1')
+      resource = Aliyun::Odps::Resource.new(name: 'function1')
       assert_raises(Aliyun::Odps::RequestError) { assert project.functions.update('function1', 'functions/2.py', [resource]) }
     end
   end

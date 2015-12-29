@@ -1,5 +1,3 @@
-# require 'aliyun/odps/clients/clients'
-require 'aliyun/odps/clients/projects'
 require 'aliyun/odps/http'
 require 'aliyun/odps/service_object'
 
@@ -7,7 +5,6 @@ module Aliyun
   module Odps
     class Client < ServiceObject
       extend Aliyun::Odps::Modelable
-      # include Aliyun::Odps::Clients
 
       include Singleton
 

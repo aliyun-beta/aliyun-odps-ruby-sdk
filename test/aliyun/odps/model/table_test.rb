@@ -1,9 +1,9 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Model::Table do
+describe Aliyun::Odps::Table do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
-  let(:table) { Aliyun::Odps::Model::Table.new(name: 'table1', project: project) }
+  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
+  let(:table) { Aliyun::Odps::Table.new(name: 'table1', project: project) }
 
   describe "partitions" do
     it "should get partitions information" do
@@ -42,7 +42,7 @@ describe Aliyun::Odps::Model::Table do
 
   describe "create" do
     it "should generate correct sql" do
-      table = Aliyun::Odps::Model::Table.new(
+      table = Aliyun::Odps::Table.new(
         name: 'test_table',
         project: project,
         schema: {
@@ -54,11 +54,11 @@ describe Aliyun::Odps::Model::Table do
     end
 
     it "should generate correct sql with schema object" do
-      schema = Aliyun::Odps::Model::TableSchema.new({
+      schema = Aliyun::Odps::TableSchema.new({
         columns: [{name: 'uuid', type: 'bigint', comment: 'major key'}],
         partitions: [{name: 'name', type: 'string'}, {name: 'name2', type: 'string', comment: 'test partition comment'}]
       })
-      table = Aliyun::Odps::Model::Table.new(name: 'test_table', comment: 'table comment', project: project, schema: schema)
+      table = Aliyun::Odps::Table.new(name: 'test_table', comment: 'table comment', project: project, schema: schema)
 
       assert_equal("CREATE TABLE mock_project_name.`test_table` (`uuid` bigint COMMENT 'major key') COMMENT 'table comment' PARTITIONED BY (`name` string, `name2` string COMMENT 'test partition comment');", table.generate_create_sql)
     end

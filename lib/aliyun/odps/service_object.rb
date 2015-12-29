@@ -6,7 +6,7 @@ module Aliyun
       end
 
       def project
-        @master.kind_of?(Model::Project) ? @master : @master.try(:project)
+        @master.kind_of?(Project) ? @master : @master.try(:project)
       end
 
       attr_reader :master

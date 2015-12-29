@@ -1,9 +1,8 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Clients::DownloadSessions do
+describe Aliyun::Odps::DownloadSessions do
   let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
-  let(:table) { Aliyun::Odps::Model::Table.new(name: 'table_name', project: project) }
+  let(:project) { Aliyun::Odps::Project.new(name: project_name) }
 
   describe "init" do
     it "should init new download session" do
@@ -23,7 +22,7 @@ describe Aliyun::Odps::Clients::DownloadSessions do
         }
       )
 
-      obj = table.download_sessions.init('table_name')
+      obj = project.table_tunnels.download_sessions.init('table_name')
 
       assert_equal('table_name', obj.table_name)
       assert_equal(project, obj.project)
@@ -42,7 +41,7 @@ describe Aliyun::Odps::Clients::DownloadSessions do
         }
       )
       assert_raises(Aliyun::Odps::RequestError) do
-        assert_kind_of(Aliyun::Odps::Model::DownloadSession, table.download_sessions.init('table_name'))
+        assert_kind_of(Aliyun::Odps::DownloadSession, project.table_tunnels.download_sessions.init('table_name'))
       end
     end
 
