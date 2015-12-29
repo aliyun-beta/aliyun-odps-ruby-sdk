@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Instance>
+  <Job>
+    <Name>instance20151229111744707cc8</Name>
+    <Comment></Comment>
+    <Priority>9</Priority>
+    <Tasks>
+      <SQL>
+        <Name>SQLCreatePartitionTask</Name>
+        <Comment></Comment>
+        <Config>
+          <Property>
+            <Name></Name>
+            <Value></Value>
+          </Property>
+        </Config>
+        <Query><![CDATA[ALTER TABLE mock_project_name.`table1` ADD PARTITION (key1 = 'v1');]]></Query>
+      </SQL>
+    </Tasks>
+  </Job>
+</Instance>
