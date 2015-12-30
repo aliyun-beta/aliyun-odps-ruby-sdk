@@ -3,7 +3,7 @@
 [Project](https://docs.aliyun.com/#/pub/odps/basic/definition&project) is the basic unit to keep your system organized, it's very similar to `database` or `schema` in traditional relational database.
 
 
-## `get`
+## ```get```
 
 We could call ```get``` to fetch a project information
 
@@ -17,7 +17,7 @@ If no project name was provide, it will return the default project which was con
 You could check existence of a project by `get` method as well, if the project doesn't exist, it will raise `Aliyun::Odps::RequestError: NoSuchObject: ODPS-0420111`
 
 
-## `list`
+## ```list```
 We could list all available projects by calling ```list```.
 
 ```ruby
@@ -29,7 +29,7 @@ We could list all available projects by calling ```list```.
 
 It will support three options `owner`, `marker` and `maxitem`, see the usage by example.
 
-## `update`
+## ```update```
 
 Right now you are only able to update a project comment by update method, passing by options
 
