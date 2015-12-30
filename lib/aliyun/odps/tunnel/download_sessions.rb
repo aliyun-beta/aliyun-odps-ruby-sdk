@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     # Methods for DownloadSessions
     class DownloadSessions < ServiceObject
-
       # Init Download Session
       #
       # @see http://repo.aliyun.com/api-doc/Tunnel/post_create_download_session/index.html Post Download Session
@@ -16,7 +15,6 @@ module Aliyun
         unless partition.empty?
           query.merge!(partition: generate_partition_spec(partition))
         end
-        p query
 
         resp = client.post(path, query: query)
 
@@ -24,10 +22,10 @@ module Aliyun
         result = JSON.parse(result) if result.is_a?(String)
 
         DownloadSession.new(result.merge(
-          project: project,
-          client: client,
-          table_name: table_name,
-          partition_spec: query[:partition]
+                              project: project,
+                              client: client,
+                              table_name: table_name,
+                              partition_spec: query[:partition]
         ))
       end
 

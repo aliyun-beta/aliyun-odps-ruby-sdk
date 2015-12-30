@@ -15,7 +15,7 @@ module Aliyun
         @objects = objects
       end
 
-      def self.build(result, keys, &block)
+      def self.build(result, keys, &_block)
         top_key = keys.first
         marker = Utils.dig_value(result, top_key, 'Marker')
         max_items = Utils.dig_value(result, top_key, 'MaxItems')

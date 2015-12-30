@@ -16,7 +16,7 @@ describe Aliyun::Odps::Authorization do
           'Host' => 'http://service-corp.odps.aliyun-inc.com/api',
           'X-ODPS-resource-type' => 'file',
           'X-ODPS-resource-name' => 'test.file'
-      })
+        })
     )
   end
 

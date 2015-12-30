@@ -18,17 +18,17 @@ module Aliyun
       attr_reader :origin_response
 
       def initialize(response)
-        error =
-          if response.parsed_response.key?('Error')
-            @code = response.parsed_response['Error']['Code']
-            @message = response.parsed_response['Error']['Message']
-          elsif response.parsed_response.key?('Code')
-            @code = response.parsed_response['Code']
-            @message = response.parsed_response['Message']
-          else
-            @code = response.code
-            @message = response.message
-          end
+        if response.parsed_response.key?('Error')
+          @code = response.parsed_response['Error']['Code']
+          @message = response.parsed_response['Error']['Message']
+        elsif response.parsed_response.key?('Code')
+          @code = response.parsed_response['Code']
+          @message = response.parsed_response['Message']
+        else
+          @code = response.code
+          @message = response.message
+        end
+
         @request_id = response.headers['x-odps-request-id']
         @origin_response = response
         super("#{@request_id} - #{@code}: #{@message}")
@@ -47,27 +47,9 @@ module Aliyun
       end
     end
 
-    class NotSupportTaskTypeError < Error
-      def initialize(type)
-        super("Not Support Task Type: #{type.to_s}")
-      end
-    end
-
-    class NotSupportResourceTypeError < Error
-      def initialize(type)
-        super("Not Support Resource Type: #{type.to_s}")
-      end
-    end
-
-    class NotSupportColumnTypeError < Error
-      def initialize(type)
-        super("Not Support Column Type: #{type.to_s}")
-      end
-    end
-
     class PriorityInvalidError < Error
       def initialize
-        super("Priority must more than or equal to zero.")
+        super('Priority must more than or equal to zero.')
       end
     end
 
@@ -78,8 +60,20 @@ module Aliyun
     end
 
     class InstanceNameInvalidError < Error
-      def initialize(name)
+      def initialize(_name)
         super("Instance name should match pattern: '([a-z]|[A-Z]){1,}([a-z]|[A-Z]|[\d]|_)*")
+      end
+    end
+
+    class TunnelEndpointMissingError < Error
+      def initialize
+        super("Tunnel Endpoint auto detect fail, Use Aliyun::Odps.configure {|config| config.tunnel_endpoint = 'your-project' } to config")
+      end
+    end
+
+    class ValueNotSupportedError < Error
+      def initialize(attr, supported_value)
+        super("#{attr.to_s} only support: #{Utils.wrap(supported_value).join(', ')} !!")
       end
     end
   end

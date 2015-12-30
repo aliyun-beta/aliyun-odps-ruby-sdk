@@ -5,8 +5,8 @@ describe Aliyun::Odps::Functions do
   let(:project_name) { 'mock_project_name' }
   let(:project) { Aliyun::Odps.project(project_name) }
 
-  describe "list functions" do
-    it "should return list object" do
+  describe 'list functions' do
+    it 'should return list object' do
       query = { name: 'function1', owner: 'ownername', maxitems: 1, marker: 'fdsafdafdaeegfdsg' }
       stub_client_request(
         :get,
@@ -14,11 +14,9 @@ describe Aliyun::Odps::Functions do
         {
           query: query
         },
-        {
-          file_path: 'functions/list.xml',
-          headers: {
-            content_type: 'application/xml'
-          }
+        file_path: 'functions/list.xml',
+        headers: {
+          content_type: 'application/xml'
         }
       )
 
@@ -28,7 +26,7 @@ describe Aliyun::Odps::Functions do
       assert_equal(1, obj.max_items)
     end
 
-    it "should raise RequestError" do
+    it 'should raise RequestError' do
       stub_fail_request(
         :get,
         "#{endpoint}/projects/#{project_name}/registration/functions"
@@ -39,8 +37,8 @@ describe Aliyun::Odps::Functions do
     end
   end
 
-  describe "create" do
-    it "should create function" do
+  describe 'create' do
+    it 'should create function' do
       location = "#{endpoint}/projects/test_project/registration/functions/Extract_Name"
       resource = Aliyun::Odps::Resource.new(name: 'Extract_Name.py')
       args = ['Extract_Name', 'ExtractName', [resource]]
@@ -50,10 +48,8 @@ describe Aliyun::Odps::Functions do
         {
           file_path: 'functions/create.xml'
         },
-        {
-          headers: {
-            Location: location
-          }
+        headers: {
+          Location: location
         }
       )
 
@@ -64,59 +60,56 @@ describe Aliyun::Odps::Functions do
       assert_equal('ExtractName', obj.class_type)
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:post, %r[/projects/#{project_name}/registration/functions])
+    it 'should raise RequestError' do
+      stub_fail_request(:post, %r{/projects/#{project_name}/registration/functions})
       resource = Aliyun::Odps::Resource.new(name: 'function1')
       assert_raises(Aliyun::Odps::RequestError) do
         assert(
           project.functions.create('functio1', 'functions/1.py', [resource]),
-          "should create function"
+          'should create function'
         )
       end
     end
   end
 
-  describe "update" do
-    it "should update exist function" do
+  describe 'update' do
+    it 'should update exist function' do
       resource = Aliyun::Odps::Resource.new(name: 'Extract_Name.py')
       args = ['Extract_Name', 'ExtractName2', [resource]]
       stub_client_request(
         :put,
         "#{endpoint}/projects/#{project_name}/registration/functions/Extract_Name",
-        {
-          file_path: 'functions/update.xml'
-        }
+        file_path: 'functions/update.xml'
       )
-      assert(project.functions.update(*args), "update success")
+      assert(project.functions.update(*args), 'update success')
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:put, %r[/projects/#{project_name}/registration/functions/function1])
+    it 'should raise RequestError' do
+      stub_fail_request(:put, %r{/projects/#{project_name}/registration/functions/function1})
       resource = Aliyun::Odps::Resource.new(name: 'function1')
       assert_raises(Aliyun::Odps::RequestError) do
         assert(
           project.functions.update('function1', 'functions/2.py', [resource]),
-          "should update function success"
+          'should update function success'
         )
       end
     end
   end
 
-  describe "delete" do
-    it "should delete function" do
+  describe 'delete' do
+    it 'should delete function' do
       stub_client_request(
         :delete,
-        "#{endpoint}/projects/#{project_name}/registration/functions/function1",
+        "#{endpoint}/projects/#{project_name}/registration/functions/function1"
       )
       assert(project.functions.delete('function1'), 'delete function success')
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:delete, %r[/projects/#{project_name}/registration/functions/function1])
+    it 'should raise RequestError' do
+      stub_fail_request(:delete, %r{/projects/#{project_name}/registration/functions/function1})
       assert_raises(Aliyun::Odps::RequestError) do
-        assert(project.functions.delete('function1'), "should delete function")
+        assert(project.functions.delete('function1'), 'should delete function')
       end
     end
   end
-
 end

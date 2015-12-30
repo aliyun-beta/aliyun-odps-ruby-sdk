@@ -4,8 +4,8 @@ describe Aliyun::Odps::Resources do
   let(:project_name) { 'mock_project_name' }
   let(:project) { Aliyun::Odps.project(project_name) }
 
-  describe "list instances" do
-    it "should return list object" do
+  describe 'list instances' do
+    it 'should return list object' do
       query = { maxitems: 3, status: 'Terminated' }
       stub_client_request(
         :get,
@@ -13,11 +13,9 @@ describe Aliyun::Odps::Resources do
         {
           query: query
         },
-        {
-          file_path: 'instances/list.xml',
-          headers: {
-            content_type: 'application/xml'
-          }
+        file_path: 'instances/list.xml',
+        headers: {
+          content_type: 'application/xml'
         }
       )
 
@@ -27,16 +25,16 @@ describe Aliyun::Odps::Resources do
       assert_equal(3, list.max_items)
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/instances])
+    it 'should raise RequestError' do
+      stub_fail_request(:get, %r{/projects/#{project_name}/instances})
       assert_raises(Aliyun::Odps::RequestError) do
         assert_kind_of(Array, project.instances.list)
       end
     end
   end
 
-  describe "create" do
-    it "should create new instance" do
+  describe 'create' do
+    it 'should create new instance' do
       location = "#{endpoint}/projects/#{project_name}/instances/UUIDJobName"
       task = Aliyun::Odps::InstanceTask.new(
         type: 'SQL',
@@ -52,10 +50,8 @@ describe Aliyun::Odps::Resources do
         {
           file_path: 'instances/create.xml'
         },
-        {
-          headers: {
-            Location: location
-          }
+        headers: {
+          Location: location
         }
       )
 
@@ -65,7 +61,7 @@ describe Aliyun::Odps::Resources do
       assert_equal(location, instance.location)
     end
 
-    it "should create new instance without task comment" do
+    it 'should create new instance without task comment' do
       location = "#{endpoint}/projects/#{project_name}/instances/JobName"
       task = Aliyun::Odps::InstanceTask.new(type: 'SQL', name: 'SqlTask', query: 'SELECT * FROM test_table;')
       args = [[task], name: 'JobName', comment: 'JobComment', priority: 1]
@@ -75,10 +71,8 @@ describe Aliyun::Odps::Resources do
         {
           file_path: 'instances/create2.xml'
         },
-        {
-          headers: {
-            Location: location
-          }
+        headers: {
+          Location: location
         }
       )
 
@@ -88,8 +82,8 @@ describe Aliyun::Odps::Resources do
       assert_equal(location, instance.location)
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:post, %r[/projects/#{project_name}/instances])
+    it 'should raise RequestError' do
+      stub_fail_request(:post, %r{/projects/#{project_name}/instances})
       task = Aliyun::Odps::InstanceTask.new(
         type: 'SQL',
         name: 'sql1',
@@ -102,28 +96,25 @@ describe Aliyun::Odps::Resources do
     end
   end
 
-  describe "status" do
-    it "should view instance status" do
+  describe 'status' do
+    it 'should view instance status' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/instances/instancename",
         {},
-        {
-          file_path: 'instances/status.xml',
-          headers: {
-            content_type: 'application/xml'
-          }
+        file_path: 'instances/status.xml',
+        headers: {
+          content_type: 'application/xml'
         }
       )
       assert_equal('Terminated', project.instances.status('instancename'))
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/instances/newinstance])
+    it 'should raise RequestError' do
+      stub_fail_request(:get, %r{/projects/#{project_name}/instances/newinstance})
       assert_raises(Aliyun::Odps::RequestError) do
         assert_kind_of(Hash, project.instances.status('newinstance'))
       end
     end
   end
-
 end

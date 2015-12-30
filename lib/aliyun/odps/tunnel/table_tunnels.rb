@@ -12,7 +12,8 @@ module Aliyun
 
       def client
         config = Aliyun::Odps.config.dup
-        config.endpoint = TunnelRouter.get_tunnel_endpoint(project.client, project.name)
+        config.endpoint = TunnelRouter.get_tunnel_endpoint(project.client, project.name) || Aliyun::Odps.config.tunnel_endpoint
+        fail TunnelEndpointMissingError if config.endpoint.nil?
         Aliyun::Odps::Client.new(config)
       end
     end

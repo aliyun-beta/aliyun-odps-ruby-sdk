@@ -7,7 +7,7 @@ module Aliyun
           query: { service: true, curr_project: project_name }
         ).parsed_response
         "#{Aliyun::Odps.config.protocol}://#{host}"
-      rescue RequestError => e
+      rescue RequestError
         nil
       end
     end

@@ -5,7 +5,7 @@ describe Aliyun::Odps do
     refute_nil ::Aliyun::Odps::VERSION
   end
 
-  describe "project" do
+  describe 'project' do
     before do
       @default_project = Aliyun::Odps.config.project
     end
@@ -16,7 +16,7 @@ describe Aliyun::Odps do
       end
     end
 
-    it "should get default project" do
+    it 'should get default project' do
       Aliyun::Odps.configure do |config|
         config.project = 'test_project'
       end
@@ -26,7 +26,7 @@ describe Aliyun::Odps do
       assert_equal('test_project', obj.name)
     end
 
-    it "should get project" do
+    it 'should get project' do
       Aliyun::Odps.configure do |config|
         config.project = 'test_project'
       end
@@ -36,7 +36,7 @@ describe Aliyun::Odps do
       assert_equal('mock_project', obj.name)
     end
 
-    it "should raise MissingProjectConfiguration" do
+    it 'should raise MissingProjectConfiguration' do
       Aliyun::Odps.configure do |config|
         config.project = nil
       end

@@ -23,3 +23,9 @@ Metrics/ClassLength:
 
 Style/AccessorMethodName:
   Enabled: false
+
+Style/PredicateName:
+  Enabled: false
+
+Style/Lambda:
+  Enabled: false

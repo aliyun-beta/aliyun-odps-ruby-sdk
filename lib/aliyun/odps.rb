@@ -10,13 +10,11 @@ require 'aliyun/odps/client'
 require 'aliyun/odps/utils'
 require 'aliyun/odps/list'
 
-
 # DEBUG
 require 'pry'
 
 module Aliyun
   module Odps
-
     # Your code goes here...
     class << self
       attr_writer :configuration

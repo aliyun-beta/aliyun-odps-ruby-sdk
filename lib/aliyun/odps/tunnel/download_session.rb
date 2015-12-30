@@ -32,8 +32,8 @@ module Aliyun
         query.merge!(partition: partition_spec) if partition_spec
 
         headers = {}
-        headers.merge!( "x-odps-tunnel-version" => options["tunnel_version"] ) if options.key?('tunnel_version')
-        headers.merge!( "Accept-Encoding" => options["encoding"] ) if options.key?('encoding')
+        headers.merge!('x-odps-tunnel-version' => options['tunnel_version']) if options.key?('tunnel_version')
+        headers.merge!('Accept-Encoding' => options['encoding']) if options.key?('encoding')
 
         client.get(path, query: query, headers: headers).parsed_response
       end

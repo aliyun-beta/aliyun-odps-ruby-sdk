@@ -6,12 +6,12 @@ module Aliyun
       end
 
       def project
-        @master.kind_of?(Project) ? @master : @master.try(:project)
+        @master.is_a?(Project) ? @master : @master.try(:project)
       end
 
       attr_reader :master
 
-      def initialize(master, options = {})
+      def initialize(master, _options = {})
         @master = master
       end
 
@@ -20,7 +20,7 @@ module Aliyun
       end
 
       def self.build(master, options = {})
-        service_pool[master] ||= self.new(master, options)
+        service_pool[master] ||= new(master, options)
       end
     end
   end

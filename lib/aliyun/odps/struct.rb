@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     module Struct
       class Base
-
         def initialize(attributes = {})
           attributes.each do |key, value|
             m = "#{Utils.underscore(key)}=".to_sym
@@ -29,7 +28,7 @@ module Aliyun
 
           # @example
           #
-          #  def_attr :name, :String, required: true, init_with: Proc.new {|value| value.upcase }
+          #  def_attr :name, :String, required: true, init_with: proc {|value| value.upcase }, within: %w{value1 value2}
           #
           # @params options [Hash] options
           # @option options [Boolean] :required required or optional
@@ -46,11 +45,20 @@ module Aliyun
               else
                 case type.to_s
                 when 'Integer'
-                  Proc.new { |value| value.to_i }
+                  proc { |value| value.to_i }
                 when 'DateTime'
-                  Proc.new { |value| DateTime.parse(value) }
+                  proc { |value| DateTime.parse(value) }
+                when 'String'
+                  if options.key?(:within) && options[:within].is_a?(Array)
+                    proc do |value|
+                      fail ValueNotSupportedError.new(attr, options[:within]) unless options[:within].include?(value.to_s)
+                      value
+                    end
+                  else
+                    proc { |value| value }
+                  end
                 else
-                  Proc.new { |value| value }
+                  proc { |value| value }
                 end
               end
 
@@ -59,7 +67,6 @@ module Aliyun
                 instance_variable_set("@#{attr}", init_with_block.call(value))
               end
             end
-
           end
         end
       end

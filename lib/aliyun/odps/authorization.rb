@@ -9,7 +9,6 @@ module Aliyun
       PROVIDER = 'ODPS'
 
       class << self
-
         # @private
         #
         # Get authorization key

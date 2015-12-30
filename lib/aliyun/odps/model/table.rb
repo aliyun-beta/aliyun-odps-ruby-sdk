@@ -13,7 +13,7 @@ module Aliyun
       def_attr :table_id, :String
       def_attr :comment, :String
       def_attr :owner, :String
-      def_attr :schema, :TableSchema, init_with: Proc.new {|value|
+      def_attr :schema, :TableSchema, init_with: ->(value) do
         case value
         when TableSchema
           value
@@ -21,7 +21,7 @@ module Aliyun
           value = JSON.parse(value['__content__']) if value.key?('__content__')
           TableSchema.new(value)
         end
-      }
+      end
       def_attr :creation_time, :DateTime
       def_attr :last_modified, :DateTime
 
@@ -37,16 +37,16 @@ module Aliyun
       end
 
       def generate_create_sql
-        sql = ""
+        sql = ''
         sql += "CREATE TABLE #{project.name}.`#{name}`"
-        sql += " (" + schema.columns.map do |column|
-          "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : "")
-        end.join(", ") + ")" if schema && schema.columns
+        sql += ' (' + schema.columns.map do |column|
+          "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : '')
+        end.join(', ') + ')' if schema && schema.columns
         sql += " COMMENT '#{comment}'" if comment
-        sql += " PARTITIONED BY (" + schema.partitions.map do |column|
-          "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : "")
-        end.join(", ") + ")" if schema && schema.partitions
-        sql += ";"
+        sql += ' PARTITIONED BY (' + schema.partitions.map do |column|
+          "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : '')
+        end.join(', ') + ')' if schema && schema.partitions
+        sql += ';'
       end
 
       def generate_drop_sql
@@ -55,4 +55,3 @@ module Aliyun
     end
   end
 end
-
