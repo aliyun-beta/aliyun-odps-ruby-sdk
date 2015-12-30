@@ -31,14 +31,14 @@ describe Aliyun::Odps::UploadSession do
           'uploadid' => upload_session.upload_id
         },
         headers: {
-          'x-odps-tunnel-version' => '2.0',
-          'Content-Encoding' => 'Gzip'
+          'x-odps-tunnel-version' => '4',
+          'Content-Encoding' => 'deflate'
         },
         body: 'Content'
       )
 
       assert(
-        upload_session.upload(1, 'Content', tunnel_version: '2.0', encoding: 'Gzip'),
+        upload_session.upload(1, 'Content', 'deflate'),
         'update should success'
       )
     end
@@ -57,8 +57,8 @@ describe Aliyun::Odps::UploadSession do
     end
   end
 
-  describe 'get status' do
-    it 'should view status' do
+  describe 'reload' do
+    it 'should get new status' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/tables/table1",
@@ -73,10 +73,14 @@ describe Aliyun::Odps::UploadSession do
         }
       )
 
-      assert_kind_of(Hash, upload_session.get_status)
+      obj = upload_session.reload
+      assert_kind_of(Aliyun::Odps::UploadSession, obj)
+      assert_equal(1, obj.blocks.size)
+      assert_kind_of(Aliyun::Odps::UploadBlock, obj.blocks[0])
+      assert_equal(0, obj.blocks[0].block_id)
     end
 
-    it 'should view status without content_type' do
+    it 'should reload without content_type' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/tables/table1",
@@ -88,7 +92,11 @@ describe Aliyun::Odps::UploadSession do
         file_path: 'table_tunnel/upload_sessions/status.json'
       )
 
-      assert_kind_of(Hash, upload_session.get_status)
+      obj = upload_session.reload
+      assert_kind_of(Aliyun::Odps::UploadSession, obj)
+      assert_equal(1, obj.blocks.size)
+      assert_kind_of(Aliyun::Odps::UploadBlock, obj.blocks[0])
+      assert_equal(0, obj.blocks[0].block_id)
     end
 
     it 'should raise RequestError' do
@@ -100,9 +108,7 @@ describe Aliyun::Odps::UploadSession do
         headers: { content_type: 'application/json' }
       )
 
-      assert_raises(Aliyun::Odps::RequestError) do
-        assert_kind_of(Hash, upload_session.get_status)
-      end
+      assert_raises(Aliyun::Odps::RequestError) { upload_session.reload }
     end
   end
 
@@ -115,13 +121,10 @@ describe Aliyun::Odps::UploadSession do
           uploadid: upload_session.upload_id
         },
         headers: {
-          'x-odps-tunnel-version' => '2.0'
+          'x-odps-tunnel-version' => '4'
         }
       )
-      assert(
-        upload_session.complete(tunnel_version: '2.0'),
-        'should complete success'
-      )
+      assert(upload_session.complete, 'should complete success')
     end
 
     it 'should raise RequestError' do
@@ -132,9 +135,7 @@ describe Aliyun::Odps::UploadSession do
         file_path: 'tunnel_error.json',
         headers: { content_type: 'application/json' }
       )
-      assert_raises(Aliyun::Odps::RequestError) do
-        assert(upload_session.complete, 'should complete success')
-      end
+      assert_raises(Aliyun::Odps::RequestError) { upload_session.complete }
     end
   end
 end

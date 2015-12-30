@@ -37,8 +37,6 @@ describe Aliyun::Odps::TunnelRouter do
       }
     )
 
-    assert_nil(
-      Aliyun::Odps::TunnelRouter.get_tunnel_endpoint(client, project_name)
-    )
+    assert_nil(Aliyun::Odps::TunnelRouter.get_tunnel_endpoint(client, project_name))
   end
 end

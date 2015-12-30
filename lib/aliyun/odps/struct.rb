@@ -19,6 +19,13 @@ module Aliyun
           fail "Missing attribute: #{missing_attrs.join(',')}" unless missing_attrs.empty?
         end
 
+        def update_attrs(attrs)
+          attrs.each do |k, v|
+            send("#{Utils.underscore(k)}=", v)
+          end
+          self
+        end
+
         def client
           project.client
         end

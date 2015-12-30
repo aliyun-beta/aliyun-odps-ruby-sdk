@@ -1,24 +1,24 @@
 {
-    "Initiated": "Fri, 11 Dec 2015 14:26:28 GMT",
-    "Owner": "1293470261043417",
-    "Schema": {
-        "IsVirtualView": false,
-        "columns": [
-            {
-                "name": "c1",
-                "type": "bigint"
-            }
-        ],
-        "partitionKeys": []
-    },
-    "Status": "normal",
-    "UploadID": "201512111426289792b70a007a009f",
-    "UploadedBlockList": [
-        {
-            "BlockID": 0,
-            "CreateTime": 0,
-            "Date": "",
-            "Version": 1449815188991
-        }
-    ]
+  "Initiated": "Fri, 11 Dec 2015 14:26:28 GMT",
+  "Owner": "1293470261043417",
+  "Schema": {
+    "IsVirtualView": false,
+    "columns": [
+      {
+        "name": "c1",
+        "type": "bigint"
+      }
+    ],
+    "partitionKeys": []
+  },
+  "Status": "normal",
+  "UploadID": "201512111426289792b70a007a009f",
+  "UploadedBlockList": [
+    {
+      "BlockID": 0,
+      "CreateTime": 0,
+      "Date": "",
+      "Version": 1449815188991
+    }
+  ]
 }
