@@ -38,20 +38,14 @@ describe Aliyun::Odps::DownloadSession do
             downloadid: download_session.download_id
           },
           headers: {
-            'x-odps-tunnel-version' => '2.0',
-            'Accept-Encoding' => 'Zlib'
+            'x-odps-tunnel-version' => '4',
+            'Content-Encoding' => 'deflate'
           }
         },
         body: 'content'
       )
 
-      obj = download_session.download(
-        rowrange,
-        columns,
-        tunnel_version: '2.0',
-        encoding: 'Zlib'
-      )
-
+      obj = download_session.download(rowrange, columns, 'deflate')
       assert_equal('content', obj)
     end
 
@@ -63,9 +57,7 @@ describe Aliyun::Odps::DownloadSession do
         file_path: 'tunnel_error.json',
         headers: { content_type: 'application/json' }
       )
-      assert_raises(Aliyun::Odps::RequestError) do
-        assert_kind_of(String, download_session.download('(1,100)', 'uuid,name'))
-      end
+      assert_raises(Aliyun::Odps::RequestError) { download_session.download('(1,100)', 'uuid,name') }
     end
   end
 end

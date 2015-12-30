@@ -1,7 +1,6 @@
 module Aliyun
   module Odps
     class DownloadSession < Struct::Base
-      extend Aliyun::Odps::Modelable
 
       def_attr :project, :Project, required: true
       def_attr :client, :Client, required: true
@@ -21,19 +20,29 @@ module Aliyun
       #
       # @params rowrange [String] specify data range with format: "(start,end)"
       # @params columns [String] specify columns need download with format: "col0,col1,col2"
-      # @params options [Hash] options
-      # @option options [String] :tunnel_version specify the Tunnel version
-      # @option options [String] :encoding specify the data compression format, supported value: Raw, Zlib, snappy
-      def download(rowrange, columns, options = {})
-        Utils.stringify_keys!(options)
+      # @params encoding [String] specify the data compression format, supported value: raw, deflate, snappy
+      def download(rowrange, columns, encoding = 'raw')
         path = "/projects/#{project.name}/tables/#{table_name}"
 
-        query = { data: true, downloadid: download_id, columns: URI.escape(columns), rowrange: URI.escape(rowrange) }
+        query = {
+          data: true,
+          downloadid: download_id,
+          columns: URI.escape(columns),
+          rowrange: URI.escape(rowrange)
+        }
         query.merge!(partition: partition_spec) if partition_spec
 
-        headers = {}
-        headers.merge!('x-odps-tunnel-version' => options['tunnel_version']) if options.key?('tunnel_version')
-        headers.merge!('Accept-Encoding' => options['encoding']) if options.key?('encoding')
+        headers = { 'x-odps-tunnel-version' => TableTunnels::TUNNEL_VERSION }
+
+        case encoding.to_s.downcase
+        when 'deflate'
+          headers['Content-Encoding'] = 'deflate'
+        when 'snappy'
+          headers['Content-Encoding'] = 'x-snappy-framed'
+        when 'raw'
+        else
+          fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
+        end
 
         client.get(path, query: query, headers: headers).parsed_response
       end
