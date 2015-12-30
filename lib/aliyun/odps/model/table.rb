@@ -13,7 +13,7 @@ module Aliyun
       def_attr :table_id, :String
       def_attr :comment, :String
       def_attr :owner, :String
-      def_attr :schema, :TableSchema, init_with: proc {|value|
+      def_attr :schema, :TableSchema, init_with: ->(value) do
         case value
         when TableSchema
           value
@@ -21,7 +21,7 @@ module Aliyun
           value = JSON.parse(value['__content__']) if value.key?('__content__')
           TableSchema.new(value)
         end
-      }
+      end
       def_attr :creation_time, :DateTime
       def_attr :last_modified, :DateTime
 

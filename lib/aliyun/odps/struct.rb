@@ -28,7 +28,7 @@ module Aliyun
 
           # @example
           #
-          #  def_attr :name, :String, required: true, init_with: Proc.new {|value| value.upcase }
+          #  def_attr :name, :String, required: true, init_with: proc {|value| value.upcase }, within: %w{value1 value2}
           #
           # @params options [Hash] options
           # @option options [Boolean] :required required or optional
@@ -48,6 +48,15 @@ module Aliyun
                   proc { |value| value.to_i }
                 when 'DateTime'
                   proc { |value| DateTime.parse(value) }
+                when 'String'
+                  if options.key?(:within) && options[:within].is_a?(Array)
+                    proc do |value|
+                      fail ValueNotSupportedError.new(attr, options[:within]) unless options[:within].include?(value.to_s)
+                      value
+                    end
+                  else
+                    proc { |value| value }
+                  end
                 else
                   proc { |value| value }
                 end

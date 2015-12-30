@@ -9,6 +9,7 @@ describe Aliyun::Odps::Struct do
       def_attr :datetime_name, :DateTime
       def_attr :string_name, :String
       def_attr :required_name, :String, required: true
+      def_attr :within_name, :String, within: %w(value1 value2)
     end
   end
 
@@ -31,6 +32,12 @@ describe Aliyun::Odps::Struct do
       foo.string_name = '2015-10-12T10:01:30'
       assert_kind_of(String, foo.string_name)
       assert_equal('2015-10-12T10:01:30', foo.string_name)
+
+      foo.within_name = 'value1'
+      assert_equal('value1', foo.within_name)
+
+      error = assert_raises(Aliyun::Odps::ValueNotSupportedError) { foo.within_name = 'noexistvalue' }
+      assert_equal("within_name only support: value1, value2 !!", error.message)
     end
   end
 end

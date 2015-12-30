@@ -47,24 +47,6 @@ module Aliyun
       end
     end
 
-    class NotSupportTaskTypeError < Error
-      def initialize(type)
-        super("Not Support Task Type: #{type}")
-      end
-    end
-
-    class NotSupportResourceTypeError < Error
-      def initialize(type)
-        super("Not Support Resource Type: #{type}")
-      end
-    end
-
-    class NotSupportColumnTypeError < Error
-      def initialize(type)
-        super("Not Support Column Type: #{type}")
-      end
-    end
-
     class PriorityInvalidError < Error
       def initialize
         super('Priority must more than or equal to zero.')
@@ -86,6 +68,12 @@ module Aliyun
     class TunnelEndpointMissingError < Error
       def initialize
         super("Tunnel Endpoint auto detect fail, Use Aliyun::Odps.configure {|config| config.tunnel_endpoint = 'your-project' } to config")
+      end
+    end
+
+    class ValueNotSupportedError < Error
+      def initialize(attr, supported_value)
+        super("#{attr.to_s} only support: #{Utils.wrap(supported_value).join(', ')} !!")
       end
     end
   end

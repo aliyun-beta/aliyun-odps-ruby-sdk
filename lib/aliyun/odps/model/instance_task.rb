@@ -2,11 +2,7 @@ module Aliyun
   module Odps
     class InstanceTask < Struct::Base
       def_attr :name, :String, required: true
-      def_attr :type, :String, required: true, init_with: ->(value) do
-        fail "Not support type: #{v}" unless %w(SQL SQLPLAN MapReduce DT PLSQL).include?(value)
-        value
-      end
-
+      def_attr :type, :String, required: true, within: %w(SQL SQLPLAN MapReduce DT PLSQL)
       def_attr :comment, :String
       def_attr :property, :Hash, init_with: ->(hash) do
         hash.map { |k, v| { 'Name' => k, 'Value' => v } }

@@ -7,10 +7,7 @@ module Aliyun
       def_attr :owner, :String
       def_attr :last_updator, :String
       def_attr :comment, :String
-      def_attr :resource_type, :String, init_with: ->(value) do
-        fail NotSupportResourceTypeError, value unless %w(py jar archive file table).include?(value)
-        value
-      end
+      def_attr :resource_type, :String, within: %w(py jar archive file table)
       def_attr :local_path, :String
       def_attr :creation_time, :DateTime
       def_attr :last_modified_time, :DateTime
