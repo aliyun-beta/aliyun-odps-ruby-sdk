@@ -7,7 +7,6 @@ module Aliyun
   module Odps
     class Utils
       class << self
-
         # Calculate content length
         #
         # @return [Integer]

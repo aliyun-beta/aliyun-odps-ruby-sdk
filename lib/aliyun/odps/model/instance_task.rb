@@ -2,17 +2,15 @@ module Aliyun
   module Odps
     class InstanceTask < Struct::Base
       def_attr :name, :String, required: true
-      def_attr :type, :String, required: true, init_with: Proc.new { |value|
-        fail "Not support type: #{v}" unless %w{SQL SQLPLAN MapReduce DT PLSQL}.include?(value)
+      def_attr :type, :String, required: true, init_with: ->(value) do
+        fail "Not support type: #{v}" unless %w(SQL SQLPLAN MapReduce DT PLSQL).include?(value)
         value
-      }
+      end
 
       def_attr :comment, :String
-      def_attr :property, :Hash, init_with: Proc.new { |hash|
-        hash.map do |key, value|
-          { 'Name' => key, 'Value' => value }
-        end
-      }
+      def_attr :property, :Hash, init_with: ->(hash) do
+        hash.map { |k, v| { 'Name' => k, 'Value' => v } }
+      end
       def_attr :query, :String
       def_attr :start_time, :DateTime
       def_attr :end_time, :DateTime
@@ -31,7 +29,6 @@ module Aliyun
           }
         }
       end
-
     end
   end
 end

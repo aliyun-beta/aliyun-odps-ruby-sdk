@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     module Struct
       class Base
-
         def initialize(attributes = {})
           attributes.each do |key, value|
             m = "#{Utils.underscore(key)}=".to_sym
@@ -46,11 +45,11 @@ module Aliyun
               else
                 case type.to_s
                 when 'Integer'
-                  Proc.new { |value| value.to_i }
+                  proc { |value| value.to_i }
                 when 'DateTime'
-                  Proc.new { |value| DateTime.parse(value) }
+                  proc { |value| DateTime.parse(value) }
                 else
-                  Proc.new { |value| value }
+                  proc { |value| value }
                 end
               end
 
@@ -59,7 +58,6 @@ module Aliyun
                 instance_variable_set("@#{attr}", init_with_block.call(value))
               end
             end
-
           end
         end
       end

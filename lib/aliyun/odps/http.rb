@@ -8,11 +8,11 @@ module Aliyun
       include HTTParty
 
       class BetterXmlParser < HTTParty::Parser
-
         protected
+
         def xml
           MultiXml.parse(body)
-        rescue => e
+        rescue
           body
         end
       end
@@ -64,7 +64,7 @@ module Aliyun
         path = @endpoint + resource
         # options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI, http_proxyaddr: "127.0.0.1", http_proxyport: "8888" }
         options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI }
-        #p options
+        # p options
 
         wrap(self.class.__send__(verb.downcase, path, options))
       end

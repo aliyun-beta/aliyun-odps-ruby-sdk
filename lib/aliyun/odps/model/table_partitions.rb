@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     # Methods for TablePartitions
     class TablePartitions < ServiceObject
-
       # List partitions of table
       #
       # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
@@ -59,13 +58,14 @@ module Aliyun
       end
 
       private
+
       def generate_create_sql(partition_spec)
-        spec = partition_spec.map { |k, v| "#{k} = '#{v}'" }.join(",")
+        spec = partition_spec.map { |k, v| "#{k} = '#{v}'" }.join(',')
         "ALTER TABLE #{project.name}.`#{master.name}` ADD PARTITION (#{spec});"
       end
 
       def generate_drop_sql(partition_spec)
-        spec = partition_spec.map { |k, v| "#{k} = '#{v}'" }.join(",")
+        spec = partition_spec.map { |k, v| "#{k} = '#{v}'" }.join(',')
         "ALTER TABLE #{project.name}.`#{master.name}`DROP IF EXISTS PARTITION (#{spec});"
       end
     end

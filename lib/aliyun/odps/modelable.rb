@@ -4,14 +4,13 @@ require 'aliyun/odps/service_object'
 module Aliyun
   module Odps
     module Modelable
-
-      def has_many(models, opts = {})
+      def has_many(models, _opts = {})
         # p "#{models.to_s.singularize.camelize}"
         mod = models.to_s.singularize
         klass = "Aliyun::Odps::#{mod.camelize}s".constantize
-        define_method(models) {
+        define_method(models) do
           klass.build(self)
-        }
+        end
         # if opts[:actions]
         #   opts[:actions].each do |action|
         #     action = action.to_s

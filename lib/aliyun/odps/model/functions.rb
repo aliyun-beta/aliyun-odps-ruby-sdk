@@ -73,6 +73,5 @@ module Aliyun
         !!client.delete(path)
       end
     end
-
   end
 end

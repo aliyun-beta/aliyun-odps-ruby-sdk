@@ -5,8 +5,8 @@ describe Aliyun::Odps::Table do
   let(:project) { Aliyun::Odps.project(project_name) }
   let(:table) { Aliyun::Odps::Table.new(name: 'table1', project: project) }
 
-  describe "partitions" do
-    it "should get partitions information" do
+  describe 'partitions' do
+    it 'should get partitions information' do
       query = { maxitems: 2, marker: 'cGFydDE9cGFydDEh' }
       stub_client_request(
         :get,
@@ -17,11 +17,9 @@ describe Aliyun::Odps::Table do
             expectmarker: true
           }.merge(query)
         },
-        {
-          file_path: 'tables/partitions.xml',
-          headers: {
-            content_type: 'application/xml'
-          }
+        file_path: 'tables/partitions.xml',
+        headers: {
+          content_type: 'application/xml'
         }
       )
 
@@ -30,24 +28,24 @@ describe Aliyun::Odps::Table do
       assert_kind_of(Aliyun::Odps::List, obj)
       assert_equal(nil, obj.marker)
       assert_equal(2, obj.max_items)
-      assert_equal({ "sale_date" => "20150915", "region" => "USA" }, obj[0])
-      assert_equal({ "sale_date" => "20150916", "region" => "CHINA" }, obj[1])
+      assert_equal({ 'sale_date' => '20150915', 'region' => 'USA' }, obj[0])
+      assert_equal({ 'sale_date' => '20150916', 'region' => 'CHINA' }, obj[1])
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/tables/table1])
+    it 'should raise RequestError' do
+      stub_fail_request(:get, %r{/projects/#{project_name}/tables/table1})
       assert_raises(Aliyun::Odps::RequestError) { table.partitions }
     end
   end
 
-  describe "create" do
-    it "should generate correct sql" do
+  describe 'create' do
+    it 'should generate correct sql' do
       table = Aliyun::Odps::Table.new(
         name: 'test_table',
         project: project,
         schema: {
-          columns: [{name: 'uuid', type: 'bigint', comment: 'major key'}],
-          partitions: [{name: 'name', type: 'string'}, {name: 'name2', type: 'string', comment: 'test partition comment'}]
+          columns: [{ name: 'uuid', type: 'bigint', comment: 'major key' }],
+          partitions: [{ name: 'name', type: 'string' }, { name: 'name2', type: 'string', comment: 'test partition comment' }]
         })
 
       assert_equal(
@@ -56,11 +54,9 @@ describe Aliyun::Odps::Table do
       )
     end
 
-    it "should generate correct sql with schema object" do
-      schema = Aliyun::Odps::TableSchema.new({
-        columns: [{name: 'uuid', type: 'bigint', comment: 'major key'}],
-        partitions: [{name: 'name', type: 'string'}, {name: 'name2', type: 'string', comment: 'test partition comment'}]
-      })
+    it 'should generate correct sql with schema object' do
+      schema = Aliyun::Odps::TableSchema.new(columns: [{ name: 'uuid', type: 'bigint', comment: 'major key' }],
+                                             partitions: [{ name: 'name', type: 'string' }, { name: 'name2', type: 'string', comment: 'test partition comment' }])
       table = Aliyun::Odps::Table.new(name: 'test_table', comment: 'table comment', project: project, schema: schema)
 
       assert_equal(
@@ -69,5 +65,4 @@ describe Aliyun::Odps::Table do
       )
     end
   end
-
 end

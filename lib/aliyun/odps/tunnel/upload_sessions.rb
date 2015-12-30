@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     # Methods for UploadSessions
     class UploadSessions < ServiceObject
-
       # Init Download Session
       #
       # @see http://repo.aliyun.com/api-doc/Tunnel/post_create_download_session/index.html Post Download Session
@@ -15,20 +14,20 @@ module Aliyun
         Utils.stringify_keys!(options)
         path = "/projects/#{project.name}/tables/#{table_name}"
         query = { uploads: true }
-        query.merge!( partition: options['partition_spec'] ) if options.key?('partition_spec')
+        query.merge!(partition: options['partition_spec']) if options.key?('partition_spec')
 
         headers = {}
-        headers.merge!( "x-odps-tunnel-version" => options['tunnel_version'] ) if options.key?('tunnel_version')
+        headers.merge!('x-odps-tunnel-version' => options['tunnel_version']) if options.key?('tunnel_version')
 
         resp = client.post(path, query: query, headers: headers)
         result = resp.parsed_response
         result = JSON.parse(result) if result.is_a?(String)
 
         UploadSession.new(result.merge(
-          project: project,
-          client: client,
-          table_name: table_name,
-          partition_spec: options['partition_spec']
+                            project: project,
+                            client: client,
+                            table_name: table_name,
+                            partition_spec: options['partition_spec']
         ))
       end
 

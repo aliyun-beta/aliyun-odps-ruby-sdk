@@ -31,8 +31,8 @@ module Aliyun
         query.merge!(partition: partition_spec) if partition_spec
 
         headers = {}
-        headers.merge!( "x-odps-tunnel-version" => options["tunnel_version"] ) if options.key?('tunnel_version')
-        headers.merge!( "Content-Encoding" => options["encoding"] ) if options.key?('encoding')
+        headers.merge!('x-odps-tunnel-version' => options['tunnel_version']) if options.key?('tunnel_version')
+        headers.merge!('Content-Encoding' => options['encoding']) if options.key?('encoding')
 
         !!client.put(path, query: query, headers: headers, body: Utils.to_data(file_or_bin))
       end
@@ -66,11 +66,10 @@ module Aliyun
         query.merge!(partition: partition_spec) if partition_spec
 
         headers = {}
-        headers.merge!( "x-odps-tunnel-version" => options["tunnel_version"] ) if options.key?('tunnel_version')
+        headers.merge!('x-odps-tunnel-version' => options['tunnel_version']) if options.key?('tunnel_version')
 
         !!client.post(path, query: query, headers: headers)
       end
-
     end
   end
 end

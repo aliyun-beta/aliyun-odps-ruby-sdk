@@ -4,18 +4,17 @@ require 'mocha/test_unit'
 module Aliyun
   module Odps
     describe Modelable do
-
       before do
         class D
           extend Modelable
         end
         class Ds < Aliyun::Odps::ServiceObject
-          def list(options={})
-            return []
+          def list(_options = {})
+            []
           end
 
-          def create(options={})
-            return D.new
+          def create(_options = {})
+            D.new
           end
         end
         class M
@@ -24,8 +23,7 @@ module Aliyun
         end
       end
 
-      it "should support has_many" do
-
+      it 'should support has_many' do
         m = M.new
         assert(m.respond_to?(:ds), 'response to service object')
 
@@ -35,7 +33,7 @@ module Aliyun
         assert(m.ds.respond_to?(:create), 'response to create model')
 
         assert_kind_of(D, m.ds.create(name: 'abc'))
-        assert_equal([], m.ds.list())
+        assert_equal([], m.ds.list)
 
         assert_nil(m.ds.project)
 

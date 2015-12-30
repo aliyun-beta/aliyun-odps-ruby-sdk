@@ -5,7 +5,7 @@ describe Aliyun::Odps::TunnelRouter do
   let(:tunnel_server) { 'mock-dt.odps.aliyun.com' }
   let(:client) { Aliyun::Odps::Client.new }
 
-  it "should get tunnel endpoint" do
+  it 'should get tunnel endpoint' do
     stub_client_request(
       :get,
       "#{endpoint}/projects/#{project_name}/tunnel",
@@ -15,11 +15,9 @@ describe Aliyun::Odps::TunnelRouter do
           service: true
         }
       },
-      {
-        body: tunnel_server,
-        headers: {
-          content_type: 'application/xml'
-        }
+      body: tunnel_server,
+      headers: {
+        content_type: 'application/xml'
       }
     )
 
@@ -29,15 +27,13 @@ describe Aliyun::Odps::TunnelRouter do
     )
   end
 
-  it "should return nil when raise RequestError" do
+  it 'should return nil when raise RequestError' do
     stub_fail_request(
       :get,
       "#{endpoint}/projects/#{project_name}/tunnel",
-      {
-        query: {
-          curr_project: project_name,
-          service: true
-        }
+      query: {
+        curr_project: project_name,
+        service: true
       }
     )
 

@@ -21,48 +21,44 @@ describe Aliyun::Odps::UploadSession do
     Aliyun::Odps::TunnelRouter.unstub(:get_tunnel_endpoint)
   end
 
-  describe "upload" do
-    it "should can upload" do
+  describe 'upload' do
+    it 'should can upload' do
       stub_client_request(
         :put,
         "#{endpoint}/projects/#{project_name}/tables/table1",
-        {
-          query: {
-            'blockid' => 1,
-            'uploadid' => upload_session.upload_id
-          },
-          headers: {
-            'x-odps-tunnel-version' => '2.0',
-            'Content-Encoding' => 'Gzip'
-          },
-          body: "Content"
-        }
+        query: {
+          'blockid' => 1,
+          'uploadid' => upload_session.upload_id
+        },
+        headers: {
+          'x-odps-tunnel-version' => '2.0',
+          'Content-Encoding' => 'Gzip'
+        },
+        body: 'Content'
       )
 
       assert(
-        upload_session.upload(1, "Content", tunnel_version: '2.0', encoding: 'Gzip'),
-        "update should success"
+        upload_session.upload(1, 'Content', tunnel_version: '2.0', encoding: 'Gzip'),
+        'update should success'
       )
     end
 
-    it "should raise RequestError" do
+    it 'should raise RequestError' do
       stub_fail_request(
         :put,
-        %r[/projects/#{project_name}/tables/table1],
+        %r{/projects/#{project_name}/tables/table1},
         {},
-        {
-          file_path: 'tunnel_error.json',
-          headers: { content_type: 'application/json' }
-        }
+        file_path: 'tunnel_error.json',
+        headers: { content_type: 'application/json' }
       )
       assert_raises(Aliyun::Odps::RequestError) do
-        assert(upload_session.upload(100, "Hello"))
+        assert(upload_session.upload(100, 'Hello'))
       end
     end
   end
 
-  describe "get status" do
-    it "should view status" do
+  describe 'get status' do
+    it 'should view status' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/tables/table1",
@@ -71,18 +67,16 @@ describe Aliyun::Odps::UploadSession do
             uploadid: upload_session.upload_id
           }
         },
-        {
-          file_path: 'table_tunnel/upload_sessions/status.json',
-          headers: {
-            content_type: 'application/json'
-          }
+        file_path: 'table_tunnel/upload_sessions/status.json',
+        headers: {
+          content_type: 'application/json'
         }
       )
 
       assert_kind_of(Hash, upload_session.get_status)
     end
 
-    it "should view status without content_type" do
+    it 'should view status without content_type' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/tables/table1",
@@ -91,23 +85,19 @@ describe Aliyun::Odps::UploadSession do
             uploadid: upload_session.upload_id
           }
         },
-        {
-          file_path: 'table_tunnel/upload_sessions/status.json'
-        }
+        file_path: 'table_tunnel/upload_sessions/status.json'
       )
 
       assert_kind_of(Hash, upload_session.get_status)
     end
 
-    it "should raise RequestError" do
+    it 'should raise RequestError' do
       stub_fail_request(
         :get,
-        %r[/projects/#{project_name}/tables/table1],
+        %r{/projects/#{project_name}/tables/table1},
         {},
-        {
-          file_path: 'tunnel_error.json',
-          headers: { content_type: 'application/json' }
-        }
+        file_path: 'tunnel_error.json',
+        headers: { content_type: 'application/json' }
       )
 
       assert_raises(Aliyun::Odps::RequestError) do
@@ -116,42 +106,35 @@ describe Aliyun::Odps::UploadSession do
     end
   end
 
-
-  describe "complete" do
-    it "should complete a upload session" do
+  describe 'complete' do
+    it 'should complete a upload session' do
       stub_client_request(
         :post,
         "#{endpoint}/projects/#{project_name}/tables/table1",
-        {
-          query: {
-            uploadid: upload_session.upload_id
-          },
-          headers: {
-            'x-odps-tunnel-version' => '2.0'
-          }
+        query: {
+          uploadid: upload_session.upload_id
+        },
+        headers: {
+          'x-odps-tunnel-version' => '2.0'
         }
       )
       assert(
         upload_session.complete(tunnel_version: '2.0'),
-        "should complete success"
+        'should complete success'
       )
     end
 
-    it "should raise RequestError" do
+    it 'should raise RequestError' do
       stub_fail_request(
         :post,
-        %r[/projects/#{project_name}/tables/table1],
+        %r{/projects/#{project_name}/tables/table1},
         {},
-        {
-          file_path: 'tunnel_error.json',
-          headers: { content_type: 'application/json' }
-        }
+        file_path: 'tunnel_error.json',
+        headers: { content_type: 'application/json' }
       )
       assert_raises(Aliyun::Odps::RequestError) do
-        assert(upload_session.complete, "should complete success")
+        assert(upload_session.complete, 'should complete success')
       end
     end
   end
-
-
 end

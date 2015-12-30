@@ -7,6 +7,7 @@ describe Aliyun::Odps::DownloadSession do
   let(:download_session) do
     Aliyun::Odps::DownloadSession.new(
       table_name: 'table1',
+      partition_spec: 'part=part1',
       download_id: '1122wwssddd33222',
       client: project.table_tunnels.client,
       project: project
@@ -21,11 +22,10 @@ describe Aliyun::Odps::DownloadSession do
     Aliyun::Odps::TunnelRouter.unstub(:get_tunnel_endpoint)
   end
 
-  describe "download" do
-    it "should can download" do
-      columns = "col1,col2,col3"
-      rowrange = "(1,100)"
-      partition_spec = "part=part1"
+  describe 'download' do
+    it 'should can download' do
+      columns = 'col1,col2,col3'
+      rowrange = '(1,100)'
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/tables/table1",
@@ -34,45 +34,38 @@ describe Aliyun::Odps::DownloadSession do
             data: true,
             columns: columns,
             rowrange: rowrange,
-            partition: partition_spec,
-            downloadid: download_session.download_id,
+            partition: download_session.partition_spec,
+            downloadid: download_session.download_id
           },
           headers: {
             'x-odps-tunnel-version' => '2.0',
             'Accept-Encoding' => 'Zlib'
           }
         },
-        {
-          body: "content"
-        }
+        body: 'content'
       )
 
       obj = download_session.download(
         rowrange,
         columns,
-        partition_spec: partition_spec,
         tunnel_version: '2.0',
         encoding: 'Zlib'
       )
 
-      assert_equal("content", obj)
+      assert_equal('content', obj)
     end
 
-    it "should raise RequestError" do
+    it 'should raise RequestError' do
       stub_fail_request(
         :get,
-        %r[/projects/#{project_name}/tables/table1],
+        %r{/projects/#{project_name}/tables/table1},
         {},
-        {
-          file_path: 'tunnel_error.json',
-          headers: { content_type: 'application/json' }
-        }
+        file_path: 'tunnel_error.json',
+        headers: { content_type: 'application/json' }
       )
       assert_raises(Aliyun::Odps::RequestError) do
-        assert_kind_of(String, download_session.download("(1,100)", "uuid,name"))
+        assert_kind_of(String, download_session.download('(1,100)', 'uuid,name'))
       end
     end
   end
-
-
 end

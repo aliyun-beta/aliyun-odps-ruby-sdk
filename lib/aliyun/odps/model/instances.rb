@@ -1,7 +1,6 @@
 module Aliyun
   module Odps
     class Instances < ServiceObject
-
       # List instances of project
       #
       # @see http://repo.aliyun.com/api-doc/Instance/get_instances/index.html Get instances
@@ -60,7 +59,7 @@ module Aliyun
 
         instance.tap do |obj|
           obj.location = resp.headers['Location']
-          obj.name = obj.location.split("/").last if obj.location
+          obj.name = obj.location.split('/').last if obj.location
         end
       end
 
