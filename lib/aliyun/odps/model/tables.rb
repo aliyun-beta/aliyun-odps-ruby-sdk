@@ -65,7 +65,7 @@ module Aliyun
         task = InstanceTask.new(
           name: 'SQLCreateTableTask',
           type: 'SQL',
-          query: table.generate_create_sql
+          query: generate_create_sql(table)
         )
 
         instance = project.instances.create([task])
@@ -91,7 +91,7 @@ module Aliyun
         task = InstanceTask.new(
           name: 'SQLDropTableTask',
           type: 'SQL',
-          query: table.generate_drop_sql
+          query: generate_drop_sql(table)
         )
 
         !!project.instances.create([task])
@@ -104,6 +104,26 @@ module Aliyun
       # @params name [String] specify the table name
       def partitions(name)
         Table.new(name: name).partitions
+      end
+
+      private
+
+      def generate_create_sql(table)
+        sql = ''
+        sql += "CREATE TABLE #{project.name}.`#{table.name}`"
+        sql += ' (' + table.schema.columns.map do |column|
+          "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : '')
+        end.join(', ') + ')' if table.schema && table.schema.columns
+        sql += " COMMENT '#{table.comment}'" if table.comment
+        sql += ' PARTITIONED BY (' + table.schema.partitions.map do |column|
+          "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : '')
+        end.join(', ') + ')' if table.schema && table.schema.partitions
+        sql += ';'
+        sql
+      end
+
+      def generate_drop_sql(table)
+        "DROP TABLE IF EXISTS #{project.name}.`#{table.name}`;"
       end
     end
   end

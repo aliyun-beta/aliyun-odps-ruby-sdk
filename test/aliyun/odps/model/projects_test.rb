@@ -3,6 +3,10 @@ require 'test_helper'
 describe Aliyun::Odps::Projects do
   let(:client) { Aliyun::Odps::Client.new }
 
+  before do
+    stub_request(:get, "#{Aliyun::Odps.config.endpoint}/projects/#{Aliyun::Odps.config.project}")
+  end
+
   describe 'list' do
     it 'should list projects' do
       query = { maxitems: 2 }

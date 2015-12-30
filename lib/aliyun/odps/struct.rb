@@ -18,6 +18,7 @@ module Aliyun
           end
           fail "Missing attribute: #{missing_attrs.join(',')}" unless missing_attrs.empty?
         end
+        private :validate_required
 
         def update_attrs(attrs)
           attrs.each do |k, v|
@@ -33,9 +34,13 @@ module Aliyun
         class << self
           attr_reader :required_attrs
 
+          # @!macro [attach] def_attr
+          #   @!attribute [rw] $1
+          #   @return [$2]
+          #
           # @example
           #
-          #  def_attr :name, :String, required: true, init_with: proc {|value| value.upcase }, within: %w{value1 value2}
+          #  def_attr :name, String, required: true, init_with: proc {|value| value.upcase }, within: %w{value1 value2}
           #
           # @params options [Hash] options
           # @option options [Boolean] :required required or optional

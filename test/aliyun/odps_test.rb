@@ -14,6 +14,7 @@ describe Aliyun::Odps do
       Aliyun::Odps.configure do |config|
         config.project = @default_project
       end
+      Aliyun::Odps::Client.any_instance.unstub(:projects)
     end
 
     it 'should get default project' do
@@ -21,9 +22,11 @@ describe Aliyun::Odps do
         config.project = 'test_project'
       end
 
+      projects_service = stubs(get: true)
+      Aliyun::Odps::Client.any_instance.stubs(:projects).returns(projects_service)
+
+      projects_service.expects(:get).with('test_project')
       obj = Aliyun::Odps.project
-      assert_kind_of(Aliyun::Odps::Project, obj)
-      assert_equal('test_project', obj.name)
     end
 
     it 'should get project' do
@@ -31,9 +34,11 @@ describe Aliyun::Odps do
         config.project = 'test_project'
       end
 
+      projects_service = stubs(get: true)
+      Aliyun::Odps::Client.any_instance.stubs(:projects).returns(projects_service)
+
+      projects_service.expects(:get).with('mock_project')
       obj = Aliyun::Odps.project('mock_project')
-      assert_kind_of(Aliyun::Odps::Project, obj)
-      assert_equal('mock_project', obj.name)
     end
 
     it 'should raise MissingProjectConfiguration' do

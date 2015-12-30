@@ -2,8 +2,12 @@ require 'test_helper'
 
 describe Aliyun::Odps::TableTunnels do
   let(:endpoint) { 'http://mock-dt.odps.aliyun.com' }
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
+  let(:project) do
+    Aliyun::Odps::Project.new(
+      name: project_name,
+      client: Aliyun::Odps::Client.new
+    )
+  end
 
   before do
     Aliyun::Odps::TunnelRouter.stubs(:get_tunnel_endpoint).returns(endpoint)

@@ -38,7 +38,7 @@ module Aliyun
           resources: resources
         )
 
-        resp = client.post(path, body: function.build_create_body)
+        resp = client.post(path, body: build_create_body(function))
 
         function.tap do |obj|
           obj.location = resp.headers['Location']
@@ -60,7 +60,7 @@ module Aliyun
           class_type: class_path,
           resources: resources
         )
-        !!client.put(path, body: function.build_create_body)
+        !!client.put(path, body: build_create_body(function))
       end
 
       # Delete function in project
@@ -71,6 +71,21 @@ module Aliyun
       def delete(name)
         path = "/projects/#{project.name}/registration/functions/#{name}"
         !!client.delete(path)
+      end
+
+      private
+
+      def build_create_body(function)
+        fail XmlElementMissingError, 'ClassType' if function.class_type.nil?
+        fail XmlElementMissingError, 'Resources' if function.resources.empty?
+
+        Utils.to_xml(
+          'Function' => {
+            'Alias' => function.name,
+            'ClassType' => function.class_type,
+            'Resources' => function.resources.map(&:to_hash)
+          }
+        )
       end
     end
   end

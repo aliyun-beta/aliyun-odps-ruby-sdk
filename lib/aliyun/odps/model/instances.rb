@@ -38,6 +38,10 @@ module Aliyun
 
         name = options.key?('name') ? options['name'] : Utils.generate_uuid('instance')
 
+        unless name.match(Instance::NAME_PATTERN)
+          fail InstanceNameInvalidError, name
+        end
+
         instance = Instance.new(
           name: name,
           tasks: tasks,
@@ -55,7 +59,7 @@ module Aliyun
 
         path = "/projects/#{project.name}/instances"
 
-        resp = client.post(path, body: instance.build_create_body)
+        resp = client.post(path, body: build_create_body(instance))
 
         instance.tap do |obj|
           obj.location = resp.headers['Location']
@@ -77,6 +81,24 @@ module Aliyun
         )
 
         instance.get_status
+      end
+
+      private
+
+      def build_create_body(instance)
+        fail XmlElementMissingError, 'Priority' if instance.priority.nil?
+        fail XmlElementMissingError, 'Tasks' if instance.tasks.empty?
+
+        Utils.to_xml(
+          'Instance' => {
+            'Job' => {
+              'Name' => instance.name,
+              'Comment' => instance.comment || '',
+              'Priority' => instance.priority,
+              'Tasks' => instance.tasks.map(&:to_hash)
+            }
+          }
+        )
       end
     end
   end

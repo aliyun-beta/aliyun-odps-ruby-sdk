@@ -1,7 +1,6 @@
 require 'test_helper'
 
 describe Aliyun::Odps::TunnelRouter do
-  let(:project_name) { 'mock_project' }
   let(:tunnel_server) { 'mock-dt.odps.aliyun.com' }
   let(:client) { Aliyun::Odps::Client.new }
 

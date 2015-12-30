@@ -1,9 +1,6 @@
 require 'test_helper'
 
 describe Aliyun::Odps::Resources do
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
-
   describe 'list' do
     it 'should list resources' do
       query = { maxitems: 3 }

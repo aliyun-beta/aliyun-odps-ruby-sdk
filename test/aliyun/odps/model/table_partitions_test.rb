@@ -1,8 +1,6 @@
 require 'test_helper'
 
 describe Aliyun::Odps::TablePartitions do
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
   let(:table) { Aliyun::Odps::Table.new(name: 'table1', project: project) }
 
   describe 'list' do

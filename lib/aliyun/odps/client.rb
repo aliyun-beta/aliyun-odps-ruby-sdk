@@ -1,11 +1,14 @@
 require 'aliyun/odps/http'
 require 'aliyun/odps/service_object'
+require 'aliyun/odps/model/projects'
 
 module Aliyun
   module Odps
     class Client < ServiceObject
       extend Aliyun::Odps::Modelable
 
+      # @!method projects
+      # @return [Projects]
       has_many :projects
 
       attr_reader :access_key, :secret_key, :endpoint, :opts

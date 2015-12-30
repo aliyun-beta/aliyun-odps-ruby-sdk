@@ -1,10 +1,6 @@
 require 'test_helper'
 
 describe Aliyun::Odps::Functions do
-  let(:endpoint) { Aliyun::Odps.config.endpoint }
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
-
   describe 'list functions' do
     it 'should return list object' do
       query = { name: 'function1', owner: 'ownername', maxitems: 1, marker: 'fdsafdafdaeegfdsg' }

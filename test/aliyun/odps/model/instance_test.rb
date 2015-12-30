@@ -1,8 +1,6 @@
 require 'test_helper'
 
 describe Aliyun::Odps::Instance do
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
   let(:instance) { Aliyun::Odps::Instance.new(name: 'instance_name', project: project) }
 
   describe 'task_detail' do

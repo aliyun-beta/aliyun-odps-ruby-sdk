@@ -2,6 +2,7 @@ require 'forwardable'
 
 module Aliyun
   module Odps
+    # Wrap for simple array and give marker and max_items methods
     class List
       include Enumerable
       extend Forwardable
@@ -15,6 +16,16 @@ module Aliyun
         @objects = objects
       end
 
+      # Auto detect marker, max_items, values from result,
+      # build a object, where you can access marker, max_items, and values
+      #
+      # @example
+      #
+      #   Aliyun::Odps::List.build(result, %w(Projects Project)) do |hash|
+      #     Project.new(hash.merge(client: client))
+      #   end
+      #
+      # @return [List]
       def self.build(result, keys, &_block)
         top_key = keys.first
         marker = Utils.dig_value(result, top_key, 'Marker')

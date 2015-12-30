@@ -60,8 +60,8 @@ module Aliyun
     end
 
     class InstanceNameInvalidError < Error
-      def initialize(_name)
-        super("Instance name should match pattern: '([a-z]|[A-Z]){1,}([a-z]|[A-Z]|[\d]|_)*")
+      def initialize(name)
+        super("#{name} should match pattern: #{Instance::NAME_PATTERN}")
       end
     end
 

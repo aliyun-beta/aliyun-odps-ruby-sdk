@@ -15,6 +15,17 @@ Aliyun::Odps.configure do |config|
   config.project = ENV['ALIYUN_PROJECT'] || 'mock_project_name'
 end
 
+def project_name
+  Aliyun::Odps.config.project
+end
+
+def project
+  Aliyun::Odps::Project.new(
+    name: project_name,
+    client: Aliyun::Odps::Client.new
+  )
+end
+
 def endpoint
   Aliyun::Odps.config.endpoint
 end

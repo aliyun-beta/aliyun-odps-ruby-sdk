@@ -6,12 +6,12 @@ module Aliyun
       #
       # @see http://repo.aliyun.com/api-doc/Project/get_projects/index.html Get projects
       #
-      # @params options [Hash] options
+      # @param options [Hash] options
       # @option options [String] :owner specify the project owner
       # @option options [String] :marker specify marker for paginate
       # @option options [String] :maxitems (1000) specify maxitems in this request
       #
-      # @return [Aliyun::Odps::List]
+      # @return [List]
       #
       # TODO: http://git.oschina.net/newell_zlx/aliyun-odps-ruby-sdk/issues/2
       def list(options = {})
@@ -29,7 +29,9 @@ module Aliyun
       #
       # @see http://repo.aliyun.com/api-doc/Project/get_project/index.html Get Project
       #
-      # @params name specify the project name
+      # @param name specify the project name
+      #
+      # @return [Project]
       def get(name)
         result = client.get("/projects/#{name}").parsed_response
         hash = Utils.dig_value(result, 'Project')
@@ -43,6 +45,8 @@ module Aliyun
       # @params name specify the project name
       # @params options [Hash] options
       # @option options [String] :comment Comment of the project
+      #
+      # @return true
       def update(name, options = {})
         Utils.stringify_keys!(options)
         project = Project.new(
@@ -50,8 +54,19 @@ module Aliyun
           comment: options['comment'],
           client: client
         )
-        body = project.build_update_body
-        !!client.put("/projects/#{name}", body: body)
+        !!client.put("/projects/#{name}", body: build_update_body(project))
+      end
+
+      private
+
+      def build_update_body(project)
+        fail XmlElementMissingError, 'Comment' if project.comment.nil?
+
+        Utils.to_xml(
+          'Project' => {
+            'Name' => project.name,
+            'Comment' => project.comment
+          })
       end
     end
   end

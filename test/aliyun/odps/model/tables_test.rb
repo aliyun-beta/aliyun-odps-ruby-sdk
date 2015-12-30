@@ -1,9 +1,6 @@
 require 'test_helper'
 
 describe Aliyun::Odps::Tables do
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
-
   describe 'list' do
     it 'should list tables' do
       query = { maxitems: 2 }
@@ -117,6 +114,34 @@ describe Aliyun::Odps::Tables do
       )
 
       assert(project.tables.delete('test_table1'), 'delete table success')
+    end
+  end
+
+  describe 'sql' do
+    it 'should generate correct sql' do
+      table = Aliyun::Odps::Table.new(
+        name: 'test_table',
+        project: project,
+        schema: {
+          columns: [{ name: 'uuid', type: 'bigint', comment: 'major key' }],
+          partitions: [{ name: 'name', type: 'string' }, { name: 'name2', type: 'string', comment: 'test partition comment' }]
+        })
+
+      assert_equal(
+        "CREATE TABLE mock_project_name.`test_table` (`uuid` bigint COMMENT 'major key') PARTITIONED BY (`name` string, `name2` string COMMENT 'test partition comment');",
+        project.tables.send(:generate_create_sql, table)
+      )
+    end
+
+    it 'should generate correct sql with schema object' do
+      schema = Aliyun::Odps::TableSchema.new(columns: [{ name: 'uuid', type: 'bigint', comment: 'major key' }],
+                                             partitions: [{ name: 'name', type: 'string' }, { name: 'name2', type: 'string', comment: 'test partition comment' }])
+      table = Aliyun::Odps::Table.new(name: 'test_table', comment: 'table comment', project: project, schema: schema)
+
+      assert_equal(
+        "CREATE TABLE mock_project_name.`test_table` (`uuid` bigint COMMENT 'major key') COMMENT 'table comment' PARTITIONED BY (`name` string, `name2` string COMMENT 'test partition comment');",
+        project.tables.send(:generate_create_sql, table)
+      )
     end
   end
 end

@@ -2,8 +2,6 @@ require 'test_helper'
 
 describe Aliyun::Odps::DownloadSession do
   let(:endpoint) { 'http://mock-dt.odps.aliyun.com' }
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
   let(:download_session) do
     Aliyun::Odps::DownloadSession.new(
       table_name: 'table1',
@@ -39,7 +37,7 @@ describe Aliyun::Odps::DownloadSession do
           },
           headers: {
             'x-odps-tunnel-version' => '4',
-            'Content-Encoding' => 'deflate'
+            'Accept-Encoding' => 'deflate'
           }
         },
         body: 'content'

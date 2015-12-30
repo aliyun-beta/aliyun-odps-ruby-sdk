@@ -18,8 +18,7 @@ module Aliyun
         # @param options [Hash] Options
         # @option options [String] :verb VERB, request method
         # @option options [String] :date Request Time in formate: '%a, %d %b %Y %H:%M:%S GMT'
-        # @option options [String] :bucket Bucket Name
-        # @option options [String] :key Object Name
+        # @option options [String] :path resource name
         # @option options [Hash] :query Query key-value pair
         # @option options [Hash] :headers Headers
         #

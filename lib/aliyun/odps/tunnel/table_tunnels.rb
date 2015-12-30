@@ -1,6 +1,5 @@
 module Aliyun
   module Odps
-    # Methods for TableTunnels
     class TableTunnels < ServiceObject
       TUNNEL_VERSION = '4'
       SUPPORTED_ENCODING = %w(raw deflate snappy)

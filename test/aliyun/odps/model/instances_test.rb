@@ -1,9 +1,6 @@
 require 'test_helper'
 
 describe Aliyun::Odps::Resources do
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
-
   describe 'list instances' do
     it 'should return list object' do
       query = { maxitems: 3, status: 'Terminated' }
@@ -80,6 +77,14 @@ describe Aliyun::Odps::Resources do
       assert_kind_of(Aliyun::Odps::Instance, instance)
       assert_equal('JobName', instance.name)
       assert_equal(location, instance.location)
+    end
+
+    it 'should create new instance with invalid name' do
+      task = Aliyun::Odps::InstanceTask.new(type: 'SQL', name: 'SqlTask', query: 'SELECT * FROM test_table;')
+      args = [[task], name: '1invalidJobName', comment: 'JobComment', priority: 1]
+      assert_raises(Aliyun::Odps::InstanceNameInvalidError) do
+        project.instances.create(*args)
+      end
     end
 
     it 'should raise RequestError' do

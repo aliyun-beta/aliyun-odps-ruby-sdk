@@ -17,17 +17,19 @@ module Aliyun
 
       alias_method :uploaded_block_list=, :blocks=
 
-      # Upload data in block
+      # Upload data with block id
       #
       # @see http://repo.aliyun.com/api-doc/Tunnel/put_create_upload_id/index.html Put Upload Block ID
       #
-      # @params blockid [String] specify blockid for this upload, range in 0~19999, new block with replace with old with same blockid
-      # @params file_or_bin [File|Bin Data] specify the data, a local file path or raw data
-      # @params encoding [String] specify the data compression format, supported value: raw, deflate, snappy
-      def upload(blockid, file_or_bin, encoding = 'raw')
+      # @param block_id [String] specify block_id for this upload, range in 0~19999, new block with replace with old with same blockid
+      # @param file_or_bin [File|Bin Data] specify the data, a local file path or raw data
+      # @param encoding [String] specify the data compression format, supported value: raw, deflate, snappy
+      #
+      # @return [true]
+      def upload(block_id, file_or_bin, encoding = 'raw')
         path = "/projects/#{project.name}/tables/#{table_name}"
 
-        query = { blockid: blockid, uploadid: upload_id }
+        query = { blockid: block_id, uploadid: upload_id }
         query[:partition] = partition_spec if partition_spec
 
         headers = { 'x-odps-tunnel-version' => TableTunnels::TUNNEL_VERSION }
@@ -45,11 +47,11 @@ module Aliyun
         !!client.put(path, query: query, headers: headers, body: Utils.to_data(file_or_bin))
       end
 
-      # reload upload session status
+      # reload this upload session
       #
       # @see http://repo.aliyun.com/api-doc/Tunnel/get_upload_session_status/index.html Get Upload Session Status
       #
-      # @return UploadSession
+      # @return [UploadSession]
       def reload
         path = "/projects/#{project.name}/tables/#{table_name}"
 
@@ -72,11 +74,11 @@ module Aliyun
         blocks
       end
 
-      # Complete a upload session
+      # Complete the upload session
       #
       # @see http://repo.aliyun.com/api-doc/Tunnel/post_commit_upload_session/index.html Post commit Upload Session
       #
-      # @return true
+      # @return [true]
       def complete
         path = "/projects/#{project.name}/tables/#{table_name}"
 

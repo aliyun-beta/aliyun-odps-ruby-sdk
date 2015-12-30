@@ -2,8 +2,6 @@ require 'test_helper'
 
 describe Aliyun::Odps::UploadSession do
   let(:endpoint) { 'http://mock-dt.odps.aliyun.com' }
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps.project(project_name) }
   let(:upload_session) do
     Aliyun::Odps::UploadSession.new(
       table_name: 'table1',

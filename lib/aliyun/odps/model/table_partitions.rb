@@ -1,14 +1,15 @@
 module Aliyun
   module Odps
-    # Methods for TablePartitions
     class TablePartitions < ServiceObject
-      # List partitions of table
+      # List partitions for table
       #
       # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
       #
-      # @params options [Hash] options
+      # @param options [Hash] options
       # @option options [String] :marker specify marker for paginate
       # @option options [String] :maxitems (1000) specify maxitems in this request
+      #
+      # @return [List]
       def list(options = {})
         Utils.stringify_keys!(options)
         path = "/projects/#{project.name}/tables/#{master.name}"
@@ -25,9 +26,11 @@ module Aliyun
 
       # Create Partition
       #
-      # @params partitions_spec [Hash<name, value>] specify the partition spec
-      def create(partition_spec)
-        sql = generate_create_sql(partition_spec)
+      # @param partition [Hash<name, value>] specify the partition you want to create
+      #
+      # @return [Hash] the partition you create
+      def create(partition)
+        sql = generate_create_sql(partition)
 
         task = InstanceTask.new(
           name: 'SQLCreatePartitionTask',
@@ -39,14 +42,16 @@ module Aliyun
 
         instance.wait_for_success
 
-        partition_spec
+        partition
       end
 
       # Delete Partition
       #
-      # @params partitions_spec [Hash<name, value>] specify the partition spec
-      def delete(partition_spec)
-        sql = generate_drop_sql(partition_spec)
+      # @params partitions [Hash<name, value>] specify the partition you want to delete
+      #
+      # @return [true]
+      def delete(partition)
+        sql = generate_drop_sql(partition)
 
         task = InstanceTask.new(
           name: 'SQLDropPartitionTask',
@@ -59,13 +64,13 @@ module Aliyun
 
       private
 
-      def generate_create_sql(partition_spec)
-        spec = partition_spec.map { |k, v| "#{k} = '#{v}'" }.join(',')
+      def generate_create_sql(partition)
+        spec = partition.map { |k, v| "#{k} = '#{v}'" }.join(',')
         "ALTER TABLE #{project.name}.`#{master.name}` ADD PARTITION (#{spec});"
       end
 
-      def generate_drop_sql(partition_spec)
-        spec = partition_spec.map { |k, v| "#{k} = '#{v}'" }.join(',')
+      def generate_drop_sql(partition)
+        spec = partition.map { |k, v| "#{k} = '#{v}'" }.join(',')
         "ALTER TABLE #{project.name}.`#{master.name}`DROP IF EXISTS PARTITION (#{spec});"
       end
     end
