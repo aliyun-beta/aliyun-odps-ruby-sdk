@@ -75,7 +75,9 @@ describe Aliyun::Odps::UploadSession do
 
       obj = upload_session.reload
       assert_kind_of(Aliyun::Odps::UploadSession, obj)
-      assert_equal([], obj.blocks)
+      assert_equal(1, obj.blocks.size)
+      assert_kind_of(Aliyun::Odps::UploadBlock, obj.blocks[0])
+      assert_equal(0, obj.blocks[0].block_id)
     end
 
     it 'should reload without content_type' do
@@ -92,7 +94,9 @@ describe Aliyun::Odps::UploadSession do
 
       obj = upload_session.reload
       assert_kind_of(Aliyun::Odps::UploadSession, obj)
-      assert_equal([], obj.blocks)
+      assert_equal(1, obj.blocks.size)
+      assert_kind_of(Aliyun::Odps::UploadBlock, obj.blocks[0])
+      assert_equal(0, obj.blocks[0].block_id)
     end
 
     it 'should raise RequestError' do

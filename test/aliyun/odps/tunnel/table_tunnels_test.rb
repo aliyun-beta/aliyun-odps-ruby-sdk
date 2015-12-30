@@ -60,9 +60,6 @@ describe Aliyun::Odps::TableTunnels do
         {
           query: {
             uploads: true
-          },
-          headers: {
-            'x-odps-tunnel-version' => '4'
           }
         },
         headers: {

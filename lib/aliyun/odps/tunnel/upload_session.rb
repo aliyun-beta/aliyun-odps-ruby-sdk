@@ -1,7 +1,6 @@
 module Aliyun
   module Odps
     class UploadSession < Struct::Base
-
       def_attr :project, :Project, required: true
       def_attr :client, :Client, required: true
 
@@ -13,7 +12,7 @@ module Aliyun
       def_attr :initiated, :DateTime
       def_attr :schema, :Hash
       def_attr :blocks, :Array, init_with: ->(value) do
-        value.map {|v| UploadBlock.new(v) }
+        value.map { |v| UploadBlock.new(v) }
       end
 
       alias_method :uploaded_block_list=, :blocks=
@@ -62,8 +61,6 @@ module Aliyun
         result = resp.parsed_response
         attrs = result.is_a?(String) ? JSON.parse(result) : result
 
-        p attrs
-
         update_attrs(attrs)
       end
 
@@ -89,15 +86,6 @@ module Aliyun
         headers = { 'x-odps-tunnel-version' => TableTunnels::TUNNEL_VERSION }
 
         !!client.post(path, query: query, headers: headers)
-      end
-
-      private
-
-      def update_attrs(attrs)
-        attrs.each do |k, v|
-          self.send("#{Utils.underscore(k)}=", v)
-        end
-        self
       end
     end
   end

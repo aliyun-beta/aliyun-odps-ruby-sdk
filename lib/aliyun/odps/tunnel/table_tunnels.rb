@@ -2,7 +2,6 @@ module Aliyun
   module Odps
     # Methods for TableTunnels
     class TableTunnels < ServiceObject
-
       TUNNEL_VERSION = '4'
       SUPPORTED_ENCODING = %w(raw deflate snappy)
 
@@ -37,8 +36,8 @@ module Aliyun
             project: project,
             client: client,
             table_name: table_name,
-            partition_spec: query[:partition]
-        ))
+            partition_spec: query['partition']
+          ))
       end
 
       # Init Upload Session
@@ -64,8 +63,8 @@ module Aliyun
             project: project,
             client: client,
             table_name: table_name,
-            partition_spec: query[:partition]
-        ))
+            partition_spec: query['partition']
+          ))
       end
 
       private

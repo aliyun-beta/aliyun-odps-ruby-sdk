@@ -37,7 +37,7 @@ describe Aliyun::Odps::Struct do
       assert_equal('value1', foo.within_name)
 
       error = assert_raises(Aliyun::Odps::ValueNotSupportedError) { foo.within_name = 'noexistvalue' }
-      assert_equal("within_name only support: value1, value2 !!", error.message)
+      assert_equal('within_name only support: value1, value2 !!', error.message)
     end
   end
 end

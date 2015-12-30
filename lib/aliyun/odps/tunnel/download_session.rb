@@ -1,7 +1,6 @@
 module Aliyun
   module Odps
     class DownloadSession < Struct::Base
-
       def_attr :project, :Project, required: true
       def_attr :client, :Client, required: true
 

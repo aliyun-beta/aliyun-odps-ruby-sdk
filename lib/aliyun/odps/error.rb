@@ -73,7 +73,7 @@ module Aliyun
 
     class ValueNotSupportedError < Error
       def initialize(attr, supported_value)
-        super("#{attr.to_s} only support: #{Utils.wrap(supported_value).join(', ')} !!")
+        super("#{attr} only support: #{Utils.wrap(supported_value).join(', ')} !!")
       end
     end
   end
