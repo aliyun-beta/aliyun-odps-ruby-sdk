@@ -52,7 +52,6 @@ module Aliyun
 
         body = generate_body_for_upload(record_values)
 
-
         !!client.put(path, query: query, headers: headers, body: body)
       end
 
@@ -111,19 +110,17 @@ module Aliyun
 
       def value_to_record(value)
         schema = Aliyun::Odps::OdpsTableSchema.new(self.schema)
-        unless value.is_a? Array
-          fail "value must be a array"
-        end
+        fail 'value must be a array' unless value.is_a? Array
 
         if value.count != schema.getColumnCount
-          fail "column counts are not equal between value and schema"
+          fail 'column counts are not equal between value and schema'
         end
 
         record = OdpsTableRecord.new(schema)
         i = 0
-        while i < value.count do
+        while i < value.count
           type = schema.getColumnType(i)
-          if value[i] == nil
+          if value[i].nil?
             record.setNullValue(i)
             i += 1
             next
@@ -142,13 +139,12 @@ module Aliyun
           when $ODPS_DECIMAL
             record.setDecimal(i, value[i])
           else
-            raise "unsupported schema type"
+            fail 'unsupported schema type'
           end
           i += 1
         end
-        return record
+        record
       end
-
     end
   end
 end

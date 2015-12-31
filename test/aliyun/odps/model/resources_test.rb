@@ -173,7 +173,7 @@ describe Aliyun::Odps::Resources do
       error = assert_raises(Aliyun::Odps::ResourceMissingContentError) do
         project.resources.create('resource_name', 'py')
       end
-      assert_equal("A Resource must exist file or table", error.message)
+      assert_equal('A Resource must exist file or table', error.message)
     end
   end
 
@@ -233,7 +233,7 @@ describe Aliyun::Odps::Resources do
       error = assert_raises(Aliyun::Odps::ResourceMissingContentError) do
         project.resources.update('resource_name', 'py')
       end
-      assert_equal("A Resource must exist file or table", error.message)
+      assert_equal('A Resource must exist file or table', error.message)
     end
   end
 

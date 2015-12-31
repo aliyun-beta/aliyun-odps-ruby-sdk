@@ -79,7 +79,7 @@ module Aliyun
 
     class ResourceMissingContentError < Error
       def initialize
-        super("A Resource must exist file or table")
+        super('A Resource must exist file or table')
       end
     end
   end

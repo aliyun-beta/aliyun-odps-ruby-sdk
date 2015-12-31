@@ -140,9 +140,9 @@ describe Aliyun::Odps::Instance do
     end
   end
 
-  describe "task_results" do
-    it "should get task results" do
-      #skip("should add test here")
+  describe 'task_results' do
+    it 'should get task results' do
+      # skip("should add test here")
       #
       stub_client_request(
         :get,
@@ -166,9 +166,9 @@ describe Aliyun::Odps::Instance do
 
   # TODO: sometimes, it will wait until progress stop
   it 'wait_for_terminated should sleep until instance terminated' do
-    skip("should add test here")
-     #Kernel.stubs(:sleep)
-     #instance.stubs(:get_status).returns(['Running', 'Running', 'Terminated'])
-     #instance.wait_for_terminated
+    skip('should add test here')
+    # Kernel.stubs(:sleep)
+    # instance.stubs(:get_status).returns(['Running', 'Running', 'Terminated'])
+    # instance.wait_for_terminated
   end
 end

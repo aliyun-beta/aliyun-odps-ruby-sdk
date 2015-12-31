@@ -100,7 +100,7 @@ module Aliyun
         headers.merge!('x-odps-comment' => options['comment']) if options.key?('comment')
         headers.merge!('x-odps-copy-table-source' => options['table']) if options.key?('table')
 
-        body = options.key?('file') ? Utils.to_data(options['file']) : ""
+        body = options.key?('file') ? Utils.to_data(options['file']) : ''
 
         fail ResourceMissingContentError if body.empty? && !options.key?('table')
 
@@ -132,7 +132,7 @@ module Aliyun
         headers.merge!('x-odps-comment' => options['comment']) if options.key?('comment')
         headers.merge!('x-odps-copy-table-source' => options['table']) if options.key?('table')
 
-        body = options.key?('file') ? Utils.to_data(options['file']) : ""
+        body = options.key?('file') ? Utils.to_data(options['file']) : ''
 
         fail ResourceMissingContentError if body.empty? && !options.key?('table')
 

@@ -64,7 +64,7 @@ module Aliyun
         query = { result: true }
         result = client.get(path, query: query).parsed_response
         task_results = Utils.dig_value(result, 'Instance', 'Tasks', 'Task')
-        Hash[Utils.wrap(task_results).map{|v| [v['Name'], Aliyun::Odps::TaskResult.new(v)] }]
+        Hash[Utils.wrap(task_results).map { |v| [v['Name'], Aliyun::Odps::TaskResult.new(v)] }]
       end
 
       # Get tasks of instance

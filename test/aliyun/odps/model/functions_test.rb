@@ -33,8 +33,8 @@ describe Aliyun::Odps::Functions do
     end
   end
 
-  describe "get" do
-    it "should get function" do
+  describe 'get' do
+    it 'should get function' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/registration/functions/function1",

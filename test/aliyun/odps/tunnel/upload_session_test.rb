@@ -5,6 +5,7 @@ describe Aliyun::Odps::UploadSession do
   let(:upload_session) do
     Aliyun::Odps::UploadSession.new(
       table_name: 'table1',
+      schema: { 'columns' => [{ 'name' => 'name', 'type' => 'string' }] },
       upload_id: '1122wwssddd33222',
       client: project.table_tunnels.client,
       project: project
@@ -32,11 +33,11 @@ describe Aliyun::Odps::UploadSession do
           'x-odps-tunnel-version' => '4',
           'Content-Encoding' => 'deflate'
         },
-        body: 'Content'
+        body: "\n\aContent\x80\xC0\xFF\u007Fڻ\xAB\xD3\r\xF0\xFF\xFF\u007F\u0002\xF8\xFF\xFF\u007F\xB7\xE2\xD2\xE7\n"
       )
 
       assert(
-        upload_session.upload(1, 'Content', 'deflate'),
+        upload_session.upload(1, [['Content']], 'deflate'),
         'update should success'
       )
     end
@@ -50,7 +51,7 @@ describe Aliyun::Odps::UploadSession do
         headers: { content_type: 'application/json' }
       )
       assert_raises(Aliyun::Odps::RequestError) do
-        assert(upload_session.upload(100, 'Hello'))
+        assert(upload_session.upload(100, [['Hello']]))
       end
     end
   end
@@ -137,12 +138,10 @@ describe Aliyun::Odps::UploadSession do
     end
   end
 
-  describe "list blocks" do
-
-    it "should list uploaded blocks" do
+  describe 'list blocks' do
+    it 'should list uploaded blocks' do
       upload_session.expects(:reload)
       upload_session.list_blocks
     end
-
   end
 end
