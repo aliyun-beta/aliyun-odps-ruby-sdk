@@ -107,7 +107,7 @@ describe Aliyun::Odps::Resources do
 
   describe 'create' do
     it 'should create new resource' do
-      args = ['py', 'resource_name', comment: 'test comment', file: 'Hello']
+      args = ['resource_name', 'py', comment: 'test comment', file: 'Hello']
       location = "#{endpoint}/projects/#{project_name}/resources/resource_name"
       stub_client_request(
         :post,
@@ -117,7 +117,8 @@ describe Aliyun::Odps::Resources do
             'x-odps-resource-name' => 'resource_name',
             'x-odps-resource-type' => 'py',
             'x-odps-comment' => 'test comment'
-          }
+          },
+          body: 'Hello'
         },
         headers: {
           Location: location
@@ -133,17 +134,52 @@ describe Aliyun::Odps::Resources do
       assert_equal(location, obj.location)
     end
 
+    it 'should create new table resource' do
+      args = ['resource_name', 'table', comment: 'test comment', table: "test_table partition=(part='part1')"]
+      location = "#{endpoint}/projects/#{project_name}/resources/resource_name"
+      stub_client_request(
+        :post,
+        "#{endpoint}/projects/#{project_name}/resources/",
+        {
+          headers: {
+            'x-odps-resource-name' => 'resource_name',
+            'x-odps-resource-type' => 'table',
+            'x-odps-copy-table-source' => "test_table partition=(part='part1')",
+            'x-odps-comment' => 'test comment'
+          }
+        },
+        headers: {
+          Location: location
+        }
+      )
+
+      obj = project.resources.create(*args)
+
+      assert_kind_of(Aliyun::Odps::Resource, obj)
+      assert_equal('resource_name', obj.name)
+      assert_equal('table', obj.resource_type)
+      assert_equal('test comment', obj.comment)
+      assert_equal(location, obj.location)
+    end
+
     it 'should raise RequestError' do
       stub_fail_request(:post, %r{/projects/#{project_name}/resources/})
       assert_raises(Aliyun::Odps::RequestError) do
-        project.resources.create('py', 'resource_name', file: 'Hello')
+        project.resources.create('resource_name', 'py', file: 'Hello')
       end
+    end
+
+    it 'should raise ResourceMissingContentError' do
+      error = assert_raises(Aliyun::Odps::ResourceMissingContentError) do
+        project.resources.create('resource_name', 'py')
+      end
+      assert_equal("A Resource must exist file or table", error.message)
     end
   end
 
   describe 'update' do
     it 'should update exist resource' do
-      args = ['py', 'resource_name', comment: 'test comment', file: 'Hello']
+      args = ['resource_name', 'py', comment: 'test comment', file: 'Hello']
       location = "#{endpoint}/projects/#{project_name}/resources/resource_name"
       stub_client_request(
         :put,
@@ -153,7 +189,8 @@ describe Aliyun::Odps::Resources do
             'x-odps-resource-name' => 'resource_name',
             'x-odps-resource-type' => 'py',
             'x-odps-comment' => 'test comment'
-          }
+          },
+          body: 'Hello'
         },
         headers: {
           Location: location
@@ -163,11 +200,40 @@ describe Aliyun::Odps::Resources do
       assert(project.resources.update(*args), 'update success')
     end
 
+    it 'should update exist table resource' do
+      args = ['resource_name', 'table', comment: 'test comment', table: "test_table partition=(part='part1')"]
+      location = "#{endpoint}/projects/#{project_name}/resources/resource_name"
+      stub_client_request(
+        :put,
+        "#{endpoint}/projects/#{project_name}/resources/resource_name",
+        {
+          headers: {
+            'x-odps-resource-name' => 'resource_name',
+            'x-odps-resource-type' => 'table',
+            'x-odps-copy-table-source' => "test_table partition=(part='part1')",
+            'x-odps-comment' => 'test comment'
+          }
+        },
+        headers: {
+          Location: location
+        }
+      )
+
+      assert(project.resources.update(*args), 'should update success')
+    end
+
     it 'should raise RequestError' do
       stub_fail_request(:put, %r{/projects/#{project_name}/resources/resource_name})
       assert_raises(Aliyun::Odps::RequestError) do
-        project.resources.update('py', 'resource_name', file: 'Hello')
+        project.resources.update('resource_name', 'py', file: 'Hello')
       end
+    end
+
+    it 'should raise ResourceMissingContentError' do
+      error = assert_raises(Aliyun::Odps::ResourceMissingContentError) do
+        project.resources.update('resource_name', 'py')
+      end
+      assert_equal("A Resource must exist file or table", error.message)
     end
   end
 

@@ -6,11 +6,13 @@ module Aliyun
       #
       # @see http://repo.aliyun.com/api-doc/Function/get_functions/index.html Get functions
       #
-      # @params options [Hash] options
+      # @param options [Hash] options
       # @option options [String] :name specify function name
       # @option options [String] :owner specify function owner
       # @option options [String] :marker
       # @option options [String] :maxitems (1000)
+      #
+      # @return [List]
       def list(options = {})
         Utils.stringify_keys!(options)
         path = "/projects/#{project.name}/registration/functions"
@@ -22,13 +24,28 @@ module Aliyun
         end
       end
 
+      # Get Function
+      #
+      # @param name specify function name
+      #
+      # @return [Function]
+      def get(name)
+        path = "/projects/#{project.name}/registration/functions/#{name}"
+
+        result = client.get(path).parsed_response
+        Function.new(Utils.dig_value(result, 'Function'))
+      end
+      alias_method :function, :get
+
       # Register function in project
       #
       # @see http://repo.aliyun.com/api-doc/Function/post_function/index.html Post function
       #
-      # @params name [String] specify function name
-      # @params class_path [String] specify class Path used by function
-      # @params resources [Array<Model::Resource>] specify resources used by function
+      # @param name [String] specify function name
+      # @param class_path [String] specify class Path used by function
+      # @param resources [Array<Model::Resource>] specify resources used by function
+      #
+      # @return [Function]
       def create(name, class_path, resources = [])
         path = "/projects/#{project.name}/registration/functions"
 
@@ -49,9 +66,11 @@ module Aliyun
       #
       # @see http://repo.aliyun.com/api-doc/Function/put_function/index.html Put function
       #
-      # @params name [String] specify function name
-      # @params class_path [String] specify class Path used by function
-      # @params resources [Array<Model::Resource>] specify resources used by function
+      # @param name [String] specify function name
+      # @param class_path [String] specify class Path used by function
+      # @param resources [Array<Model::Resource>] specify resources used by function
+      #
+      # @return [true]
       def update(name, class_path, resources = [])
         path = "/projects/#{project.name}/registration/functions/#{name}"
 
@@ -67,7 +86,9 @@ module Aliyun
       #
       # @see http://repo.aliyun.com/api-doc/Function/delete_function/index.html Delete function
       #
-      # @params name [String] specify function name
+      # @param name [String] specify function name
+      #
+      # @return [true]
       def delete(name)
         path = "/projects/#{project.name}/registration/functions/#{name}"
         !!client.delete(path)

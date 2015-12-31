@@ -53,4 +53,23 @@ To deleta table, just use `tables#delete`
     project.tables.delete('table_name')
     
 
+### Partition
+
+In ODPS, you can contains partitions for table:
+
+To list all exist partitions:
+
+    partitions = table.table_partitions.list
+
+To create partition:    
+
+    partition = table.table_partitions.create(city: 'hangzhou')
+
+To delete a exist partition:
+
+    partition = table.table_partitions.delete(city: 'hangzhou') 
+
+***Note: if create partition or delete partition fail, it will raise Aliyun::Odps::InstanceTaskNotSuccessError, check your partition value is match the schema defined when create table***       
+    
+
 Ok, Tables is over, let's go to [resources](./resources.md)  

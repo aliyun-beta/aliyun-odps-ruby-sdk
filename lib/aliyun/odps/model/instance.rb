@@ -16,6 +16,9 @@ module Aliyun
       def_attr :start_time, DateTime
       def_attr :end_time, DateTime
       def_attr :location, String
+      def_attr :results, Array, init_with: ->(value) do
+        Utils.wrap(value).map {|v| Aliyun::odps::TaskResult.new(v) }
+      end
 
       # Get task detail of instance
       #
@@ -54,6 +57,17 @@ module Aliyun
         path = "/projects/#{project.name}/instances/#{name}"
         query = { instancesummary: true, taskname: task_name }
         client.get(path, query: query).parsed_response
+      end
+
+      # Get task results
+      #
+      # @return [Hash<name, TaskResult>]
+      def task_results
+        path = "/projects/#{project.name}/instances/#{name}"
+        query = { result: true }
+        result = client.get(path, query: query).parsed_response
+        task_results = Utils.dig_value(result, 'Instance', 'Tasks', 'Task')
+        Hash[Utils.wrap(task_results).map{|v| [v['Name'], Aliyun::Odps::TaskResult.new(v)] }]
       end
 
       # Get tasks of instance

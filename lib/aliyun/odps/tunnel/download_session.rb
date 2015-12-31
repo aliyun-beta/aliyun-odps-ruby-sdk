@@ -42,11 +42,14 @@ module Aliyun
         when 'snappy'
           headers['Accept-Encoding'] = 'x-snappy-framed'
         when 'raw'
+          headers.delete('Accept-Encoding')
         else
           fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
         end
 
-        client.get(path, query: query, headers: headers).parsed_response
+        resp = client.get(path, query: query, headers: headers)
+        p resp
+        resp.parsed_response
       end
     end
   end
