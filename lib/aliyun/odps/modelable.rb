@@ -4,26 +4,13 @@ require 'aliyun/odps/service_object'
 module Aliyun
   module Odps
     module Modelable
-
-      def has_many(models, opts = {})
-        # p "#{models.to_s.singularize.camelize}"
+      def has_many(models, _opts = {})
         mod = models.to_s.singularize
-        klass = "Aliyun::Odps::Model::#{mod.camelize}Service".constantize
-        define_method(models) {
+        klass = "Aliyun::Odps::#{mod.camelize}s".constantize
+        define_method(models) do
           klass.build(self)
-        }
-        # if opts[:actions]
-        #   opts[:actions].each do |action|
-        #     action = action.to_s
-        #     define_method("#{action}_#{mod}") {|options = {}|
-        #       raise "Can't #{action} object without params" if options.empty?
-        #       klass.send(action, options)
-        #     }
-        #   end
-        # end
+        end
       end
     end
   end
 end
-
-Dir[File.join(File.dirname(__FILE__), 'model/*.rb')].each { |f| require f }

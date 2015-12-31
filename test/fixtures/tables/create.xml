@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Instance>
+  <Job>
+    <Name>instance20151229111744707cc8</Name>
+    <Comment></Comment>
+    <Priority>9</Priority>
+    <Tasks>
+      <SQL>
+        <Name>SQLCreateTableTask</Name>
+        <Comment></Comment>
+        <Config>
+          <Property>
+            <Name></Name>
+            <Value></Value>
+          </Property>
+        </Config>
+        <Query><![CDATA[CREATE TABLE mock_project_name.`test_table1` (`uuid` bigint COMMENT 'major key') COMMENT 'sql comment' PARTITIONED BY (`name` string, `name2` string COMMENT 'test partition comment');]]></Query>
+      </SQL>
+    </Tasks>
+  </Job>
+</Instance>

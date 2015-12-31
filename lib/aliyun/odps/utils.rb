@@ -7,7 +7,6 @@ module Aliyun
   module Odps
     class Utils
       class << self
-
         # Calculate content length
         #
         # @return [Integer]
@@ -92,6 +91,10 @@ module Aliyun
           hash.keys.each do |key|
             hash[key.to_s] = hash.delete(key)
           end
+        end
+
+        def generate_uuid(flag)
+          "#{flag}#{Time.now.strftime('%Y%m%d%H%M%S')}#{SecureRandom.hex(3)}"
         end
       end
     end

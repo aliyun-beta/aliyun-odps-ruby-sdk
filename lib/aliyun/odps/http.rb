@@ -8,11 +8,11 @@ module Aliyun
       include HTTParty
 
       class BetterXmlParser < HTTParty::Parser
-
         protected
+
         def xml
           MultiXml.parse(body)
-        rescue => e
+        rescue
           body
         end
       end
@@ -20,9 +20,10 @@ module Aliyun
 
       attr_reader :access_key, :secret_key
 
-      def initialize(access_key, secret_key)
+      def initialize(access_key, secret_key, endpoint)
         @access_key = access_key
         @secret_key = secret_key
+        @endpoint = endpoint
       end
 
       def get(uri, options = {})
@@ -60,10 +61,10 @@ module Aliyun
         body = options.delete(:body)
 
         append_headers!(headers, verb, body, options.merge(path: resource))
-        path = Aliyun::Odps.config.endpoint + resource
+        path = @endpoint + resource
         # options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI, http_proxyaddr: "127.0.0.1", http_proxyport: "8888" }
         options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI }
-        #p options
+        # p path, options
 
         wrap(self.class.__send__(verb.downcase, path, options))
       end

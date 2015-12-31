@@ -1,12 +1,10 @@
 require 'test_helper'
 
-describe Aliyun::Odps::Model::Instance do
-  let(:project_name) { 'mock_project_name' }
-  let(:project) { Aliyun::Odps::Model::Project.new(name: project_name) }
-  let(:instance) { Aliyun::Odps::Model::Instance.new(name: 'instance_name', project: project) }
+describe Aliyun::Odps::Instance do
+  let(:instance) { Aliyun::Odps::Instance.new(name: 'instance_name', project: project) }
 
-  describe "task_detail" do
-    it "should get task detail information" do
+  describe 'task_detail' do
+    it 'should get task detail information' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/instances/#{instance.name}",
@@ -16,11 +14,9 @@ describe Aliyun::Odps::Model::Instance do
             taskname: 'task_name'
           }
         },
-        {
-          file_path: 'instance/task_detail.json',
-          headers: {
-            content_type: 'application/json'
-          }
+        file_path: 'instance/task_detail.json',
+        headers: {
+          content_type: 'application/json'
         }
       )
 
@@ -29,14 +25,16 @@ describe Aliyun::Odps::Model::Instance do
       assert_kind_of(Hash, obj)
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Hash, instance.task_detail('task_name') }
+    it 'should raise RequestError' do
+      stub_fail_request(:get, %r{/projects/#{project_name}/instances/instance_name})
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Hash, instance.task_detail('task_name'))
+      end
     end
   end
 
-  describe "task_progress" do
-    it "should get task progress information" do
+  describe 'task_progress' do
+    it 'should get task progress information' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/instances/instance_name",
@@ -46,11 +44,9 @@ describe Aliyun::Odps::Model::Instance do
             taskname: 'task_name'
           }
         },
-        {
-          file_path: 'instance/task_progress.xml',
-          headers: {
-            content_type: 'application/xml'
-          }
+        file_path: 'instance/task_progress.xml',
+        headers: {
+          content_type: 'application/xml'
         }
       )
 
@@ -59,14 +55,16 @@ describe Aliyun::Odps::Model::Instance do
       assert_kind_of(Hash, obj)
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Hash, instance.task_progress('task_name') }
+    it 'should raise RequestError' do
+      stub_fail_request(:get, %r{/projects/#{project_name}/instances/instance_name})
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Hash, instance.task_progress('task_name'))
+      end
     end
   end
 
-  describe "task_summary" do
-    it "should get task summary information" do
+  describe 'task_summary' do
+    it 'should get task summary information' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/instances/instance_name",
@@ -76,11 +74,9 @@ describe Aliyun::Odps::Model::Instance do
             taskname: 'task_name'
           }
         },
-        {
-          file_path: 'instance/task_summary.json',
-          headers: {
-            content_type: 'application/json'
-          }
+        file_path: 'instance/task_summary.json',
+        headers: {
+          content_type: 'application/json'
         }
       )
 
@@ -89,14 +85,16 @@ describe Aliyun::Odps::Model::Instance do
       assert_kind_of(Hash, obj)
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Hash, instance.task_summary('task_name') }
+    it 'should raise RequestError' do
+      stub_fail_request(:get, %r{/projects/#{project_name}/instances/instance_name})
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Hash, instance.task_summary('task_name'))
+      end
     end
   end
 
-  describe "list_tasks" do
-    it "should get tasks" do
+  describe 'list_tasks' do
+    it 'should get tasks' do
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/instances/instance_name",
@@ -105,11 +103,9 @@ describe Aliyun::Odps::Model::Instance do
             taskstatus: true
           }
         },
-        {
-          file_path: 'instance/tasks.xml',
-          headers: {
-            content_type: 'application/xml'
-          }
+        file_path: 'instance/tasks.xml',
+        headers: {
+          content_type: 'application/xml'
         }
       )
 
@@ -117,29 +113,62 @@ describe Aliyun::Odps::Model::Instance do
       assert_kind_of(Array, obj)
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:get, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert_kind_of Array, instance.list_tasks }
+    it 'should raise RequestError' do
+      stub_fail_request(:get, %r{/projects/#{project_name}/instances/instance_name})
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert_kind_of(Array, instance.list_tasks)
+      end
     end
   end
 
-  describe "terminate" do
-    it "should terminate instance" do
+  describe 'terminate' do
+    it 'should terminate instance' do
       stub_client_request(
         :put,
         "#{endpoint}/projects/#{project_name}/instances/instance_name",
-        {
-          file_path: 'instance/terminate.xml'
-        }
+        file_path: 'instance/terminate.xml'
       )
 
       assert(instance.terminate, 'should terminate success')
     end
 
-    it "should raise RequestError" do
-      stub_fail_request(:put, %r[/projects/#{project_name}/instances/instance_name])
-      assert_raises(Aliyun::Odps::RequestError) { assert instance.terminate }
+    it 'should raise RequestError' do
+      stub_fail_request(:put, %r{/projects/#{project_name}/instances/instance_name})
+      assert_raises(Aliyun::Odps::RequestError) do
+        assert(instance.terminate, 'should terminate success')
+      end
     end
   end
 
+  describe 'task_results' do
+    it 'should get task results' do
+      # skip("should add test here")
+      #
+      stub_client_request(
+        :get,
+        "#{endpoint}/projects/#{project_name}/instances/instance_name",
+        {
+          query: {
+            result: true
+          }
+        },
+        file_path: 'instance/task_results.xml',
+        headers: {
+          content_type: 'application/xml'
+        }
+      )
+
+      obj = instance.task_results
+      assert_kind_of(Hash, obj)
+      assert_kind_of(Aliyun::Odps::TaskResult, obj['SqlTask'])
+    end
+  end
+
+  # TODO: sometimes, it will wait until progress stop
+  it 'wait_for_terminated should sleep until instance terminated' do
+    skip('should add test here')
+    # Kernel.stubs(:sleep)
+    # instance.stubs(:get_status).returns(['Running', 'Running', 'Terminated'])
+    # instance.wait_for_terminated
+  end
 end

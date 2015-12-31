@@ -1,51 +1,37 @@
-require 'aliyun/odps/clients/tables'
-require 'aliyun/odps/model/download_session'
-require 'aliyun/odps/model/upload_session'
+require 'aliyun/odps/model/table_partitions'
+require 'aliyun/odps/model/table_schema'
 
 module Aliyun
   module Odps
-    module Model
     class Table < Struct::Base
       extend Aliyun::Odps::Modelable
-      def_attr :project, :Project, required: true
 
-      def_attr :name, :String, required: true
-      def_attr :table_id, :String
-      def_attr :comment, :String
-      def_attr :owner, :String
-      def_attr :schema, :Hash
-      def_attr :creation_time, :DateTime
-      def_attr :last_modified, :DateTime
+      # @!method table_partitions
+      # @return [TablePartitions]
+      has_many :table_partitions
 
-      # List partitions of table
-      #
-      # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
-      #
-      # @params options [Hash] options
-      # @option options [String] :marker specify marker for paginate
-      # @option options [String] :maxitems (1000) specify maxitems in this request
-      def partitions(options = {})
-        Utils.stringify_keys!(options)
-        path = "/projects/#{project.name}/tables/#{name}"
-        query = Utils.hash_slice(options, 'marker', 'maxitems').merge(
-            partitions: true,
-            expectmarker: true
-        )
-        result = client.get(path, query: query).parsed_response
+      def_attr :project, Project, required: true
 
-        Aliyun::Odps::List.build(result, %w(Partitions Partition)) do |hash|
-          Struct::Partition.new(hash)
+      def_attr :name, String, required: true
+      def_attr :table_id, String
+      def_attr :comment, String
+      def_attr :owner, String
+      def_attr :schema, TableSchema, init_with: ->(value) do
+        case value
+        when TableSchema
+          value
+        when Hash
+          value = JSON.parse(value['__content__']) if value.key?('__content__')
+          TableSchema.new(value)
         end
       end
+      def_attr :creation_time, DateTime
+      def_attr :last_modified, DateTime
 
-      has_many :download_sessions
-      has_many :upload_sessions
+      # (see TablePartitions#list)
+      def partitions(options = {})
+        table_partitions.list(options)
+      end
     end
-
-    class TableService < Aliyun::Odps::ServiceObject
-      include Aliyun::Odps::Clients::Tables
-    end
-  end
   end
 end
-

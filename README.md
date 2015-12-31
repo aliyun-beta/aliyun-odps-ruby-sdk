@@ -23,7 +23,9 @@ And run:
 
 ### Quick Start
 
-First of all, config your environment, if you use Rails, you will be familiar with below configuraion, you can place it under `config/initializers`, for other framework, just place it before your use code.
+First of all, config your environment.
+
+If you use Rails, you can place it in `config/initializers/aliyun_odps.rb`, for other framework, just place it before your other odps code.
 
     Aliyun::Odps.configure do |config|
       config.access_key = '<your-access-key>'
@@ -32,20 +34,20 @@ First of all, config your environment, if you use Rails, you will be familiar wi
       config.project = '<your-default-project>'
     end
 
-After that, you can get your project with below code and start party now!
+After that, you can get your project and start party now!
 
     project = Aliyun::Odps.project
 
-    # list tables
+    # Accesss tables
     project.tables.list
 
-    # list resources
+    # Access resources
     project.resources.list
 
-    # list instances
+    # Access instances
     project.instances.list
 
-    # list functions
+    # Access functions
     project.functions.list
 
 
@@ -54,21 +56,27 @@ After that, you can get your project with below code and start party now!
 
 More Example and Scenario, visit our [Document](#document)
 
+
 ## Document
 
 Here is original Restful API, It has the most detailed and authoritative explanation for every API.
 
 + [http://repo.aliyun.com/api-doc/index.html](http://repo.aliyun.com/api-doc/index.html)
 
-Here is thr RDoc Document for this Library, use to find mostly usage for methods.
+Here is our RDoc Document, It's well format to help you find more detail about methods.
 
-+ [RDoc Document]()
++ [RDoc Document](http://www.rubydoc.info/gems/aliyun-odps/0.1.0)
 
 
 Here are some more guides for help you. Welcome to advice.
 
 + [Installation](./wiki/installation.md)
 + [Getting Started](./wiki/get_start.md)
++ [Project](./wiki/projects.md)
++ [Project](./wiki/projects.md)
++ [Project](./wiki/projects.md)
++ [Project](./wiki/projects.md)
++ [Project](./wiki/projects.md)
 + [Error Code](./wiki/error.md)
 
 
@@ -81,7 +89,8 @@ We use minitest for test and rubocop for Syntax checker, If you want to make con
 
 ## Authors && Contributors
 
-- [Newell Zhu](https://github.com/zlx_star)
+- [Newell](https://github.com/zlx_star)
+- [genewoo](https://github.com/genewoo)
 
 
 ## License

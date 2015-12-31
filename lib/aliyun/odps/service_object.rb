@@ -2,17 +2,16 @@ module Aliyun
   module Odps
     class ServiceObject
       def client
-        Aliyun::Odps::Client.instance
+        master.is_a?(Client) ? master : project.client
       end
 
       def project
-        # so far doesn't support 2nd level object
-        @master.kind_of?(Model::Project) ?  @master : @master.try(:project)
+        @master.is_a?(Project) ? @master : @master.try(:project)
       end
 
       attr_reader :master
 
-      def initialize(master, options = {})
+      def initialize(master, _options = {})
         @master = master
       end
 
@@ -21,7 +20,7 @@ module Aliyun
       end
 
       def self.build(master, options = {})
-        service_pool[master] ||= self.new(master, options)
+        service_pool[master] ||= new(master, options)
       end
     end
   end

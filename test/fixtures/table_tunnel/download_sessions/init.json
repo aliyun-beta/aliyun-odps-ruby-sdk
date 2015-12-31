@@ -1,33 +1,33 @@
 {
-    "DownloadID": "201512111509369592b70a007a6c42",
-    "Initiated": "Fri, 11 Dec 2015 15:09:36 GMT",
-    "Owner": "1293470261043417",
-    "RecordCount": 10,
-    "Schema": {
-        "IsVirtualView": false,
-        "columns": [
-            {
-                "name": "c1",
-                "type": "bigint"
-            },
-            {
-                "name": "c2",
-                "type": "boolean"
-            },
-            {
-                "name": "c3",
-                "type": "datetime"
-            },
-            {
-                "name": "c4",
-                "type": "double"
-            },
-            {
-                "name": "c5",
-                "type": "string"
-            }
-        ],
-        "partitionKeys": []
-    },
-    "Status": "normal"
+  "DownloadID": "201512111509369592b70a007a6c42",
+  "Initiated": "Fri, 11 Dec 2015 15:09:36 GMT",
+  "Owner": "1293470261043417",
+  "RecordCount": 10,
+  "Schema": {
+    "IsVirtualView": false,
+    "columns": [
+      {
+        "name": "c1",
+        "type": "bigint"
+      },
+      {
+        "name": "c2",
+        "type": "boolean"
+      },
+      {
+        "name": "c3",
+        "type": "datetime"
+      },
+      {
+        "name": "c4",
+        "type": "double"
+      },
+      {
+        "name": "c5",
+        "type": "string"
+      }
+    ],
+    "partitionKeys": []
+  },
+  "Status": "normal"
 }

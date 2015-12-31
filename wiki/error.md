@@ -1,6 +1,21 @@
 ## ERROR Code
 
-In our library, [RequestError]() is raised when Request fail, in which you can get ODPS ERROR CODE, Message and Request ID.
+In our library, `Aliyun::Odps::RequestError` is raised when Request fail, ***keep your code wrap with begin...rescue***. Below is a example.
+
+
+    begin
+      projects = Aliyun::Odps.list_projects
+      puts projects.map(&:name)
+    rescue Aliyun::Odps::RequestError => e
+      puts "Code: #{e.code}"
+      puts "Message: #{e.message}"
+      puts "Request ID: #{e.request_id}"
+    end
+
+ODPS define many error code, you can find more detail in this section.
+
+If your need help for your problem, search it via Google or Aliyun forum. If you still has trouble after that, contact ODPS Developer and provide your error code and request id, they are nice and rapid response.       
+
 
 Below is the ODPS ERROR Code:
 
