@@ -24,7 +24,8 @@ describe Aliyun::Odps::TableTunnels do
         "#{endpoint}/projects/#{project_name}/tables/table_name",
         {
           query: {
-            downloads: true
+            downloads: true,
+            partition: 'part=part1'
           }
         },
         headers: {
@@ -33,7 +34,7 @@ describe Aliyun::Odps::TableTunnels do
         file_path: 'table_tunnel/download_sessions/init.json'
       )
 
-      obj = project.table_tunnels.init_download_session('table_name')
+      obj = project.table_tunnels.init_download_session('table_name', part: 'part1')
 
       assert_equal('table_name', obj.table_name)
       assert_equal(project, obj.project)
@@ -63,7 +64,8 @@ describe Aliyun::Odps::TableTunnels do
         "#{endpoint}/projects/#{project_name}/tables/table_name",
         {
           query: {
-            uploads: true
+            uploads: true,
+            partition: 'part=part1'
           }
         },
         headers: {
@@ -72,7 +74,7 @@ describe Aliyun::Odps::TableTunnels do
         file_path: 'table_tunnel/upload_sessions/init.json'
       )
 
-      obj = project.table_tunnels.init_upload_session('table_name')
+      obj = project.table_tunnels.init_upload_session('table_name', part: 'part1')
 
       assert_kind_of(Aliyun::Odps::UploadSession, obj)
       assert_equal('table_name', obj.table_name)

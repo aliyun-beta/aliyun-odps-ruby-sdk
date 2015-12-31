@@ -38,6 +38,25 @@ Show me the code:
 
 when you upload a block with exist block id, it will replace old data. block id can range from 0~1999
 
+Here, I think the most important thing is the format for the content, here, I want you provide a array and each element is also a array with your schema order.
+
+If you have a table with below schema:
+
+	{
+	    columns: [
+	      { name: 'uuid', type: 'bigint' },
+	      { name: 'username', type: 'string' },
+	      { name: 'password', type: 'string' },
+	    ]
+	}
+
+you can upload two records:
+
+    upload_session.upload(1, [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']])
+    upload_session.complete
+    
+That's it, enjoy!    
+
 #### Download
 
 A Whole download contains two steps:

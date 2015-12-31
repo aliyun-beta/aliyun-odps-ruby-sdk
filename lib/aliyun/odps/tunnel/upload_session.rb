@@ -1,3 +1,5 @@
+require 'stringio'
+
 module Aliyun
   module Odps
     class UploadSession < Struct::Base
@@ -22,17 +24,20 @@ module Aliyun
       # @see http://repo.aliyun.com/api-doc/Tunnel/put_create_upload_id/index.html Put Upload Block ID
       #
       # @param block_id [String] specify block_id for this upload, range in 0~19999, new block with replace with old with same blockid
-      # @param file_or_bin [File|Bin Data] specify the data, a local file path or raw data
+      # @param record_values [Array<Array>] specify the data, a array for your record, with order matched with your schema
       # @param encoding [String] specify the data compression format, supported value: raw, deflate, snappy
       #
       # @return [true]
-      def upload(block_id, file_or_bin, encoding = 'raw')
+      def upload(block_id, record_values, encoding = 'raw')
         path = "/projects/#{project.name}/tables/#{table_name}"
 
         query = { blockid: block_id, uploadid: upload_id }
         query[:partition] = partition_spec if partition_spec
 
-        headers = { 'x-odps-tunnel-version' => TableTunnels::TUNNEL_VERSION }
+        headers = {
+          'x-odps-tunnel-version' => TableTunnels::TUNNEL_VERSION,
+          'Transfer-Encoding' => 'chunked'
+        }
 
         case encoding.to_s.downcase
         when 'deflate'
@@ -40,11 +45,15 @@ module Aliyun
         when 'snappy'
           headers['Content-Encoding'] = 'x-snappy-framed'
         when 'raw'
+          headers.delete('Content-Encoding')
         else
           fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
         end
 
-        !!client.put(path, query: query, headers: headers, body: Utils.to_data(file_or_bin))
+        body = generate_body_for_upload(record_values)
+
+
+        !!client.put(path, query: query, headers: headers, body: body)
       end
 
       # reload this upload session
@@ -89,6 +98,57 @@ module Aliyun
 
         !!client.post(path, query: query, headers: headers)
       end
+
+      private
+
+      def generate_body_for_upload(record_values)
+        stream = StringIO.new
+        records = record_values.map { |value| value_to_record(value) }
+        serializer = Serializer.new
+        serializer.serialize(stream, records)
+        stream.string
+      end
+
+      def value_to_record(value)
+        schema = Aliyun::Odps::OdpsTableSchema.new(self.schema)
+        unless value.is_a? Array
+          fail "value must be a array"
+        end
+
+        if value.count != schema.getColumnCount
+          fail "column counts are not equal between value and schema"
+        end
+
+        record = OdpsTableRecord.new(schema)
+        i = 0
+        while i < value.count do
+          type = schema.getColumnType(i)
+          if value[i] == nil
+            record.setNullValue(i)
+            i += 1
+            next
+          end
+          case type
+          when $ODPS_BIGINT
+            record.setBigInt(i, value[i])
+          when $ODPS_BOOLEAN
+            record.setBoolean(i, value[i])
+          when $ODPS_DATETIME
+            record.setDateTime(i, value[i])
+          when $ODPS_DOUBLE
+            record.setDouble(i, value[i])
+          when $ODPS_STRING
+            record.setString(i, value[i])
+          when $ODPS_DECIMAL
+            record.setDecimal(i, value[i])
+          else
+            raise "unsupported schema type"
+          end
+          i += 1
+        end
+        return record
+      end
+
     end
   end
 end

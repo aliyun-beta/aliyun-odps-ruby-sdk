@@ -73,6 +73,10 @@ Here are some more guides for help you. Welcome to advice.
 + [Installation](./wiki/installation.md)
 + [Getting Started](./wiki/get_start.md)
 + [Project](./wiki/projects.md)
++ [Project](./wiki/projects.md)
++ [Project](./wiki/projects.md)
++ [Project](./wiki/projects.md)
++ [Project](./wiki/projects.md)
 + [Error Code](./wiki/error.md)
 
 
@@ -85,7 +89,8 @@ We use minitest for test and rubocop for Syntax checker, If you want to make con
 
 ## Authors && Contributors
 
-- [Newell Zhu](https://github.com/zlx_star)
+- [Newell](https://github.com/zlx_star)
+- [genewoo](https://github.com/genewoo)
 
 
 ## License

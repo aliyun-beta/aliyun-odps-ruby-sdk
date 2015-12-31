@@ -141,16 +141,34 @@ describe Aliyun::Odps::Instance do
   end
 
   describe "task_results" do
-    it "should get task_results" do
-      skip("should add test here")
+    it "should get task results" do
+      #skip("should add test here")
+      #
+      stub_client_request(
+        :get,
+        "#{endpoint}/projects/#{project_name}/instances/instance_name",
+        {
+          query: {
+            result: true
+          }
+        },
+        file_path: 'instance/task_results.xml',
+        headers: {
+          content_type: 'application/xml'
+        }
+      )
+
+      obj = instance.task_results
+      assert_kind_of(Hash, obj)
+      assert_kind_of(Aliyun::Odps::TaskResult, obj['SqlTask'])
     end
   end
 
   # TODO: sometimes, it will wait until progress stop
   it 'wait_for_terminated should sleep until instance terminated' do
     skip("should add test here")
-    # Kernel.stubs(:sleep)
-    # instance.stubs(:get_status).returns(['Running', 'Running', 'Terminated'])
-    # instance.wait_for_terminated
+     #Kernel.stubs(:sleep)
+     #instance.stubs(:get_status).returns(['Running', 'Running', 'Terminated'])
+     #instance.wait_for_terminated
   end
 end

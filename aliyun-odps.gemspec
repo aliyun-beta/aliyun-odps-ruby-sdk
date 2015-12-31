@@ -22,6 +22,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'addressable'
   spec.add_dependency 'activesupport'
   spec.add_dependency 'gyoku'
+  #spec.add_dependency 'beefcake'
+  spec.add_dependency 'protobuf'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake'

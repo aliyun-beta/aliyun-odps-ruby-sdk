@@ -136,4 +136,13 @@ describe Aliyun::Odps::UploadSession do
       assert_raises(Aliyun::Odps::RequestError) { upload_session.complete }
     end
   end
+
+  describe "list blocks" do
+
+    it "should list uploaded blocks" do
+      upload_session.expects(:reload)
+      upload_session.list_blocks
+    end
+
+  end
 end

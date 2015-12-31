@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Instance>
+  <Tasks>
+    <Task Type="SQL">
+      <Name>SqlTask</Name>
+      <Result Format="csv"><![CDATA[\"uuid\",\"name\",\"part1\"\r\n1,\"name1\",\"part1\"\r\n2,\"name1\",\"part1\"\r\n1,\"name1\",\"part2\"\r\n2,\"name1\",\"part2\"\r\n]]></Result>
+    </Task>
+    <Task Type="SQL">
+      <Name>SqlTask2</Name>
+      <Result Format="csv"><![CDATA[\"uuid\",\"name\",\"part1\"\r\n1,\"name1\",\"part1\"\r\n2,\"name1\",\"part1\"\r\n1,\"name1\",\"part2\"\r\n2,\"name1\",\"part2\"\r\n]]></Result>
+    </Task>
+  </Tasks>
+</Instance>

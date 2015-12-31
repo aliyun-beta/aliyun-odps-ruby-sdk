@@ -16,9 +16,6 @@ module Aliyun
       def_attr :start_time, DateTime
       def_attr :end_time, DateTime
       def_attr :location, String
-      def_attr :results, Array, init_with: ->(value) do
-        Utils.wrap(value).map {|v| Aliyun::odps::TaskResult.new(v) }
-      end
 
       # Get task detail of instance
       #

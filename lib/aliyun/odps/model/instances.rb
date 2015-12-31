@@ -65,7 +65,6 @@ module Aliyun
 
         path = "/projects/#{project.name}/instances"
 
-        #p build_create_body(instance)
         resp = client.post(path, body: build_create_body(instance))
 
         instance.tap do |obj|
