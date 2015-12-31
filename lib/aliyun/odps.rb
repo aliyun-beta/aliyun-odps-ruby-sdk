@@ -44,12 +44,30 @@ module Aliyun
 
       # Get project
       #
-      # @param name [String] specify project name
+      # @param name [String] specify project name, default is project in config
       #
       # @return [Project]
       def project(name = config.project)
         fail MissingProjectConfigurationError unless name
-        Aliyun::Odps::Client.new.projects.get(name)
+        client.projects.get(name)
+      end
+      alias_method :get_project, :project
+
+      # (see Projects#list)
+      def list_projects(options = {})
+        client.projects.list(options)
+      end
+      alias_method :projects, :list_projects
+
+      # (see Projects#update)
+      def update_project(name, options = {})
+        client.projects.update(name, options)
+      end
+
+      private
+
+      def client
+        @client ||= Aliyun::Odps::Client.new
       end
     end
   end
