@@ -13,6 +13,8 @@ module Aliyun
       # @option onlyowner [String] :onlyowner (yes) supported value: yes, no
       # @option options [String] :marker
       # @option options [String] :maxitems (1000)
+      #
+      # @return [List]
       def list(options = {})
         Utils.stringify_keys!(options)
         path = "/projects/#{project.name}/instances"
@@ -28,12 +30,16 @@ module Aliyun
       #
       # @see http://repo.aliyun.com/api-doc/Instance/post_instance/index.html Post Instance
       #
-      # @params tasks [Array<InstanceTask]> a list for instance_task
+      # @params tasks [Array<InstanceTask>] a list of instance_task
       # @params options [String] options
       # @option options [String] :name Specify the instance name
       # @option options [String] :comment Specify comment of the instance
       # @option options [Integer] :priority Specify priority of the instance
-      def create(tasks = [], options = {})
+      #
+      # @raise InstanceNameInvalidError if instance name not valid
+      #
+      # @return [Instance]
+      def create(tasks, options = {})
         Utils.stringify_keys!(options)
 
         name = options.key?('name') ? options['name'] : Utils.generate_uuid('instance')
@@ -59,6 +65,7 @@ module Aliyun
 
         path = "/projects/#{project.name}/instances"
 
+        #p build_create_body(instance)
         resp = client.post(path, body: build_create_body(instance))
 
         instance.tap do |obj|
@@ -85,6 +92,8 @@ module Aliyun
 
       private
 
+      # TODO: generate correct xml when multiple tasks
+      # body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Name>instance201512311355170aed18</Name><Comment></Comment><Priority>9</Priority><Tasks><SQL><Name>SqlTask2</Name><Comment>sql task</Comment><Config><Property><Name></Name><Value></Value></Property></Config><Query><![CDATA[select * from  test_table1;]]></Query></SQL><SQL><Name>SqlTask</Name><Comment>sql task</Comment><Config><Property><Name></Name><Value></Value></Property></Config><Query><![CDATA[select * from  test_table1;]]></Query></SQL></Tasks></Job></Instance>"
       def build_create_body(instance)
         fail XmlElementMissingError, 'Priority' if instance.priority.nil?
         fail XmlElementMissingError, 'Tasks' if instance.tasks.empty?

@@ -41,6 +41,7 @@ module Aliyun
         )
         Table.new(hash)
       end
+      alias_method :table, :get
 
       # Create Table
       #
@@ -95,15 +96,6 @@ module Aliyun
         )
 
         !!project.instances.create([task])
-      end
-
-      # List partitions of table
-      #
-      # @see http://repo.aliyun.com/api-doc/Table/get_table_partition/index.html Get table partitions
-      #
-      # @params name [String] specify the table name
-      def partitions(name)
-        Table.new(name: name).partitions
       end
 
       private

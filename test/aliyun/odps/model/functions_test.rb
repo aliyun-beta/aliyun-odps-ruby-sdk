@@ -33,6 +33,26 @@ describe Aliyun::Odps::Functions do
     end
   end
 
+  describe "get" do
+    it "should get function" do
+      stub_client_request(
+        :get,
+        "#{endpoint}/projects/#{project_name}/registration/functions/function1",
+        {},
+        file_path: 'functions/show.xml',
+        headers: {
+          content_type: 'application/xml'
+        }
+      )
+
+      obj = project.functions.get('function1')
+      assert_kind_of(Aliyun::Odps::Function, obj)
+      assert_equal('function1', obj.name)
+      assert_equal('com.taobao.mrsstd.odpsudf.tableRes', obj.class_type)
+      assert_equal(DateTime.parse('Wed, 09 Dec 2015 19:01:43 GMT'), obj.creation_time)
+    end
+  end
+
   describe 'create' do
     it 'should create function' do
       location = "#{endpoint}/projects/test_project/registration/functions/Extract_Name"

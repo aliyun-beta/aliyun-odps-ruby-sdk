@@ -76,5 +76,11 @@ module Aliyun
         super("#{attr} only support: #{Utils.wrap(supported_value).join(', ')} !!")
       end
     end
+
+    class ResourceMissingContentError < Error
+      def initialize
+        super("A Resource must exist file or table")
+      end
+    end
   end
 end
