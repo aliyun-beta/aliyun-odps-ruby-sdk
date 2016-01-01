@@ -23,16 +23,16 @@ describe Aliyun::Odps::DownloadSession do
 
   describe 'download' do
     it 'should can download' do
-      columns = 'col1,col2,col3'
-      rowrange = '(1,100)'
+      columns = ['col1', 'col2', 'col3']
+      rowrange = [1, 100]
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/tables/table1",
         {
           query: {
             data: true,
-            columns: columns,
-            rowrange: rowrange,
+            columns: columns.join(','),
+            rowrange: "(#{rowrange.join(',')})",
             partition: download_session.partition_spec,
             downloadid: download_session.download_id
           },
@@ -59,7 +59,9 @@ describe Aliyun::Odps::DownloadSession do
         file_path: 'tunnel_error.json',
         headers: { content_type: 'application/json' }
       )
-      assert_raises(Aliyun::Odps::RequestError) { download_session.download('(1,100)', 'uuid,name') }
+      columns = ['col1', 'col2', 'col3']
+      rowrange = [1, 100]
+      assert_raises(Aliyun::Odps::RequestError) { download_session.download(rowrange, columns) }
     end
   end
 end

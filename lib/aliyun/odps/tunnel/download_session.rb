@@ -19,8 +19,8 @@ module Aliyun
       #
       # @see http://repo.aliyun.com/api-doc/Tunnel/get_table_download_id/index.html Get Download Block ID
       #
-      # @param rowrange [String] specify data range with format: "(start,end)"
-      # @param columns [String] specify columns need download with format: "col0,col1,col2"
+      # @param rowrange [String] specify data range with format: [start, end]
+      # @param columns [Array] specify columns need download in array
       # @param encoding [String] specify the data compression format, supported value: raw, deflate, snappy
       #
       # @return [Raw Data] return the raw data from ODPS
@@ -30,8 +30,8 @@ module Aliyun
         query = {
           data: true,
           downloadid: download_id,
-          columns: URI.escape(columns),
-          rowrange: URI.escape(rowrange)
+          columns: columns.join(','),
+          rowrange: "(#{rowrange.join(',')})"
         }
 
         query.merge!(partition: partition_spec) if partition_spec
