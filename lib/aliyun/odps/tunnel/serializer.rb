@@ -67,6 +67,21 @@ module Aliyun
         stream << ::Protobuf::Field::VarintField.encode(key)
       end
 
+      def self.parse(content, schema = nil)
+        io = StringIO.new(content.to_s) unless content.kind_of?(StringIO)
+        records = []
+        record = [] # temp record, keep the order from server side
+        until io.eof?
+          key, value = ::Protobuf::Decoder.read_field(io)
+          if key == $TUNNEL_END_RECORD
+            records << record.pop(record.length)
+          else
+            record << value
+          end
+        end
+        records
+      end
+
       def serialize(upStream, recordList)
         crc32cPack = StringIO.new
         if recordList.is_a? Array
