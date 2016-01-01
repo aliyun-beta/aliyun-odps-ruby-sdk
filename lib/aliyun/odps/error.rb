@@ -82,5 +82,11 @@ module Aliyun
         super('A Resource must exist file or table')
       end
     end
+
+    class RecordNotMatchSchemaError < Error
+      def initialize(values, schema)
+        super("#{values} not match with #{schema}")
+      end
+    end
   end
 end

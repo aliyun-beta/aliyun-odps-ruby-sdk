@@ -1,4 +1,4 @@
-require 'stringio'
+require 'odps_protobuf'
 
 module Aliyun
   module Odps
@@ -50,7 +50,7 @@ module Aliyun
           fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
         end
 
-        body = generate_body_for_upload(record_values)
+        body = generate_upload_body(record_values)
 
         !!client.put(path, query: query, headers: headers, body: body)
       end
@@ -100,50 +100,11 @@ module Aliyun
 
       private
 
-      def generate_body_for_upload(record_values)
-        stream = StringIO.new
-        records = record_values.map { |value| value_to_record(value) }
-        serializer = Serializer.new
-        serializer.serialize(stream, records)
-        stream.string
-      end
-
-      def value_to_record(value)
-        schema = Aliyun::Odps::OdpsTableSchema.new(self.schema)
-        fail 'value must be a array' unless value.is_a? Array
-
-        if value.count != schema.getColumnCount
-          fail 'column counts are not equal between value and schema'
-        end
-
-        record = OdpsTableRecord.new(schema)
-        i = 0
-        while i < value.count
-          type = schema.getColumnType(i)
-          if value[i].nil?
-            record.setNullValue(i)
-            i += 1
-            next
-          end
-          case type
-          when $ODPS_BIGINT
-            record.setBigInt(i, value[i])
-          when $ODPS_BOOLEAN
-            record.setBoolean(i, value[i])
-          when $ODPS_DATETIME
-            record.setDateTime(i, value[i])
-          when $ODPS_DOUBLE
-            record.setDouble(i, value[i])
-          when $ODPS_STRING
-            record.setString(i, value[i])
-          when $ODPS_DECIMAL
-            record.setDecimal(i, value[i])
-          else
-            fail 'unsupported schema type'
-          end
-          i += 1
-        end
-        record
+      def generate_upload_body(record_values)
+        serializer = OdpsProtobuf::Serializer.new
+        serializer.serialize(record_values, schema)
+      rescue => e
+        raise RecordNotMatchSchemaError.new(record_values, schema)
       end
     end
   end

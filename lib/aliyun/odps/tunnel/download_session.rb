@@ -1,3 +1,5 @@
+require 'odps_protobuf'
+
 module Aliyun
   module Odps
     class DownloadSession < Struct::Base
@@ -11,7 +13,7 @@ module Aliyun
       def_attr :status, String
       def_attr :owner, String
       def_attr :initiated, DateTime
-      def_attr :schema, String
+      def_attr :schema, Hash
 
       # Download data
       #
@@ -48,8 +50,14 @@ module Aliyun
         end
 
         resp = client.get(path, query: query, headers: headers)
-        p resp
-        resp.parsed_response
+        protobufed2records(resp.parsed_response)
+      end
+
+      private
+
+      def protobufed2records(protobufed_str)
+        deserializer = OdpsProtobuf::Deserializer.new
+        deserializer.deserialize(protobufed_str, schema)
       end
     end
   end

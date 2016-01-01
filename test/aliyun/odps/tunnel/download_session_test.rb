@@ -6,6 +6,7 @@ describe Aliyun::Odps::DownloadSession do
     Aliyun::Odps::DownloadSession.new(
       table_name: 'table1',
       partition_spec: 'part=part1',
+      schema: { 'columns' => [{ 'name' => 'name', 'type' => 'string' }] },
       download_id: '1122wwssddd33222',
       client: project.table_tunnels.client,
       project: project
@@ -36,15 +37,18 @@ describe Aliyun::Odps::DownloadSession do
             downloadid: download_session.download_id
           },
           headers: {
-            'x-odps-tunnel-version' => '4',
-            'Accept-Encoding' => 'deflate'
+            'x-odps-tunnel-version' => '4'
           }
         },
-        body: 'content'
+        body: "\n\aContent\x80\xC0\xFF\u007Fڻ\xAB\xD3\r\xF0\xFF\xFF\u007F\u0002\xF8\xFF\xFF\u007F\xB7\xE2\xD2\xE7\n"
       )
 
-      obj = download_session.download(rowrange, columns, 'deflate')
-      assert_equal('content', obj)
+      obj = download_session.download(rowrange, columns)
+      assert_equal([["Content"]], obj)
+    end
+
+    it 'should can download with snappy encoding' do
+      skip("should download with snappy encoding")
     end
 
     it 'should raise RequestError' do
