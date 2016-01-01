@@ -25,7 +25,7 @@ module Aliyun
       #
       # @param block_id [String] specify block_id for this upload, range in 0~19999, new block with replace with old with same blockid
       # @param record_values [Array<Array>] specify the data, a array for your record, with order matched with your schema
-      # @param encoding [String] specify the data compression format, supported value: raw, deflate, snappy
+      # @param encoding [String] specify the data compression format, supported value: raw, deflate
       #
       # @return [true]
       def upload(block_id, record_values, encoding = 'raw')
@@ -43,14 +43,15 @@ module Aliyun
         when 'deflate'
           headers['Content-Encoding'] = 'deflate'
         when 'snappy'
-          headers['Content-Encoding'] = 'x-snappy-framed'
+          fail NotImplementedError
+          #headers['Content-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Content-Encoding')
         else
           fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
         end
 
-        body = generate_upload_body(record_values)
+        body = generate_upload_body(record_values, encoding)
 
         !!client.put(path, query: query, headers: headers, body: body)
       end
@@ -100,9 +101,25 @@ module Aliyun
 
       private
 
-      def generate_upload_body(record_values)
+      def generate_upload_body(record_values, encoding)
         serializer = OdpsProtobuf::Serializer.new
-        serializer.serialize(record_values, schema)
+        data = serializer.serialize(record_values, schema)
+
+        case encoding
+        when 'raw'
+          data
+        when 'deflate'
+          require 'zlib'
+          Zlib::Deflate.deflate(data)
+        when 'snappy'
+          fail NotImplementedError
+          #begin
+            #require 'snappy'
+          #rescue LoadError
+            #fail "snappy is required to support zlib compressed: https://github.com/miyucy/snappy"
+          #end
+          #Snappy.deflate(data)
+        end
       rescue => e
         raise RecordNotMatchSchemaError.new(record_values, schema)
       end

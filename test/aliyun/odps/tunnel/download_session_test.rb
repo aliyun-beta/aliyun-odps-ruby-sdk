@@ -43,12 +43,12 @@ describe Aliyun::Odps::DownloadSession do
         body: "\n\aContent\x80\xC0\xFF\u007Fڻ\xAB\xD3\r\xF0\xFF\xFF\u007F\u0002\xF8\xFF\xFF\u007F\xB7\xE2\xD2\xE7\n"
       )
 
-      obj = download_session.download(rowrange, columns)
+      obj = download_session.download(*rowrange, columns)
       assert_equal([["Content"]], obj)
     end
 
     it 'should can download with snappy encoding' do
-      skip("should download with snappy encoding")
+      skip("should can download with snappy encoding")
     end
 
     it 'should raise RequestError' do
@@ -60,8 +60,7 @@ describe Aliyun::Odps::DownloadSession do
         headers: { content_type: 'application/json' }
       )
       columns = ['col1', 'col2', 'col3']
-      rowrange = [1, 100]
-      assert_raises(Aliyun::Odps::RequestError) { download_session.download(rowrange, columns) }
+      assert_raises(Aliyun::Odps::RequestError) { download_session.download(1, 100, columns) }
     end
   end
 end

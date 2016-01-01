@@ -19,30 +19,32 @@ module Aliyun
       #
       # @see http://repo.aliyun.com/api-doc/Tunnel/get_table_download_id/index.html Get Download Block ID
       #
-      # @param rowrange [String] specify data range with format: [start, end]
+      # @param start [String] specify start download row number
+      # @param count [String] specify download row count
       # @param columns [Array] specify columns need download in array
-      # @param encoding [String] specify the data compression format, supported value: raw, deflate, snappy
+      # @param encoding [String] specify the data compression format, supported value: raw, deflate
       #
       # @return [Raw Data] return the raw data from ODPS
-      def download(rowrange, columns, encoding = 'raw')
+      def download(start, count, columns, encoding = 'raw')
         path = "/projects/#{project.name}/tables/#{table_name}"
 
         query = {
           data: true,
           downloadid: download_id,
           columns: columns.join(','),
-          rowrange: "(#{rowrange.join(',')})"
+          rowrange: "(#{start},#{count})"
         }
 
         query.merge!(partition: partition_spec) if partition_spec
 
         headers = { 'x-odps-tunnel-version' => TableTunnels::TUNNEL_VERSION }
 
-        case encoding.to_s.downcase
+        case encoding
         when 'deflate'
           headers['Accept-Encoding'] = 'deflate'
         when 'snappy'
-          headers['Accept-Encoding'] = 'x-snappy-framed'
+          fail NotImplementedError
+          #headers['Accept-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Accept-Encoding')
         else
@@ -50,14 +52,30 @@ module Aliyun
         end
 
         resp = client.get(path, query: query, headers: headers)
-        protobufed2records(resp.parsed_response)
+        protobufed2records(resp.parsed_response, resp.headers["content-encoding"])
       end
 
       private
 
-      def protobufed2records(protobufed_str)
+      def protobufed2records(data, encoding)
+        data =
+          case encoding
+          when 'deflate'
+            data
+          when 'x-snappy-framed'
+            fail NotImplementedError
+            #begin
+              #require 'snappy'
+            #rescue LoadError
+              #fail "Install snappy to support x-snappy-framed encoding: https://github.com/miyucy/snappy"
+            #end
+            #Snappy.inflate(data)
+          else
+            data
+          end
+
         deserializer = OdpsProtobuf::Deserializer.new
-        deserializer.deserialize(protobufed_str, schema)
+        deserializer.deserialize(data, schema)
       end
     end
   end
