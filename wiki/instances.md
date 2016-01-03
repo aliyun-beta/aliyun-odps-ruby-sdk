@@ -18,6 +18,9 @@ To create a SQL Task:
     task_result = instance.task_results[task.name]
     
     puts task_result.result
+    
+    # write task result into csv file
+    File.open('test.csv', "w") {|f| f.write task_result.result['__content__'] }
 
 
 To create other task, just replace SQL to your expected type, note the supported list metioned before.

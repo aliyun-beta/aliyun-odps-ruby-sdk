@@ -116,7 +116,7 @@ module Aliyun
 
         list_tasks.each do |task|
           if task.status.upcase != 'SUCCESS'
-            fail InstanceTaskNotSuccessError, task
+            fail InstanceTaskNotSuccessError.new(task.name, task.status, task_results[task.name].result)
           end
         end
       end

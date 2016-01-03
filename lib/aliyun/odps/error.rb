@@ -54,8 +54,8 @@ module Aliyun
     end
 
     class InstanceTaskNotSuccessError < Error
-      def initialize(task)
-        super("Task #{task.name} #{task.status}")
+      def initialize(name, status, task_result)
+        super("Task #{name} #{status}: #{task_result}")
       end
     end
 

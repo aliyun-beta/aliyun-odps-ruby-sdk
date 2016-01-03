@@ -75,6 +75,7 @@ describe Aliyun::Odps::TablePartitions do
 
   describe 'delete' do
     it 'should delete partition' do
+      Aliyun::Odps::Instance.any_instance.stubs(:wait_for_terminated).returns(true)
       Aliyun::Odps::Utils.stubs(:generate_uuid).returns('instance20151229111744707cc8')
       location = "#{endpoint}/projects/#{project_name}/instances/NewJobName"
       stub_client_request(

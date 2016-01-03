@@ -50,7 +50,7 @@ module Aliyun
       # @params options [Hash] options
       # @option options [String] :comment specify table comment
       #
-      # @raise InstanceTaskFail
+      # @raise InstanceTaskNotSuccessError if instance task failed
       #
       # @return Table
       def create(name, schema, options = {})
@@ -80,7 +80,7 @@ module Aliyun
       #
       # @params name [String]
       #
-      # @raise RequestError
+      # @raise InstanceTaskNotSuccessError if instance task failed
       #
       # @return true
       def delete(name)
@@ -95,7 +95,11 @@ module Aliyun
           query: generate_drop_sql(table)
         )
 
-        !!project.instances.create([task])
+        instance = project.instances.create([task])
+
+        instance.wait_for_success
+
+        true
       end
 
       private

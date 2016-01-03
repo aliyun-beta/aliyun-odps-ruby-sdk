@@ -28,6 +28,8 @@ module Aliyun
       #
       # @param partition [Hash<name, value>] specify the partition you want to create
       #
+      # @raise InstanceTaskNotSuccessError if instance task failed
+      #
       # @return [Hash] the partition you create
       def create(partition)
         sql = generate_create_sql(partition)
@@ -49,6 +51,8 @@ module Aliyun
       #
       # @params partitions [Hash<name, value>] specify the partition you want to delete
       #
+      # @raise InstanceTaskNotSuccessError if instance task failed
+      #
       # @return [true]
       def delete(partition)
         sql = generate_drop_sql(partition)
@@ -59,7 +63,11 @@ module Aliyun
           query: sql
         )
 
-        !!project.instances.create([task])
+        instance = project.instances.create([task])
+
+        instance.wait_for_success
+
+        true
       end
 
       private
