@@ -30,15 +30,15 @@ module Aliyun
       # @return [TableTunnels]
       has_many :table_tunnels
 
-      def_attr :client, Client, required: true
+      property :client, Client, required: true
 
-      def_attr :name, String, required: true
-      def_attr :comment, String
-      def_attr :project_group_name, String
-      def_attr :state, String
-      def_attr :clusters, Hash
-      def_attr :property, String
-      def_attr :properties, Hash
+      property :name, String, required: true
+      property :comment, String
+      property :project_group_name, String
+      property :state, String
+      property :clusters, Hash
+      property :property, String
+      property :properties, Hash
     end
   end
 end

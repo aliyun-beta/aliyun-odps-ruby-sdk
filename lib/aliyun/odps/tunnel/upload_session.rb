@@ -3,17 +3,17 @@ require 'odps_protobuf'
 module Aliyun
   module Odps
     class UploadSession < Struct::Base
-      def_attr :project, :Project, required: true
-      def_attr :client, :Client, required: true
+      property :project, :Project, required: true
+      property :client, :Client, required: true
 
-      def_attr :upload_id, :String, required: true
-      def_attr :table_name, :String, required: true
-      def_attr :partition_spec, :String
-      def_attr :status, :String
-      def_attr :owner, :String
-      def_attr :initiated, :DateTime
-      def_attr :schema, :Hash
-      def_attr :blocks, :Array, init_with: ->(value) do
+      property :upload_id, :String, required: true
+      property :table_name, :String, required: true
+      property :partition_spec, :String
+      property :status, :String
+      property :owner, :String
+      property :initiated, :DateTime
+      property :schema, :Hash
+      property :blocks, :Array, init_with: ->(value) do
         value.map { |v| UploadBlock.new(v) }
       end
 

@@ -4,12 +4,12 @@ require 'timecop'
 describe Aliyun::Odps::Struct do
   before do
     class Foo < Aliyun::Odps::Struct::Base
-      def_attr :init_with_name, :String, init_with: proc { |value| value.upcase }
-      def_attr :integer_name, :Integer
-      def_attr :datetime_name, :DateTime
-      def_attr :string_name, :String
-      def_attr :required_name, :String, required: true
-      def_attr :within_name, :String, within: %w(value1 value2)
+      property :init_with_name, :String, init_with: proc { |value| value.upcase }
+      property :integer_name, :Integer
+      property :datetime_name, :DateTime
+      property :string_name, :String
+      property :required_name, :String, required: true
+      property :within_name, :String, within: %w(value1 value2)
     end
   end
 

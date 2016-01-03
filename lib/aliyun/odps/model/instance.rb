@@ -5,17 +5,17 @@ module Aliyun
 
       NAME_PATTERN = /^([a-z]|[A-Z]){1,}([a-z]|[A-Z]|[\d]|_)*/
 
-      def_attr :project, Project, required: true
+      property :project, Project, required: true
 
-      def_attr :name, String, required: true
-      def_attr :owner, String
-      def_attr :comment, String
-      def_attr :priority, Integer
-      def_attr :tasks, Array
-      def_attr :status, String
-      def_attr :start_time, DateTime
-      def_attr :end_time, DateTime
-      def_attr :location, String
+      property :name, String, required: true
+      property :owner, String
+      property :comment, String
+      property :priority, Integer
+      property :tasks, Array
+      property :status, String
+      property :start_time, DateTime
+      property :end_time, DateTime
+      property :location, String
 
       # Get task detail of instance
       #

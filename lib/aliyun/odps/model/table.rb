@@ -10,13 +10,13 @@ module Aliyun
       # @return [TablePartitions]
       has_many :table_partitions
 
-      def_attr :project, Project, required: true
+      property :project, Project, required: true
 
-      def_attr :name, String, required: true
-      def_attr :table_id, String
-      def_attr :comment, String
-      def_attr :owner, String
-      def_attr :schema, TableSchema, init_with: ->(value) do
+      property :name, String, required: true
+      property :table_id, String
+      property :comment, String
+      property :owner, String
+      property :schema, TableSchema, init_with: ->(value) do
         case value
         when TableSchema
           value
@@ -25,8 +25,8 @@ module Aliyun
           TableSchema.new(value)
         end
       end
-      def_attr :creation_time, DateTime
-      def_attr :last_modified, DateTime
+      property :creation_time, DateTime
+      property :last_modified, DateTime
 
       # (see TablePartitions#list)
       def partitions(options = {})

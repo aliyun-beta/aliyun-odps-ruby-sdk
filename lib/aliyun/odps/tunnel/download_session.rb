@@ -3,17 +3,17 @@ require 'odps_protobuf'
 module Aliyun
   module Odps
     class DownloadSession < Struct::Base
-      def_attr :project, Project, required: true
-      def_attr :client, Client, required: true
+      property :project, Project, required: true
+      property :client, Client, required: true
 
-      def_attr :download_id, String, required: true
-      def_attr :table_name, String, required: true
-      def_attr :partition_spec, String
-      def_attr :record_count, Integer
-      def_attr :status, String
-      def_attr :owner, String
-      def_attr :initiated, DateTime
-      def_attr :schema, Hash
+      property :download_id, String, required: true
+      property :table_name, String, required: true
+      property :partition_spec, String
+      property :record_count, Integer
+      property :status, String
+      property :owner, String
+      property :initiated, DateTime
+      property :schema, Hash
 
       # Download data
       #

@@ -1,9 +1,9 @@
 module Aliyun
   module Odps
     class TablePartition < Struct::Base
-      def_attr :name, String, required: true
-      def_attr :type, String, required: true, within: %w(bigint double boolean datetime string)
-      def_attr :comment, String
+      property :name, String, required: true
+      property :type, String, required: true, within: %w(bigint double boolean datetime string)
+      property :comment, String
     end
   end
 end
