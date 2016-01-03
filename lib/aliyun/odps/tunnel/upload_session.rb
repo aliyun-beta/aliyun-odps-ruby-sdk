@@ -1,19 +1,19 @@
-require 'stringio'
+require 'odps_protobuf'
 
 module Aliyun
   module Odps
     class UploadSession < Struct::Base
-      def_attr :project, :Project, required: true
-      def_attr :client, :Client, required: true
+      property :project, :Project, required: true
+      property :client, :Client, required: true
 
-      def_attr :upload_id, :String, required: true
-      def_attr :table_name, :String, required: true
-      def_attr :partition_spec, :String
-      def_attr :status, :String
-      def_attr :owner, :String
-      def_attr :initiated, :DateTime
-      def_attr :schema, :Hash
-      def_attr :blocks, :Array, init_with: ->(value) do
+      property :upload_id, :String, required: true
+      property :table_name, :String, required: true
+      property :partition_spec, :String
+      property :status, :String
+      property :owner, :String
+      property :initiated, :DateTime
+      property :schema, :Hash
+      property :blocks, :Array, init_with: ->(value) do
         value.map { |v| UploadBlock.new(v) }
       end
 
@@ -25,7 +25,7 @@ module Aliyun
       #
       # @param block_id [String] specify block_id for this upload, range in 0~19999, new block with replace with old with same blockid
       # @param record_values [Array<Array>] specify the data, a array for your record, with order matched with your schema
-      # @param encoding [String] specify the data compression format, supported value: raw, deflate, snappy
+      # @param encoding [String] specify the data compression format, supported value: raw, deflate
       #
       # @return [true]
       def upload(block_id, record_values, encoding = 'raw')
@@ -43,14 +43,15 @@ module Aliyun
         when 'deflate'
           headers['Content-Encoding'] = 'deflate'
         when 'snappy'
-          headers['Content-Encoding'] = 'x-snappy-framed'
+          fail NotImplementedError
+          # headers['Content-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Content-Encoding')
         else
           fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
         end
 
-        body = generate_body_for_upload(record_values)
+        body = generate_upload_body(record_values, encoding)
 
         !!client.put(path, query: query, headers: headers, body: body)
       end
@@ -100,50 +101,27 @@ module Aliyun
 
       private
 
-      def generate_body_for_upload(record_values)
-        stream = StringIO.new
-        records = record_values.map { |value| value_to_record(value) }
-        serializer = Serializer.new
-        serializer.serialize(stream, records)
-        stream.string
-      end
+      def generate_upload_body(record_values, encoding)
+        serializer = OdpsProtobuf::Serializer.new
+        data = serializer.serialize(record_values, schema)
 
-      def value_to_record(value)
-        schema = Aliyun::Odps::OdpsTableSchema.new(self.schema)
-        fail 'value must be a array' unless value.is_a? Array
-
-        if value.count != schema.getColumnCount
-          fail 'column counts are not equal between value and schema'
+        case encoding
+        when 'raw'
+          data
+        when 'deflate'
+          require 'zlib'
+          Zlib::Deflate.deflate(data)
+        when 'snappy'
+          fail NotImplementedError
+          # begin
+          # require 'snappy'
+          # rescue LoadError
+          # fail "snappy is required to support zlib compressed: https://github.com/miyucy/snappy"
+          # end
+          # Snappy.deflate(data)
         end
-
-        record = OdpsTableRecord.new(schema)
-        i = 0
-        while i < value.count
-          type = schema.getColumnType(i)
-          if value[i].nil?
-            record.setNullValue(i)
-            i += 1
-            next
-          end
-          case type
-          when $ODPS_BIGINT
-            record.setBigInt(i, value[i])
-          when $ODPS_BOOLEAN
-            record.setBoolean(i, value[i])
-          when $ODPS_DATETIME
-            record.setDateTime(i, value[i])
-          when $ODPS_DOUBLE
-            record.setDouble(i, value[i])
-          when $ODPS_STRING
-            record.setString(i, value[i])
-          when $ODPS_DECIMAL
-            record.setDecimal(i, value[i])
-          else
-            fail 'unsupported schema type'
-          end
-          i += 1
-        end
-        record
+      rescue => e
+        raise RecordNotMatchSchemaError.new(record_values, schema)
       end
     end
   end

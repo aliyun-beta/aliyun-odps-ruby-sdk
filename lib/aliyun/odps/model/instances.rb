@@ -91,21 +91,21 @@ module Aliyun
 
       private
 
-      # TODO: generate correct xml when multiple tasks
-      # body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Instance><Job><Name>instance201512311355170aed18</Name><Comment></Comment><Priority>9</Priority><Tasks><SQL><Name>SqlTask2</Name><Comment>sql task</Comment><Config><Property><Name></Name><Value></Value></Property></Config><Query><![CDATA[select * from  test_table1;]]></Query></SQL><SQL><Name>SqlTask</Name><Comment>sql task</Comment><Config><Property><Name></Name><Value></Value></Property></Config><Query><![CDATA[select * from  test_table1;]]></Query></SQL></Tasks></Job></Instance>"
       def build_create_body(instance)
         fail XmlElementMissingError, 'Priority' if instance.priority.nil?
         fail XmlElementMissingError, 'Tasks' if instance.tasks.empty?
 
-        Utils.to_xml(
+        Utils.to_xml({
           'Instance' => {
             'Job' => {
               'Name' => instance.name,
               'Comment' => instance.comment || '',
               'Priority' => instance.priority,
-              'Tasks' => instance.tasks.map(&:to_hash)
+              'Tasks' => instance.tasks.map(&:to_hash),
             }
           }
+        },
+        unwrap: true
         )
       end
     end

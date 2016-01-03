@@ -34,18 +34,18 @@ module Aliyun
         class << self
           attr_reader :required_attrs
 
-          # @!macro [attach] def_attr
+          # @!macro [attach] property
           #   @!attribute [rw] $1
           #   @return [$2]
           #
           # @example
           #
-          #  def_attr :name, String, required: true, init_with: proc {|value| value.upcase }, within: %w{value1 value2}
+          #  property :name, String, required: true, init_with: proc {|value| value.upcase }, within: %w{value1 value2}
           #
           # @params options [Hash] options
           # @option options [Boolean] :required required or optional
           # @option options [block] :init_with block used to init attr
-          def def_attr(attr, type, options = {})
+          def property(attr, type, options = {})
             @required_attrs ||= []
             @required_attrs << attr.to_s if options[:required]
 

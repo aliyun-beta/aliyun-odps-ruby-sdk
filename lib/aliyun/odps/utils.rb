@@ -43,8 +43,8 @@ module Aliyun
           file_or_bin.respond_to?(:read) ? IO.binread(file_or_bin) : file_or_bin
         end
 
-        def to_xml(hash) # nodoc
-          %(<?xml version="1.0" encoding="UTF-8"?>#{Gyoku.xml(hash)})
+        def to_xml(hash, options = {}) # nodoc
+          %(<?xml version="1.0" encoding="UTF-8"?>#{Gyoku.xml(hash, options)})
         end
 
         # Dig values in deep hash

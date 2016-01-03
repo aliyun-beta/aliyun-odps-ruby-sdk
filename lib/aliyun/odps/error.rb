@@ -54,8 +54,8 @@ module Aliyun
     end
 
     class InstanceTaskNotSuccessError < Error
-      def initialize(task)
-        super("Task #{task.name} #{task.status}")
+      def initialize(name, status, task_result)
+        super("Task #{name} #{status}: #{task_result}")
       end
     end
 
@@ -80,6 +80,12 @@ module Aliyun
     class ResourceMissingContentError < Error
       def initialize
         super('A Resource must exist file or table')
+      end
+    end
+
+    class RecordNotMatchSchemaError < Error
+      def initialize(values, schema)
+        super("#{values} not match with #{schema}")
       end
     end
   end

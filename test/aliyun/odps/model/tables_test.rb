@@ -101,6 +101,7 @@ describe Aliyun::Odps::Tables do
   describe 'delete' do
     it 'should delete table' do
       Aliyun::Odps::Utils.stubs(:generate_uuid).returns('instance20151229111744707cc8')
+      Aliyun::Odps::Instance.any_instance.stubs(:wait_for_success).returns(true)
       location = "#{endpoint}/projects/#{project_name}/instances/NewJobName"
       stub_client_request(
         :post,

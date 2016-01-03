@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Instance>
+  <Tasks>
+    <Task Type="SQL">
+      <Name>SqlTask</Name>
+      <Result Format="text"><![CDATA[ODPS-0130211: ERROR Detail]]></Result>
+    </Task>
+  </Tasks>
+</Instance>

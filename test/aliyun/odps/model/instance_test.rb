@@ -142,8 +142,6 @@ describe Aliyun::Odps::Instance do
 
   describe 'task_results' do
     it 'should get task results' do
-      # skip("should add test here")
-      #
       stub_client_request(
         :get,
         "#{endpoint}/projects/#{project_name}/instances/instance_name",
@@ -164,11 +162,40 @@ describe Aliyun::Odps::Instance do
     end
   end
 
-  # TODO: sometimes, it will wait until progress stop
-  it 'wait_for_terminated should sleep until instance terminated' do
-    skip('should add test here')
-    # Kernel.stubs(:sleep)
-    # instance.stubs(:get_status).returns(['Running', 'Running', 'Terminated'])
-    # instance.wait_for_terminated
+  describe "wait_for_success" do
+    it "should raise InstanceTaskNotSuccessError if instance not success" do
+      instance.stubs(:wait_for_terminated).returns(true)
+      stub_client_request(
+        :get,
+        "#{endpoint}/projects/#{project_name}/instances/instance_name",
+        {
+          query: {
+            taskstatus: true
+          }
+        },
+        file_path: 'instance/tasks2.xml',
+        headers: {
+          content_type: 'application/xml'
+        }
+      )
+
+      stub_client_request(
+        :get,
+        "#{endpoint}/projects/#{project_name}/instances/instance_name",
+        {
+          query: {
+            result: true
+          }
+        },
+        file_path: 'instance/task_results2.xml',
+        headers: {
+          content_type: 'application/xml'
+        }
+      )
+
+      error = assert_raises(Aliyun::Odps::InstanceTaskNotSuccessError) { instance.wait_for_success }
+      assert_equal("Task SqlTask Fail: {\"Format\"=>\"text\", \"__content__\"=>\"ODPS-0130211: ERROR Detail\"}", error.message)
+    end
   end
+
 end
