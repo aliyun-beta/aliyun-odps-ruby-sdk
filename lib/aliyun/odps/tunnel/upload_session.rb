@@ -44,7 +44,7 @@ module Aliyun
           headers['Content-Encoding'] = 'deflate'
         when 'snappy'
           fail NotImplementedError
-          #headers['Content-Encoding'] = 'x-snappy-framed'
+          # headers['Content-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Content-Encoding')
         else
@@ -113,12 +113,12 @@ module Aliyun
           Zlib::Deflate.deflate(data)
         when 'snappy'
           fail NotImplementedError
-          #begin
-            #require 'snappy'
-          #rescue LoadError
-            #fail "snappy is required to support zlib compressed: https://github.com/miyucy/snappy"
-          #end
-          #Snappy.deflate(data)
+          # begin
+          # require 'snappy'
+          # rescue LoadError
+          # fail "snappy is required to support zlib compressed: https://github.com/miyucy/snappy"
+          # end
+          # Snappy.deflate(data)
         end
       rescue => e
         raise RecordNotMatchSchemaError.new(record_values, schema)

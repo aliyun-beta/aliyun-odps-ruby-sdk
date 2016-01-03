@@ -44,7 +44,7 @@ module Aliyun
           headers['Accept-Encoding'] = 'deflate'
         when 'snappy'
           fail NotImplementedError
-          #headers['Accept-Encoding'] = 'x-snappy-framed'
+          # headers['Accept-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Accept-Encoding')
         else
@@ -52,7 +52,7 @@ module Aliyun
         end
 
         resp = client.get(path, query: query, headers: headers)
-        protobufed2records(resp.parsed_response, resp.headers["content-encoding"])
+        protobufed2records(resp.parsed_response, resp.headers['content-encoding'])
       end
 
       private
@@ -64,12 +64,12 @@ module Aliyun
             data
           when 'x-snappy-framed'
             fail NotImplementedError
-            #begin
-              #require 'snappy'
-            #rescue LoadError
-              #fail "Install snappy to support x-snappy-framed encoding: https://github.com/miyucy/snappy"
-            #end
-            #Snappy.inflate(data)
+            # begin
+            # require 'snappy'
+            # rescue LoadError
+            # fail "Install snappy to support x-snappy-framed encoding: https://github.com/miyucy/snappy"
+            # end
+            # Snappy.inflate(data)
           else
             data
           end

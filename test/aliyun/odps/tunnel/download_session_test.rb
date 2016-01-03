@@ -23,7 +23,7 @@ describe Aliyun::Odps::DownloadSession do
 
   describe 'download' do
     it 'should can download' do
-      columns = ['col1', 'col2', 'col3']
+      columns = %w(col1 col2 col3)
       rowrange = [1, 100]
       stub_client_request(
         :get,
@@ -44,11 +44,11 @@ describe Aliyun::Odps::DownloadSession do
       )
 
       obj = download_session.download(*rowrange, columns)
-      assert_equal([["Content"]], obj)
+      assert_equal([['Content']], obj)
     end
 
     it 'should can download with snappy encoding' do
-      skip("should can download with snappy encoding")
+      skip('should can download with snappy encoding')
     end
 
     it 'should raise RequestError' do
@@ -59,7 +59,7 @@ describe Aliyun::Odps::DownloadSession do
         file_path: 'tunnel_error.json',
         headers: { content_type: 'application/json' }
       )
-      columns = ['col1', 'col2', 'col3']
+      columns = %w(col1 col2 col3)
       assert_raises(Aliyun::Odps::RequestError) { download_session.download(1, 100, columns) }
     end
   end

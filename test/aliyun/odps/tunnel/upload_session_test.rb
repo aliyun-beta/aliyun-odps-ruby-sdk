@@ -42,7 +42,7 @@ describe Aliyun::Odps::UploadSession do
     end
 
     it 'should can upload with snappy encoding' do
-      skip("should can upload with snappy encoding")
+      skip('should can upload with snappy encoding')
     end
 
     it 'should raise RequestError' do
