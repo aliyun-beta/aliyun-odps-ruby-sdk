@@ -72,11 +72,12 @@ Here are some more guides for help you. Welcome to advice.
 
 + [Installation](./wiki/installation.md)
 + [Getting Started](./wiki/get_start.md)
-+ [Project](./wiki/projects.md)
-+ [Project](./wiki/projects.md)
-+ [Project](./wiki/projects.md)
-+ [Project](./wiki/projects.md)
-+ [Project](./wiki/projects.md)
++ [Projects](./wiki/projects.md)
++ [Instances](./wiki/instances.md)
++ [Resources](./wiki/resources.md)
++ [Functions](./wiki/functions.md)
++ [Tables](./wiki/tables.md)
++ [Tunnels](./wiki/tunnels.md)
 + [Error Code](./wiki/error.md)
 
 
