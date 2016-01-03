@@ -87,6 +87,40 @@ describe Aliyun::Odps::Resources do
       end
     end
 
+    it 'should create new instance with more than one task' do
+      location = "#{endpoint}/projects/#{project_name}/instances/UUIDJobName"
+      task1 = Aliyun::Odps::InstanceTask.new(
+        type: 'SQL',
+        name: 'SqlTask',
+        comment: 'TaskComment',
+        property: { 'key1' => 'value1' },
+        query: 'SELECT * FROM test_table;'
+      )
+      task2 = Aliyun::Odps::InstanceTask.new(
+        type: 'SQL',
+        name: 'SqlTask2',
+        comment: 'TaskComment2',
+        property: { 'key1' => 'value1' },
+        query: 'SELECT * FROM test_table;'
+      )
+      args = [[task1, task2], name: 'JobName', comment: 'JobComment', priority: 1]
+      stub_client_request(
+        :post,
+        "#{endpoint}/projects/#{project_name}/instances",
+        {
+          file_path: 'instances/create3.xml'
+        },
+        headers: {
+          Location: location
+        }
+      )
+
+      instance = project.instances.create(*args)
+      assert_kind_of(Aliyun::Odps::Instance, instance)
+      assert_equal('UUIDJobName', instance.name)
+      assert_equal(location, instance.location)
+    end
+
     it 'should raise RequestError' do
       stub_fail_request(:post, %r{/projects/#{project_name}/instances})
       task = Aliyun::Odps::InstanceTask.new(
