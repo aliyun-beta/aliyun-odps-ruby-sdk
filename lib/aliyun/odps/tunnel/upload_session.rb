@@ -120,7 +120,7 @@ module Aliyun
           # end
           # Snappy.deflate(data)
         end
-      rescue => e
+      rescue
         raise RecordNotMatchSchemaError.new(record_values, schema)
       end
     end

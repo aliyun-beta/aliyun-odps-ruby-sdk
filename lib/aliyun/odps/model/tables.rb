@@ -19,7 +19,7 @@ module Aliyun
         result = client.get(path, query: query).parsed_response
 
         Aliyun::Odps::List.build(result, %w(Tables Table)) do |hash|
-          Table.new(hash.merge(project: project))
+          build_table(hash)
         end
       end
 
@@ -32,14 +32,14 @@ module Aliyun
         path = "/projects/#{project.name}/tables/#{name}"
         resp = client.get(path)
 
-        hash = Utils.dig_value(resp.parsed_response, 'Table')
-        hash.merge!(
-          'creation_time' => resp.headers['x-odps-creation-time'],
-          'last_modified' => resp.headers['Last-Modified'],
-          'owner' => resp.headers['x-odps-owner'],
-          'project' => project
+        build_table(
+          Utils.dig_value(resp.parsed_response, 'Table')
+          .merge(
+            'creation_time' => resp.headers['x-odps-creation-time'],
+            'last_modified' => resp.headers['Last-Modified'],
+            'owner' => resp.headers['x-odps-owner']
+          )
         )
-        Table.new(hash)
       end
       alias_method :table, :get
 
@@ -55,24 +55,13 @@ module Aliyun
       # @return Table
       def create(name, schema, options = {})
         Utils.stringify_keys!(options)
-
-        table = Table.new(
-          name: name,
-          schema: schema,
-          project: project
-        )
+        table = Table.new(name: name, schema: schema, project: project)
         table.comment = options['comment'] if options.key?('comment')
 
-        task = InstanceTask.new(
-          name: 'SQLCreateTableTask',
-          type: 'SQL',
-          query: generate_create_sql(table)
-        )
+        task = InstanceTask.new(name: 'SQLCreateTableTask', type: 'SQL', query: generate_create_sql(table))
 
         instance = project.instances.create([task])
-
         instance.wait_for_success
-
         table
       end
 
@@ -84,10 +73,7 @@ module Aliyun
       #
       # @return true
       def delete(name)
-        table = Table.new(
-          name: name,
-          project: project
-        )
+        table = Table.new(name: name, project: project)
 
         task = InstanceTask.new(
           name: 'SQLDropTableTask',
@@ -96,30 +82,43 @@ module Aliyun
         )
 
         instance = project.instances.create([task])
-
         instance.wait_for_success
-
         true
       end
 
       private
 
       def generate_create_sql(table)
-        sql = ''
-        sql += "CREATE TABLE #{project.name}.`#{table.name}`"
-        sql += ' (' + table.schema.columns.map do |column|
-          "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : '')
-        end.join(', ') + ')' if table.schema && table.schema.columns
+        sql = "CREATE TABLE #{project.name}.`#{table.name}`"
+        sql += generate_table_coumns_sql(table.schema.columns) if table.schema && table.schema.columns
         sql += " COMMENT '#{table.comment}'" if table.comment
-        sql += ' PARTITIONED BY (' + table.schema.partitions.map do |column|
-          "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : '')
-        end.join(', ') + ')' if table.schema && table.schema.partitions
+        sql += generate_table_partitions_sql(table.schema.partitions) if table.schema && table.schema.partitions
         sql += ';'
         sql
       end
 
+      def generate_table_coumns_sql(columns)
+        ' (' + columns.map do |column|
+          generate_table_column_sql(column)
+        end.join(', ') + ')'
+      end
+
+      def generate_table_partitions_sql(partitions)
+        ' PARTITIONED BY (' + partitions.map do |column|
+          generate_table_column_sql(column)
+        end.join(', ') + ')'
+      end
+
+      def generate_table_column_sql(column)
+        "`#{column.name}` #{column.type}" + (column.comment ? " COMMENT '#{column.comment}'" : '')
+      end
+
       def generate_drop_sql(table)
         "DROP TABLE IF EXISTS #{project.name}.`#{table.name}`;"
+      end
+
+      def build_table(result)
+        Table.new(result.merge(project: project))
       end
     end
   end

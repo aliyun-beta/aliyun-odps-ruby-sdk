@@ -49,34 +49,73 @@ module Aliyun
             @required_attrs ||= []
             @required_attrs << attr.to_s if options[:required]
 
-            attr_reader attr
+            define_reader_method(attr)
+            define_writer_method(attr, type, options)
+          end
 
+          private
+
+          def define_reader_method(attr)
+            attr_reader attr
+          end
+
+          def define_writer_method(attr, type, options)
             init_with_block =
               if options.key?(:init_with) && options[:init_with].respond_to?(:call)
-                init_with_block = options[:init_with]
+                options[:init_with]
               else
-                case type.to_s
-                when 'Integer'
-                  proc { |value| value.to_i }
-                when 'DateTime'
-                  proc { |value| DateTime.parse(value) }
-                when 'String'
-                  if options.key?(:within) && options[:within].is_a?(Array)
-                    proc do |value|
-                      fail ValueNotSupportedError.new(attr, options[:within]) unless options[:within].include?(value.to_s)
-                      value
-                    end
-                  else
-                    proc { |value| value }
-                  end
-                else
-                  proc { |value| value }
-                end
+                build_block_with_type(attr, type, options)
               end
+            define_writer_method_with_block(attr, init_with_block)
+          end
 
+          def build_block_with_type(attr, type, options)
+            case type.to_s
+            when 'Integer'
+              build_integer_block(attr, options)
+            when 'DateTime'
+              build_datetime_block(attr, options)
+            when 'String'
+              build_string_block(attr, options)
+            else
+              build_default_block(attr, options)
+            end
+          end
+
+          def build_string_block(attr, options)
+            if options.key?(:within) && options[:within].is_a?(Array)
+              build_block_with_within(attr, options)
+            else
+              build_default_block(attr, options)
+            end
+          end
+
+          def build_block_with_within(attr, options)
+            proc do |value|
+              if options[:within].include?(value.to_s)
+                value
+              else
+                fail ValueNotSupportedError.new(attr, options[:within])
+              end
+            end
+          end
+
+          def build_integer_block(attr, options)
+            proc { |value| value.to_i }
+          end
+
+          def build_datetime_block(attr, options)
+            proc { |value| DateTime.parse(value) }
+          end
+
+          def build_default_block(attr, options)
+            proc { |value| value }
+          end
+
+          def define_writer_method_with_block(attr, block)
             define_method("#{attr}=") do |value|
               instance_eval do
-                instance_variable_set("@#{attr}", init_with_block.call(value))
+                instance_variable_set("@#{attr}", block.call(value))
               end
             end
           end

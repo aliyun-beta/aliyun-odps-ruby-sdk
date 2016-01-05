@@ -20,23 +20,15 @@ module Aliyun
       def init_download_session(table_name, partition = {})
         path = "/projects/#{project.name}/tables/#{table_name}"
         query = { downloads: true }
-
         unless partition.empty?
           query.merge!(partition: generate_partition_spec(partition))
         end
 
         resp = client.post(path, query: query)
-
         result = resp.parsed_response
         result = JSON.parse(result) if result.is_a?(String)
 
-        DownloadSession.new(
-          result.merge(
-            project: project,
-            client: client,
-            table_name: table_name,
-            partition_spec: query['partition']
-          ))
+        build_download_session(result, table_name, query['partition'])
       end
 
       # Init Upload Session
@@ -48,7 +40,6 @@ module Aliyun
       def init_upload_session(table_name, partition = {})
         path = "/projects/#{project.name}/tables/#{table_name}"
         query = { uploads: true }
-
         unless partition.empty?
           query.merge!(partition: generate_partition_spec(partition))
         end
@@ -57,19 +48,33 @@ module Aliyun
         result = resp.parsed_response
         result = JSON.parse(result) if result.is_a?(String)
 
-        UploadSession.new(
-          result.merge(
-            project: project,
-            client: client,
-            table_name: table_name,
-            partition_spec: query['partition']
-          ))
+        build_upload_session(result, table_name, query['partition'])
       end
 
       private
 
       def generate_partition_spec(partition)
         partition.map { |k, v| "#{k}=#{v}" }.join(',')
+      end
+
+      def build_upload_session(result, table_name, partition_spec)
+        UploadSession.new(
+          result.merge(
+            project: project,
+            client: client,
+            table_name: table_name,
+            partition_spec: partition_spec
+          ))
+      end
+
+      def build_download_session(result, table_name, partition_spec)
+        DownloadSession.new(
+          result.merge(
+            project: project,
+            client: client,
+            table_name: table_name,
+            partition_spec: partition_spec
+          ))
       end
     end
   end

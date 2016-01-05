@@ -1,6 +1,8 @@
 module Aliyun
   module Odps
     class Instances < ServiceObject
+      DEFAULT_PRIORITY = 9
+
       # List instances of project
       #
       # @see http://repo.aliyun.com/api-doc/Instance/get_instances/index.html Get instances
@@ -41,36 +43,12 @@ module Aliyun
       # @return [Instance]
       def create(tasks, options = {})
         Utils.stringify_keys!(options)
-
-        name = options.key?('name') ? options['name'] : Utils.generate_uuid('instance')
-
-        unless name.match(Instance::NAME_PATTERN)
-          fail InstanceNameInvalidError, name
-        end
-
-        instance = Instance.new(
-          name: name,
-          tasks: tasks,
-          project: project,
-          priority: 9,
-          client: client
-        )
-
-        if options.key?('priority')
-          fail PriorityInvalidError if options['priority'] < 0
-          instance.priority = options['priority']
-        end
-
-        instance.comment = options['comment'] if options['comment']
-
         path = "/projects/#{project.name}/instances"
 
+        instance = validate_and_build_instance(tasks, options)
         resp = client.post(path, body: build_create_body(instance))
 
-        instance.tap do |obj|
-          obj.location = resp.headers['Location']
-          obj.name = obj.location.split('/').last if obj.location
-        end
+        append_location(instance, resp.headers['Location'])
       end
 
       # Get status of instance
@@ -95,18 +73,46 @@ module Aliyun
         fail XmlElementMissingError, 'Priority' if instance.priority.nil?
         fail XmlElementMissingError, 'Tasks' if instance.tasks.empty?
 
-        Utils.to_xml({
+        Utils.to_xml(build_hash(instance), unwrap: true)
+      end
+
+      def build_hash(instance)
+        {
           'Instance' => {
             'Job' => {
               'Name' => instance.name,
               'Comment' => instance.comment || '',
               'Priority' => instance.priority,
-              'Tasks' => instance.tasks.map(&:to_hash),
+              'Tasks' => instance.tasks.map(&:to_hash)
             }
           }
-        },
-        unwrap: true
+        }
+      end
+
+      def validate_and_build_instance(tasks, options)
+        name = options.key?('name') ? options['name'] : Utils.generate_uuid('instance')
+        fail InstanceNameInvalidError, name unless name.match(Instance::NAME_PATTERN)
+        fail PriorityInvalidError if options.key?('priority') && options['priority'] < 0
+
+        build_instance(name, tasks, options['priority'], options['comment'])
+      end
+
+      def build_instance(name, tasks, priority = nil, comment = nil)
+        Instance.new(
+          name: name,
+          tasks: tasks,
+          project: project,
+          priority: priority || DEFAULT_PRIORITY,
+          client: client,
+          comment: comment
         )
+      end
+
+      def append_location(instance, location)
+        instance.tap do |obj|
+          obj.location = location
+          obj.name = obj.location.split('/').last if obj.location
+        end
       end
     end
   end

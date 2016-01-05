@@ -34,20 +34,7 @@ module Aliyun
       def get(name)
         path = "/projects/#{project.name}/resources/#{name}"
         resp = client.get(path)
-
-        hash = {
-          name: resp.headers['x-odps-resource-name'],
-          last_updator: resp.headers['x-odps-updator'],
-          owner: resp.headers['x-odps-owner'],
-          comment: resp.headers['x-odps-comment'],
-          last_modified_time: resp.headers['Last-Modified'],
-          creation_time: resp.headers['x-odps-creation-time'],
-          resource_size: resp.headers['x-odps-resource-size'],
-          resource_type: resp.headers['x-odps-resource-type'],
-          content: resp.parsed_response
-        }
-
-        Resource.new(hash)
+        build_resource(resp)
       end
       alias_method :resource, :get
 
@@ -61,19 +48,7 @@ module Aliyun
       def get_meta(name)
         path = "/projects/#{project.name}/resources/#{name}"
         resp = client.head(path)
-
-        hash = {
-          name: resp.headers['x-odps-resource-name'],
-          last_updator: resp.headers['x-odps-updator'],
-          owner: resp.headers['x-odps-owner'],
-          comment: resp.headers['x-odps-comment'],
-          last_modified_time: resp.headers['Last-Modified'],
-          creation_time: resp.headers['x-odps-creation-time'],
-          resource_size: resp.headers['x-odps-resource-size'],
-          resource_type: resp.headers['x-odps-resource-type']
-        }
-
-        Resource.new(hash)
+        build_resource(resp)
       end
       alias_method :head, :get_meta
 
@@ -93,19 +68,10 @@ module Aliyun
         Utils.stringify_keys!(options)
         path = "/projects/#{project.name}/resources/"
 
-        headers = {
-          'x-odps-resource-type' => type,
-          'x-odps-resource-name' => name
-        }
-        headers.merge!('x-odps-comment' => options['comment']) if options.key?('comment')
-        headers.merge!('x-odps-copy-table-source' => options['table']) if options.key?('table')
-
-        body = options.key?('file') ? Utils.to_data(options['file']) : ''
-
-        fail ResourceMissingContentError if body.empty? && !options.key?('table')
+        headers = build_create_base_headers(name, type, options)
+        body = build_create_base_body(options)
 
         location = client.post(path, headers: headers, body: body).headers['Location']
-
         Resource.new(name: name, resource_type: type, comment: options['comment'], location: location)
       end
 
@@ -125,16 +91,8 @@ module Aliyun
         Utils.stringify_keys!(options)
         path = "/projects/#{project.name}/resources/#{name}"
 
-        headers = {
-          'x-odps-resource-type' => type,
-          'x-odps-resource-name' => name
-        }
-        headers.merge!('x-odps-comment' => options['comment']) if options.key?('comment')
-        headers.merge!('x-odps-copy-table-source' => options['table']) if options.key?('table')
-
-        body = options.key?('file') ? Utils.to_data(options['file']) : ''
-
-        fail ResourceMissingContentError if body.empty? && !options.key?('table')
+        headers = build_create_base_headers(name, type, options)
+        body = build_create_base_body(options)
 
         !!client.put(path, headers: headers, body: body)
       end
@@ -150,6 +108,36 @@ module Aliyun
         path = "/projects/#{project.name}/resources/#{name}"
 
         !!client.delete(path)
+      end
+
+      private
+
+      def build_create_base_headers(name, type, options)
+        headers = { 'x-odps-resource-type' => type, 'x-odps-resource-name' => name }
+        headers['x-odps-comment'] = options['comment'] if options.key?('comment')
+        headers['x-odps-copy-table-source'] = options['table'] if options.key?('table')
+        headers
+      end
+
+      def build_create_base_body(options)
+        body = options.key?('file') ? Utils.to_data(options['file']) : ''
+        fail ResourceMissingContentError if body.empty? && !options.key?('table')
+        body
+      end
+
+      def build_resource(resp)
+        hash = {
+          name: resp.headers['x-odps-resource-name'],
+          last_updator: resp.headers['x-odps-updator'],
+          owner: resp.headers['x-odps-owner'],
+          comment: resp.headers['x-odps-comment'],
+          last_modified_time: resp.headers['Last-Modified'],
+          creation_time: resp.headers['x-odps-creation-time'],
+          resource_size: resp.headers['x-odps-resource-size'],
+          resource_type: resp.headers['x-odps-resource-type']
+        }
+        hash['content'] = resp.parsed_response unless resp.parsed_response.nil?
+        Resource.new(hash)
       end
     end
   end

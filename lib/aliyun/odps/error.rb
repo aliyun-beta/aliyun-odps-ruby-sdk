@@ -18,20 +18,25 @@ module Aliyun
       attr_reader :origin_response
 
       def initialize(response)
-        if response.parsed_response.key?('Error')
-          @code = response.parsed_response['Error']['Code']
-          @message = response.parsed_response['Error']['Message']
-        elsif response.parsed_response.key?('Code')
-          @code = response.parsed_response['Code']
-          @message = response.parsed_response['Message']
-        else
-          @code = response.code
-          @message = response.message
-        end
-
-        @request_id = response.headers['x-odps-request-id']
+        assign_error_code(response)
+        assign_request_id(response)
         @origin_response = response
         super("#{@request_id} - #{@code}: #{@message}")
+      end
+
+      def assign_error_code(response)
+        result = response.parsed_response
+        if result.key?('Error')
+          @code = result['Error']['Code']
+          @message = result['Error']['Message']
+        elsif result.key?('Code')
+          @code = result['Code']
+          @message = result['Message']
+        end
+      end
+
+      def assign_request_id(response)
+        @request_id = response.headers['x-odps-request-id']
       end
     end
 
