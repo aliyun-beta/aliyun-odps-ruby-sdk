@@ -59,14 +59,15 @@ module Aliyun
         when 'deflate'
           data
         when 'x-snappy-framed'
-          data
-          # fail NotImplementedError
-          # begin
-          # require 'snappy'
-          # rescue LoadError
-          # fail "Install snappy to support x-snappy-framed encoding: https://github.com/miyucy/snappy"
-          # end
-          # Snappy.inflate(data)
+          # seems snappy ruby binding doesn't support snappy magic header, so remove it
+          # we should create a pull request
+          data.slice!(0,18)
+          begin
+            require 'snappy'
+          rescue LoadError
+            fail "Install snappy to support x-snappy-framed encoding: https://github.com/miyucy/snappy"
+          end
+          Snappy.inflate(data)
         else
           data
         end
@@ -82,7 +83,7 @@ module Aliyun
         case encoding.to_s.downcase
         when 'deflate'
           headers['Accept-Encoding'] = 'deflate'
-        when 'snappy'
+          when 'snappy'
           # fail NotImplementedError
           headers['Accept-Encoding'] = 'x-snappy-framed'
         when 'raw'
