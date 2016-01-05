@@ -62,9 +62,9 @@ Example:
 
     download_session = project.table_tunnels.init_download_session('table_name, { part: 'value' })
     
-    content = download_session.download("1","100", "uuid,username,password")
+    content = download_session.download(1, 2, ["uuid", "username", "password"])
     
-    puts [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']]
+    puts content #=> [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']]
 
 
 Now, All is covered, Let's view the [Error Code](./error.md)    
