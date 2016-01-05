@@ -194,7 +194,7 @@ describe Aliyun::Odps::Instance do
       )
 
       error = assert_raises(Aliyun::Odps::InstanceTaskNotSuccessError) { instance.wait_for_success }
-      assert_equal("Task SqlTask Fail: {\"Format\"=>\"text\", \"__content__\"=>\"ODPS-0130211: ERROR Detail\"}", error.message)
+      assert_match(/Task SqlTask Fail.*ODPS-0130211: ERROR Detail.*/, error.message)
     end
   end
 

@@ -13,14 +13,14 @@ module Aliyun
       def list(options = {})
         Utils.stringify_keys!(options)
         path = "/projects/#{project.name}/tables/#{master.name}"
-        query = Utils.hash_slice(options, 'marker', 'maxitems').merge(
+        query = {
           partitions: true,
           expectmarker: true
-        )
-        result = client.get(path, query: query).parsed_response
+        }.merge(Utils.hash_slice(options, 'marker', 'maxitems'))
 
+        result = client.get(path, query: query).parsed_response
         Aliyun::Odps::List.build(result, %w(Partitions Partition)) do |hash|
-          Hash[Utils.wrap(hash['Column']).map(&:values)]
+          build_table_partition(hash)
         end
       end
 
@@ -80,6 +80,10 @@ module Aliyun
       def generate_drop_sql(partition)
         spec = partition.map { |k, v| "#{k} = '#{v}'" }.join(',')
         "ALTER TABLE #{project.name}.`#{master.name}`DROP IF EXISTS PARTITION (#{spec});"
+      end
+
+      def build_table_partition(hash)
+        Hash[Utils.wrap(hash['Column']).map(&:values)]
       end
     end
   end

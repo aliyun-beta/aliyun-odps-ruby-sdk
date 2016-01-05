@@ -3,9 +3,6 @@
 AllCops:
   Exclude:
     - 'demo/**/*'
-
-Style/ClassAndModuleChildren:
-  Exclude:
     - 'test/**/*'
 
 Metrics/LineLength:
@@ -28,4 +25,7 @@ Style/PredicateName:
   Enabled: false
 
 Style/Lambda:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
   Enabled: false

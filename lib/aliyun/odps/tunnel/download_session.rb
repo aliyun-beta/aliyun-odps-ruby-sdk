@@ -43,8 +43,8 @@ module Aliyun
         when 'deflate'
           headers['Accept-Encoding'] = 'deflate'
         when 'snappy'
-          fail NotImplementedError
-          # headers['Accept-Encoding'] = 'x-snappy-framed'
+          # fail NotImplementedError
+          headers['Accept-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Accept-Encoding')
         else
@@ -52,18 +52,21 @@ module Aliyun
         end
 
         resp = client.get(path, query: query, headers: headers)
+        p resp.headers
         protobufed2records(resp.parsed_response, resp.headers['content-encoding'])
       end
 
       private
 
       def protobufed2records(data, encoding)
+        p encoding
         data =
           case encoding
           when 'deflate'
             data
           when 'x-snappy-framed'
-            fail NotImplementedError
+            data
+            # fail NotImplementedError
             # begin
             # require 'snappy'
             # rescue LoadError
@@ -73,6 +76,7 @@ module Aliyun
           else
             data
           end
+        p data
 
         deserializer = OdpsProtobuf::Deserializer.new
         deserializer.deserialize(data, schema)

@@ -64,9 +64,16 @@ describe Aliyun::Odps::Tables do
   end
 
   describe 'create' do
+    before do
+      Aliyun::Odps::Instance.any_instance.stubs(:wait_for_terminated).returns(true)
+    end
+
+    after do
+      Aliyun::Odps::Instance.any_instance.unstub(:wait_for_terminated)
+    end
+
     it 'should create table' do
       Aliyun::Odps::Utils.stubs(:generate_uuid).returns('instance20151229111744707cc8')
-      Aliyun::Odps::Instance.any_instance.stubs(:wait_for_terminated).returns(true)
       location = "#{endpoint}/projects/#{project_name}/instances/NewJobName"
       stub_client_request(
         :post,
@@ -99,9 +106,16 @@ describe Aliyun::Odps::Tables do
   end
 
   describe 'delete' do
+    before do
+      Aliyun::Odps::Instance.any_instance.stubs(:wait_for_success).returns(true)
+    end
+
+    after do
+      Aliyun::Odps::Instance.any_instance.unstub(:wait_for_success)
+    end
+
     it 'should delete table' do
       Aliyun::Odps::Utils.stubs(:generate_uuid).returns('instance20151229111744707cc8')
-      Aliyun::Odps::Instance.any_instance.stubs(:wait_for_success).returns(true)
       location = "#{endpoint}/projects/#{project_name}/instances/NewJobName"
       stub_client_request(
         :post,
