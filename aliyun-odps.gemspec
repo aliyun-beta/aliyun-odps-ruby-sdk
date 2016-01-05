@@ -22,7 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'addressable'
   spec.add_dependency 'activesupport'
   spec.add_dependency 'gyoku'
-  # spec.add_dependency 'beefcake'
   spec.add_dependency 'odps_protobuf', '0.5.0'
 
   spec.add_development_dependency 'bundler'
@@ -32,4 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'webmock'
   spec.add_development_dependency 'timecop'
   spec.add_development_dependency 'rubocop'
+  spec.add_development_dependency 'snappy'
 end
