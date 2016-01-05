@@ -34,23 +34,7 @@ module Aliyun
         query = { blockid: block_id, uploadid: upload_id }
         query[:partition] = partition_spec if partition_spec
 
-        headers = {
-          'x-odps-tunnel-version' => TableTunnels::TUNNEL_VERSION,
-          'Transfer-Encoding' => 'chunked'
-        }
-
-        case encoding.to_s.downcase
-        when 'deflate'
-          headers['Content-Encoding'] = 'deflate'
-        when 'snappy'
-          fail NotImplementedError
-          # headers['Content-Encoding'] = 'x-snappy-framed'
-        when 'raw'
-          headers.delete('Content-Encoding')
-        else
-          fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
-        end
-
+        headers = build_upload_headers(encoding)
         body = generate_upload_body(record_values, encoding)
 
         !!client.put(path, query: query, headers: headers, body: body)
@@ -104,7 +88,12 @@ module Aliyun
       def generate_upload_body(record_values, encoding)
         serializer = OdpsProtobuf::Serializer.new
         data = serializer.serialize(record_values, schema)
+        uncompass_data(data, encoding)
+      rescue
+        raise RecordNotMatchSchemaError.new(record_values, schema)
+      end
 
+      def uncompass_data(data, encoding)
         case encoding
         when 'raw'
           data
@@ -120,8 +109,29 @@ module Aliyun
           # end
           # Snappy.deflate(data)
         end
-      rescue
-        raise RecordNotMatchSchemaError.new(record_values, schema)
+      end
+
+      def set_content_encoding(headers, encoding)
+        case encoding.to_s.downcase
+        when 'deflate'
+          headers['Content-Encoding'] = 'deflate'
+        when 'snappy'
+          fail NotImplementedError
+          # headers['Content-Encoding'] = 'x-snappy-framed'
+        when 'raw'
+          headers.delete('Content-Encoding')
+        else
+          fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
+        end
+      end
+
+      def build_upload_headers(encoding)
+        headers = {
+          'x-odps-tunnel-version' => TableTunnels::TUNNEL_VERSION,
+          'Transfer-Encoding' => 'chunked'
+        }
+        set_content_encoding(headers, encoding)
+        headers
       end
     end
   end
