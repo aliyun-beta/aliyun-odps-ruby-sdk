@@ -11,7 +11,7 @@ module Aliyun
       # @return [Projects]
       has_many :projects
 
-      attr_reader :access_key, :secret_key, :endpoint, :opts
+      attr_reader :config
 
       # Initialize a object
       #
@@ -21,10 +21,7 @@ module Aliyun
       #
       # @return [Response]
       def initialize(config = Aliyun::Odps.config)
-        @access_key = config.access_key
-        @secret_key = config.secret_key
-        @endpoint = config.endpoint
-        @opts = config.options
+        @config = config
       end
 
       %w(get put post delete options head).each do |method|
@@ -36,7 +33,7 @@ module Aliyun
       private
 
       def http
-        @http ||= Http.new(access_key, secret_key, endpoint)
+        @http ||= Http.new(config)
       end
     end
   end
