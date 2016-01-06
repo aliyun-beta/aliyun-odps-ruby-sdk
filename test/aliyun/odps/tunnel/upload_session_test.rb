@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'test_helper'
 
 describe Aliyun::Odps::UploadSession do
@@ -42,7 +43,23 @@ describe Aliyun::Odps::UploadSession do
     end
 
     it 'should can upload with snappy encoding' do
-      skip('should can upload with snappy encoding')
+      stub_client_request(
+        :put,
+        "#{endpoint}/projects/#{project_name}/tables/table1",
+        query: {
+          'blockid' => 1,
+          'uploadid' => upload_session.upload_id
+        },
+        headers: {
+          'x-odps-tunnel-version' => '4'
+        },
+        body: /sNaPpY/
+      )
+
+      assert(
+        upload_session.upload(1, [['Content']], 'snappy'),
+        'update should success'
+      )
     end
 
     it 'should raise RequestError' do

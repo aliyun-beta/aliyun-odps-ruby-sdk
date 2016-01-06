@@ -79,6 +79,7 @@ Here are some more guides for help you. Welcome to advice.
 + [Tables](./wiki/tables.md)
 + [Tunnels](./wiki/tunnels.md)
 + [Error Code](./wiki/error.md)
++ [SSL Connection](./wiki/ssl.md)
 
 
 ## Test

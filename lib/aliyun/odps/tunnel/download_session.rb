@@ -1,4 +1,5 @@
 require 'odps_protobuf'
+require 'aliyun/odps/tunnel/snappy_reader'
 
 module Aliyun
   module Odps
@@ -49,24 +50,17 @@ module Aliyun
       end
 
       def protobufed2records(data, encoding)
-        data = uncompass_data(data, encoding)
+        data = uncompress_data(data, encoding)
         deserializer = OdpsProtobuf::Deserializer.new
         deserializer.deserialize(data, schema)
       end
 
-      def uncompass_data(data, encoding)
+      def uncompress_data(data, encoding)
         case encoding
         when 'deflate'
           data
         when 'x-snappy-framed'
-          data
-          # fail NotImplementedError
-          # begin
-          # require 'snappy'
-          # rescue LoadError
-          # fail "Install snappy to support x-snappy-framed encoding: https://github.com/miyucy/snappy"
-          # end
-          # Snappy.inflate(data)
+          SnappyReader.uncompress(data)
         else
           data
         end
@@ -83,7 +77,6 @@ module Aliyun
         when 'deflate'
           headers['Accept-Encoding'] = 'deflate'
         when 'snappy'
-          # fail NotImplementedError
           headers['Accept-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Accept-Encoding')

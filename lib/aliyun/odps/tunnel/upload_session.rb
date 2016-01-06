@@ -1,4 +1,5 @@
 require 'odps_protobuf'
+require 'aliyun/odps/tunnel/snappy_writer'
 
 module Aliyun
   module Odps
@@ -88,12 +89,12 @@ module Aliyun
       def generate_upload_body(record_values, encoding)
         serializer = OdpsProtobuf::Serializer.new
         data = serializer.serialize(record_values, schema)
-        uncompass_data(data, encoding)
+        compress_data(data, encoding)
       rescue
         raise RecordNotMatchSchemaError.new(record_values, schema)
       end
 
-      def uncompass_data(data, encoding)
+      def compress_data(data, encoding)
         case encoding
         when 'raw'
           data
@@ -101,13 +102,7 @@ module Aliyun
           require 'zlib'
           Zlib::Deflate.deflate(data)
         when 'snappy'
-          fail NotImplementedError
-          # begin
-          # require 'snappy'
-          # rescue LoadError
-          # fail "snappy is required to support zlib compressed: https://github.com/miyucy/snappy"
-          # end
-          # Snappy.deflate(data)
+          SnappyWriter.compress(data)
         end
       end
 
@@ -116,8 +111,8 @@ module Aliyun
         when 'deflate'
           headers['Content-Encoding'] = 'deflate'
         when 'snappy'
-          fail NotImplementedError
-          # headers['Content-Encoding'] = 'x-snappy-framed'
+          # fail NotImplementedError
+          headers['Content-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Content-Encoding')
         else

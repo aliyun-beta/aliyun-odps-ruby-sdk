@@ -18,12 +18,10 @@ module Aliyun
       end
       parser BetterXmlParser
 
-      attr_reader :access_key, :secret_key
+      attr_reader :config
 
-      def initialize(access_key, secret_key, endpoint)
-        @access_key = access_key
-        @secret_key = secret_key
-        @endpoint = endpoint
+      def initialize(config)
+        @config = config
       end
 
       def get(uri, options = {})
@@ -61,10 +59,9 @@ module Aliyun
         body = options.delete(:body)
 
         append_headers!(headers, verb, body, options.merge(path: resource))
-        path = @endpoint + resource
-        # options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI, http_proxyaddr: "127.0.0.1", http_proxyport: "8888" }
-        options = { headers: headers, query: query, body: body, uri_adapter: Addressable::URI }
-        # p path, options
+        path = config.endpoint + resource
+        options = { headers: headers, query: query, body: body }
+        append_options!(options, path)
 
         wrap(self.class.__send__(verb.downcase, path, options))
       end
@@ -82,6 +79,15 @@ module Aliyun
         append_default_headers!(headers)
         append_body_headers!(headers, body)
         append_authorization_headers!(headers, verb, options)
+      end
+
+      def append_options!(options, url)
+        options.merge!(uri_adapter: Addressable::URI)
+        if config.ssl_ca_file
+          options.merge!(ssl_ca_file: config.ssl_ca_file)
+        elsif url.start_with?('https://')
+          options.merge!(verify_peer: true)
+        end
       end
 
       def append_default_headers!(headers)
@@ -107,7 +113,7 @@ module Aliyun
       end
 
       def get_auth_key(options)
-        Authorization.get_authorization(access_key, secret_key, options)
+        Authorization.get_authorization(config.access_key, config.secret_key, options)
       end
 
       def default_headers

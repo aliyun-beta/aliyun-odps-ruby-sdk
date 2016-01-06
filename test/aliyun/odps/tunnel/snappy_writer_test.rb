@@ -1,0 +1,16 @@
+# encoding: utf-8
+require 'test_helper'
+
+describe Aliyun::SnappyWriter do
+
+  it "should uncompress data" do
+    schema = {"columns"=>[{"name"=>"uuid", "type"=>"bigint"}, {"name"=>"name", "type"=>"string"}]}
+    expected = "\xFF\x06\x00\x00sNaPpY\x01\x7F\x00\x00\x84\x8Al\xF0\b\x04\x12\x05name1\x80\xC0\xFF\x7F\x84\x9D\x91\x9F\a\b\x02\x12\x03jin\x80\xC0\xFF\x7F\xA2\x85\xAF\xCD\x02\b\xC8\x01\x12\tzhuzhuzhu\x80\xC0\xFF\x7F\xA4\xF9\x9F\xA3\b\b\x02\x12\x02jz\x80\xC0\xFF\x7F\xEF\xA1\xC2\xCB\x06\b\xF6\x01\x12\x04Jack\x80\xC0\xFF\x7F\xD1\x99\x82\xE6\f\b\xF8\x01\x12\x05Smith\x80\xC0\xFF\x7F\xFB\xB3\xD2\x97\x05\xF0\xFF\xFF\x7F\f\xF8\xFF\xFF\x7F\x87\xC4\x8A\x9C\x04"
+    serializer = OdpsProtobuf::Serializer.new
+    assert_equal(
+      expected,
+      Aliyun::SnappyWriter.compress(serializer.serialize([[2, "name1"], [1, "jin"], [100, "zhuzhuzhu"], [1, "jz"], [123, "Jack"], [124, "Smith"]], schema)).force_encoding('utf-8')
+    )
+  end
+
+end
