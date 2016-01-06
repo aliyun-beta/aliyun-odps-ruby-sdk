@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'test_helper'
 
 describe Aliyun::Odps::DownloadSession do
@@ -48,7 +49,31 @@ describe Aliyun::Odps::DownloadSession do
     end
 
     it 'should can download with snappy encoding' do
-      skip('should can download with snappy encoding')
+      columns = %w(col1 col2 col3)
+      rowrange = [1, 100]
+      stub_client_request(
+        :get,
+        "#{endpoint}/projects/#{project_name}/tables/table1",
+        {
+          query: {
+            data: true,
+            columns: columns.join(','),
+            rowrange: "(#{rowrange.join(',')})",
+            partition: download_session.partition_spec,
+            downloadid: download_session.download_id
+          },
+          headers: {
+            'x-odps-tunnel-version' => '4'
+          }
+        },
+        body: "\xFF\u0006\u0000\u0000sNaPpY\u0000&\u0000\u0000/C\xB6e |\n\aContent\x80\xC0\xFF\x7F\xDA\xBB\xAB\xD3\r\xF0\xFF\xFF\x7F\x02\xF8\xFF\xFF\x7F\xB7\xE2\xD2\xE7\n",
+        headers: {
+          'Content-Encoding' => 'x-snappy-framed'
+        }
+      )
+
+      obj = download_session.download(*rowrange, columns, 'snappy')
+      assert_equal([['Content']], obj)
     end
 
     it 'should raise RequestError' do
