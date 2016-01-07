@@ -111,7 +111,6 @@ module Aliyun
         when 'deflate'
           headers['Content-Encoding'] = 'deflate'
         when 'snappy'
-          # fail NotImplementedError
           headers['Content-Encoding'] = 'x-snappy-framed'
         when 'raw'
           headers.delete('Content-Encoding')

@@ -33,7 +33,7 @@ module Aliyun
         headers = build_download_headers(encoding)
 
         resp = client.get(path, query: query, headers: headers)
-        protobufed2records(resp.parsed_response, resp.headers['content-encoding'])
+        protobufed2records(resp.parsed_response, resp.headers['content-encoding'], columns)
       end
 
       private
@@ -49,10 +49,13 @@ module Aliyun
         query
       end
 
-      def protobufed2records(data, encoding)
+      def protobufed2records(data, encoding, columns)
         data = uncompress_data(data, encoding)
         deserializer = OdpsProtobuf::Deserializer.new
+        schema = build_schema_with(columns)
         deserializer.deserialize(data, schema)
+      rescue
+        raise RecordNotMatchSchemaError.new(columns, schema)
       end
 
       def uncompress_data(data, encoding)
@@ -83,6 +86,12 @@ module Aliyun
         else
           fail ValueNotSupportedError.new(:encoding, TableTunnels::SUPPORTED_ENCODING)
         end
+      end
+
+      def build_schema_with(columns)
+        {
+          'columns' => schema['columns'].select { |column| columns.include?(column['name']) }
+        }
       end
     end
   end
