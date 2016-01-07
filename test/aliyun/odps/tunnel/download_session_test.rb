@@ -24,7 +24,7 @@ describe Aliyun::Odps::DownloadSession do
 
   describe 'download' do
     it 'should can download' do
-      columns = %w(col1 col2 col3)
+      columns = %w(name)
       rowrange = [1, 100]
       stub_client_request(
         :get,
@@ -49,7 +49,7 @@ describe Aliyun::Odps::DownloadSession do
     end
 
     it 'should can download with snappy encoding' do
-      columns = %w(col1 col2 col3)
+      columns = %w(name)
       rowrange = [1, 100]
       stub_client_request(
         :get,
