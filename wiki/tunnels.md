@@ -40,7 +40,7 @@ upload_session = project.table_tunnels.init_upload_session('table_name', { part:
     
 upload_session.upload(1, [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']])
 
-upload_session.upload(1, [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']], 'snappy) # use x-snappy-framedd encoding for upload, current we support zlib/deflate, snappy and raw(default) now.
+upload_session.upload(1, [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']], 'snappy') # use x-snappy-framedd encoding for upload, current we support zlib/deflate, snappy and raw(default) now.
     
 upload_session.upload(1, [[1, 'Jack', 'jackpass']])  # replace the block 1
     
