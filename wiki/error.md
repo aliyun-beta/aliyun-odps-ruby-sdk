@@ -22,7 +22,7 @@ Below is the ODPS ERROR Code:
 ### ODPS Common ERROR Code
 
 | CODE | Message | HTTP STATUS CODE |
-|--|--|--|
+|------|---------|------------------|
 |ServiceUnavailable	|Service is temporarily unavailable, Please try again later.	|	503 Service Unavailable|
 |InternalServerError|	Service internal error, please try again later.|	500 Internal Server Error|
 |MethodNotAllowed|	Unsupported request method.|	405 Method Not Allowed|
@@ -46,8 +46,8 @@ In General, ODPS return ERROR Code with ODPS-MMCCCCX format.
 
 Below is a table list all SQL ERROR Code:
 
-|Code	|Severity Level	| ERROR Message|
-|--|--|--|
+|Code |Severity Level |ERROR Message |
+|-----|---------------|--------------|
 |ODPS-0110005|	5	|	Unknown exception from metadata operation|
 |ODPS-0110011|	1	|Authorization exception|
 |ODPS-0110021|	1	|	Invalid parameters|
@@ -142,8 +142,8 @@ Below is a table list all SQL ERROR Code:
 
 Since now, the Tunnel has Different ERROR Code, Below is the List:
 
-|Code	| Message|
-|--|--|
+|Code |Message |
+|-----|--------|
 |AccessDenied|	Access Denied|
 |CorruptedDataStream	|The data stream was corrupted, please try again later	|
 |DataUnderReplication	|The specified table data is under replication and you cannot initiate upload or download at this time. Please try again later|
