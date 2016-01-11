@@ -65,7 +65,7 @@ A Whole download contains two steps:
 Example:
 
 ```ruby
-download_session = project.table_tunnels.init_download_session('table_name, { part: 'value' })
+download_session = project.table_tunnels.init_download_session('table_name', { part: 'value' })
     
 content = download_session.download(1, 2, ["uuid", "username", "password"])
 
