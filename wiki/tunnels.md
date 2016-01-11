@@ -27,21 +27,25 @@ Show me the code:
 
 If you have a table with below schema:
 
-	{
-	    columns: [
-	      { name: 'uuid', type: 'bigint' },
-	      { name: 'username', type: 'string' },
-	      { name: 'password', type: 'string' },
-	    ]
-	}
+```ruby
+{
+  columns: [
+    { name: 'uuid', type: 'bigint' },
+    { name: 'username', type: 'string' },
+    { name: 'password', type: 'string' },
+  ]
+}
 	
-    upload_session = project.table_tunnels.init_upload_session('table_name', { part: 'value' })
+upload_session = project.table_tunnels.init_upload_session('table_name', { part: 'value' })
     
-    upload_session.upload(1, [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']])
+upload_session.upload(1, [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']])
+
+upload_session.upload(1, [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']], 'snappy') # use x-snappy-framedd encoding for upload, current we support zlib/deflate, snappy and raw(default) now.
     
-    upload_session.upload(1, [[1, 'Jack', 'jackpass']])  # replace the block 1
+upload_session.upload(1, [[1, 'Jack', 'jackpass']])  # replace the block 1
     
-    upload_session.complete
+upload_session.complete
+```
     
 
 when you upload a block with exist block id, it will replace old data. block id can range from 0~1999
@@ -61,13 +65,16 @@ A Whole download contains two steps:
 
 Example:
 
-    download_session = project.table_tunnels.init_download_session('table_name, { part: 'value' })
+```ruby
+download_session = project.table_tunnels.init_download_session('table_name', { part: 'value' })
     
-    content = download_session.download(1, 2, ["uuid", "username", "password"])
+content = download_session.download(1, 2, ["uuid", "username", "password"])
+
+content = download_session.download(1, 2, ["uuid", "username", "password"], 'snappy') # here, we support deflate, snappy and raw(default) for Accept-Encoding too.
     
-    puts content #=> [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']]
+puts content #=> [[1, 'Jack', 'jackpass'], [2, 'Smith', 'smithpass']]
+```
 
 
 Now, All is covered, Let's view the [Error Code](./error.md)    
     
-
