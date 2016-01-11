@@ -30,8 +30,8 @@ To create a resource with exist table exist in project, pass table with table pa
 
 please note the table argument format: 
 
-"tablename partition(col=value,[col=value])" for table with partition
-"tablename" for table without any partitions
++ "tablename partition(col=value,[col=value])" for table with partition
++ "tablename" for table without any partitions
 
 ### Get Resource
 
