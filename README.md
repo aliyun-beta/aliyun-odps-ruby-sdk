@@ -70,6 +70,8 @@ Here is our RDoc Document, It's well format to help you find more detail about m
 
 Here are some more guides for help you. Welcome to advice.
 
+All document are under `./wiki`
+
 + [Installation](./wiki/installation.md)
 + [Getting Started](./wiki/get_start.md)
 + [Projects](./wiki/projects.md)
