@@ -6,12 +6,12 @@ require 'aliyun/odps/version'
 Gem::Specification.new do |spec|
   spec.name          = 'aliyun-odps'
   spec.version       = Aliyun::Odps::VERSION
-  spec.authors       = ['Newell Zhu']
-  spec.email         = ['zlx.star@gmail.com']
+  spec.authors       = ['Newell Zhu', 'genewoo']
+  spec.email         = ['zlx.star@gmail.com', 'gene_wu@hotmail.com']
 
   spec.summary       = 'It is a full-featured Ruby Library for Aliyun ODPS API. Enjoy it!'
   spec.description   = 'It is a full-featured Ruby Library for Aliyun ODPS API. Enjoy it!'
-  spec.homepage      = 'https://github.com/aliyun-beta'
+  spec.homepage      = 'https://github.com/aliyun-beta/aliyun-odps-ruby-sdk'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'
