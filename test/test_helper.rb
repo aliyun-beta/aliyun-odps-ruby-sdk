@@ -1,5 +1,10 @@
-require 'simplecov'
-SimpleCov.start
+if ENV['TESTLOCAL']
+  require 'simplecov'
+  SimpleCov.start
+else
+  require 'coveralls'
+  Coveralls.wear!
+end
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'aliyun/odps'
