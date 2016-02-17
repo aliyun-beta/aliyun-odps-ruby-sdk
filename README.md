@@ -1,5 +1,8 @@
 # Aliyun ODPS SDK
 
+[![Build Status](https://travis-ci.org/aliyun-beta/aliyun-odps-ruby-sdk.svg)](https://travis-ci.org/aliyun-beta/aliyun-odps-ruby-sdk)
+[![Coverage Status](https://coveralls.io/repos/github/aliyun-beta/aliyun-odps-ruby-sdk/badge.svg?branch=master)](https://coveralls.io/github/aliyun-beta/aliyun-odps-ruby-sdk?branch=master)
+
 -----
 
 It is a full-featured Ruby Library for Aliyun ODPS API. Enjoy it!
