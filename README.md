@@ -65,7 +65,7 @@ Here is original Restful API, It has the most detailed and authoritative explana
 
 Here is our RDoc Document, It's well format to help you find more detail about methods.
 
-+ [RDoc Document](http://www.rubydoc.info/gems/aliyun-odps/0.1.0)
++ [RDoc Document](http://www.rubydoc.info/gems/aliyun-odps)
 
 
 Here are some more guides for help you. Welcome to advice.
