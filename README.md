@@ -96,7 +96,7 @@ We use minitest for test and rubocop for Syntax checker, If you want to make con
 
 ## Authors && Contributors
 
-- [Newell](https://github.com/zlx_star)
+- [Newell](https://github.com/zlx)
 - [genewoo](https://github.com/genewoo)
 
 
